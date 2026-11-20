@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>The Camden Market Camera Case</title>
+<style>
+  :root{
+    --bg:#14161c; --paper:#f3ead7; --paper2:#e8dcc0; --ink:#2a241c; --muted:#6d6250;
+    --red:#b8322a; --green:#2f7d4a; --gold:#d9a441; --blue:#2c4a6e;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;min-height:100%}
+  body{
+    background:radial-gradient(ellipse at 50% 0%, #2a2f3b 0%, var(--bg) 65%);
+    color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    font-size:18px; line-height:1.45; min-height:100vh; padding-bottom:40px;
+  }
+  .type{font-family:"American Typewriter","Courier New",Courier,monospace}
+  header{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    padding:12px 18px;color:#e9e2cf;max-width:900px;margin:0 auto;
+  }
+  header .who{font-size:15px;opacity:.85}
+  .progress{display:flex;gap:6px;align-items:center}
+  .progress span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+    border:2px solid #5a5f6b;font-size:15px;color:#8a8f99}
+  .progress span.done{background:var(--gold);border-color:var(--gold);color:#222}
+  .progress span.now{border-color:var(--gold);color:var(--gold)}
+  .hbtns{display:flex;gap:8px}
+  .hbtn{background:transparent;color:#e9e2cf;border:1.5px solid #6b7080;border-radius:10px;
+    padding:7px 12px;font-size:15px;cursor:pointer}
+  .hbtn:active{background:#2b303b}
+  main{max-width:900px;margin:0 auto;padding:0 14px}
+  .card{
+    background:var(--paper);border-radius:6px;padding:26px 26px 30px;position:relative;
+    box-shadow:0 18px 40px rgba(0,0,0,.45), inset 0 0 60px rgba(160,130,80,.18);
+  }
+  .card:before{content:"";position:absolute;top:-14px;left:28px;width:120px;height:24px;
+    background:var(--paper2);border-radius:6px 6px 0 0}
+  .tag{display:inline-block;background:var(--ink);color:var(--paper);padding:3px 10px;
+    font-size:13px;letter-spacing:.12em;text-transform:uppercase;border-radius:3px}
+  h1{font-size:34px;margin:14px 0 6px;line-height:1.15}
+  h2{font-size:26px;margin:12px 0 4px}
+  .de{color:var(--muted);font-size:15px;font-style:italic;margin-top:4px}
+  .witness{display:flex;gap:14px;align-items:flex-start;background:#fffaf0;border-left:5px solid var(--gold);
+    padding:12px 14px;border-radius:4px;margin:14px 0}
+  .witness .face{font-size:40px;line-height:1}
+  .task{margin:16px 0 8px;font-weight:600}
+  .sentence{font-size:23px;line-height:1.6;background:#fff;border:1.5px dashed #b9a985;border-radius:8px;
+    padding:18px;margin:12px 0}
+  .speaker{display:block;font-size:14px;color:var(--muted);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+  .gap{display:inline-block;min-width:70px;border-bottom:3px solid var(--ink);text-align:center;font-weight:700;padding:0 6px}
+  .gap.ok{color:var(--green);border-color:var(--green)}
+  .opts{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .btn{font-size:20px;padding:13px 26px;border-radius:12px;border:2px solid var(--ink);background:#fff;color:var(--ink);
+    cursor:pointer;font-weight:600;min-width:110px}
+  .btn:active{transform:translateY(2px)}
+  .btn.primary{background:var(--ink);color:var(--paper)}
+  .btn.wrong{background:#f6d4d0;border-color:var(--red);color:var(--red);animation:shake .35s}
+  .btn.right{background:#d6efdd;border-color:var(--green);color:var(--green)}
+  .btn:disabled{opacity:.45}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .feedback{min-height:28px;margin-top:12px;font-size:17px;font-weight:600}
+  .feedback.bad{color:var(--red)} .feedback.good{color:var(--green)}
+  .dots{display:flex;gap:6px;margin:6px 0 0}
+  .dots i{width:12px;height:12px;border-radius:50%;background:#d3c6a6;display:block}
+  .dots i.done{background:var(--green)} .dots i.now{background:var(--gold)}
+  .word{display:inline-block;padding:2px 6px;margin:2px 1px;border-radius:6px;cursor:pointer;border:2px solid transparent}
+  .word:active{background:#f1e6c9}
+  .word.wrong{background:#f6d4d0;border-color:var(--red);animation:shake .35s}
+  .word.picked{background:#fff1c7;border-color:var(--gold)}
+  .word.replaced{background:#d6efdd;border-color:var(--green);color:var(--green);font-weight:700}
+  .answerline{min-height:64px;background:#fff;border:2px solid var(--ink);border-radius:10px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .pool{display:flex;flex-wrap:wrap;gap:8px;min-height:56px;margin:10px 0}
+  .chip{font-size:20px;padding:9px 14px;border-radius:10px;background:var(--paper2);border:2px solid #b9a985;cursor:pointer;font-weight:600}
+  .answerline .chip{background:#fff7e0;border-color:var(--gold)}
+  .answerline.wrong{border-color:var(--red);animation:shake .35s}
+  .answerline.right{border-color:var(--green);background:#eef8f1}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  input[type=text]{font-size:22px;padding:12px 14px;border-radius:10px;border:2px solid var(--ink);width:100%;max-width:380px;background:#fff}
+  .clue{background:#fffdf6;border:2px solid var(--ink);border-radius:6px;padding:18px 18px 18px 64px;position:relative;margin:16px 0;font-size:20px}
+  .clue:before{content:"🔍";position:absolute;left:16px;top:14px;font-size:32px}
+  .stamp{display:inline-block;border:4px solid var(--red);color:var(--red);padding:4px 16px;font-size:26px;font-weight:800;
+    letter-spacing:.12em;transform:rotate(-7deg);margin:4px 0 10px;text-transform:uppercase}
+  .stamp.green{border-color:var(--green);color:var(--green)}
+  .cluelist{margin:10px 0 14px;padding:0;list-style:none}
+  .cluelist li{background:#fffdf6;border-left:5px solid var(--gold);padding:8px 12px;margin:6px 0;border-radius:3px}
+  .lineup{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+  @media (max-width:620px){.lineup{grid-template-columns:repeat(2,1fr)} h1{font-size:28px}}
+  .suspect{background:#3a3f4a;border-radius:10px;padding:10px 6px 8px;text-align:center;cursor:pointer;border:3px solid transparent;color:#fff;
+    background-image:repeating-linear-gradient(0deg,transparent 0 29px,rgba(255,255,255,.12) 29px 30px)}
+  .suspect svg{width:100%;max-width:140px;height:auto}
+  .suspect .nm{font-weight:700;font-size:17px}
+  .suspect.wrong{border-color:var(--red);opacity:.55}
+  .suspect.right{border-color:var(--gold)}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;z-index:20}
+  .overlay.show{display:flex}
+  .overlay .card{max-width:640px;width:100%;max-height:88vh;overflow:auto}
+  .rule{background:#fff;border-radius:8px;padding:12px 14px;margin:10px 0}
+  .rule b.k{color:var(--blue)}
+  .ex{font-style:italic}
+  .cert{text-align:center}
+  .cert .big{font-size:24px;margin:8px 0}
+  .small{font-size:14px;color:var(--muted)}
+  a.link{color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<header id="hdr" style="display:none">
+  <div class="who type" id="who"></div>
+  <div class="progress" id="prog"></div>
+  <div class="hbtns">
+    <button class="hbtn" onclick="showRules()">📒 Rules</button>
+    <button class="hbtn" onclick="showClues()">🔍 Clues</button>
+  </div>
+</header>
+<main id="app"></main>
+
+<div class="overlay" id="ov" onclick="if(event.target===this)closeOv()">
+  <div class="card" id="ovc"></div>
+</div>
+
+<script>
+/* ---------- DATA ---------- */
+const STATIONS = [
+  {
+    type:"choice",
+    title:"Station 1: The camera stall",
+    face:"🧔🏽", witness:"Mr Patel",
+    about:"owns the camera stall. The thief stole a silver camera from him.",
+    task:"Complete Mr Patel's answers: <b>one</b> or <b>ones</b>?",
+    taskDe:"Ergänze: one (Einzahl) oder ones (Mehrzahl)?",
+    options:["one","ones"],
+    items:[
+      {q:"Which camera did the thief take?", a:"The silver ___ next to the radio.", ans:"one"},
+      {q:"What do you sell?", a:"I sell new cameras and old ___.", ans:"ones"},
+      {q:"Are the lenses expensive?", a:"These lenses are cheap, but those ___ over there are really expensive.", ans:"ones"},
+      {q:"Do you sell radios too?", a:"Yes, I've got two radios: a black one and a brown ___.", ans:"one"},
+      {q:"Have you got any camera bags?", a:"Yes, I've got some small ___.", ans:"ones"},
+      {q:"Which stall is yours?", a:"The ___ next to the café.", ans:"one"}
+    ],
+    clue:"Mr Patel: “Before the thief took the camera, they bought a cap from me – not the red one, the <b>green one</b>.”",
+    key:"cap"
+  },
+  {
+    type:"tap",
+    title:"Station 2: The pizza stall",
+    face:"👧🏼", witness:"Lily (13)",
+    about:"was eating pizza when the thief ran past her.",
+    task:"Lily repeats words. Tap the noun you can replace – then choose <b>one</b> or <b>ones</b>.",
+    taskDe:"Tippe auf das Nomen, das unnötig wiederholt wird, und ersetze es.",
+    items:[
+      {s:"The market had big stalls and small *stalls*.", ans:"ones"},
+      {s:"I wanted a big pizza, but I only had money for a small *pizza*.", ans:"one"},
+      {s:"I didn't take my photo with my new phone. I took it with my old *phone*.", ans:"one"},
+      {s:"Most kids here wear black trainers, but the thief wore white *trainers*.", ans:"ones"}
+    ],
+    clue:"Lily: “I didn't see the thief's face. But their trainers weren't black ones – they were <b>white ones</b>.”",
+    key:"shoes"
+  },
+  {
+    type:"choice",
+    title:"Station 3: The security office",
+    face:"👮🏿‍♂️", witness:"Mr Brown",
+    about:"is the security guard. He checks the CCTV videos with you.",
+    task:"<b>one</b>, <b>ones</b> or <b>nothing</b>? Careful: some nouns can't be counted!",
+    taskDe:"Nicht zählbare Nomen (coffee, water, information …) bekommen kein one/ones.",
+    options:["one","ones","— (nothing)"],
+    items:[
+      {q:"Can we watch the CCTV?", a:"Sure. There are two cameras at the gate. The ___ on the left is broken.", ans:"one"},
+      {q:"Do you want some coffee, Mr Brown?", a:"No thanks, I've already got some ___.", ans:"— (nothing)"},
+      {q:"Which videos should we watch?", a:"We've got old videos and new ___. Let's start with today's.", ans:"ones"},
+      {q:"Can you tell us more?", a:"I need more information first. Have you got any ___?", ans:"— (nothing)"},
+      {q:"Look! The thief has got a bag!", a:"Yes! Is it a big bag or a small ___?", ans:"one"},
+      {q:"Phew, it's hot in here.", a:"There's no water in my bottle. Can I have some ___?", ans:"— (nothing)"}
+    ],
+    clue:"Mr Brown: “Look at the video: The thief's bag isn't a big one – it's a <b>small one</b>.”",
+    key:"bag"
+  },
+  {
+    type:"order",
+    title:"Station 4: Bus number 24",
+    face:"👩🏻‍🦰", witness:"Mrs King",
+    about:"is a bus driver. The thief got on her bus. You show her photos of different glasses.",
+    task:"Put the words in the right order. Tap the words.",
+    taskDe:"Tippe die Wörter in der richtigen Reihenfolge an. Nochmal tippen = zurück.",
+    items:[
+      {who:"You", words:["Which","ones","did","the","thief","wear","?"]},
+      {who:"Mrs King", words:["Not","the","square","ones",","," ","the","round","ones","."].filter(w=>w!==" ")},
+      {who:"You", words:["Are","you","sure","it","wasn't","this","one","?"]},
+      {who:"Mrs King", words:["Yes",",","the","thief","wore","those","round","ones","."]}
+    ],
+    clue:"Mrs King: “The thief wore glasses – not the square ones, the <b>round ones</b>.”",
+    key:"glasses"
+  }
+];
+
+const SUSPECTS = [
+  {name:"Jake", cap:"green", shoes:"white", bag:"big",   glasses:"round",  shirt:"#c77d2e", skin:"#f1c9a5", hair:"#3b2a1a"},
+  {name:"Ruby", cap:"red",   shoes:"white", bag:"small", glasses:"round",  shirt:"#6c4fa3", skin:"#8d5a3b", hair:"#1d1410"},
+  {name:"Leo",  cap:"green", shoes:"black", bag:"small", glasses:"round",  shirt:"#2f6f8f", skin:"#e8b48e", hair:"#a0522d"},
+  {name:"Zoe",  cap:"green", shoes:"white", bag:"small", glasses:"square", shirt:"#b0476a", skin:"#c68a5e", hair:"#2b1b10"},
+  {name:"Sam",  cap:"green", shoes:"white", bag:"small", glasses:"round",  shirt:"#5c6b3a", skin:"#f3d1b5", hair:"#d8b25a"},
+  {name:"Ava",  cap:"red",   shoes:"black", bag:"big",   glasses:"square", shirt:"#3d4a7a", skin:"#a86c48", hair:"#1a1a1a"}
+];
+const THIEF = {cap:"green", shoes:"white", bag:"small", glasses:"round"};
+const CLUE_NO = {cap:1, shoes:2, bag:3, glasses:4};
+
+/* ---------- STATE ---------- */
+let S = {name:"", station:-1, mistakes:0, start:0, end:0, done:false};
+let item = 0;
+function save(){ try{localStorage.setItem("oneCase",JSON.stringify(S))}catch(e){} }
+function load(){ try{const x=JSON.parse(localStorage.getItem("oneCase")); if(x&&x.name) S=x;}catch(e){} }
+const $ = id => document.getElementById(id);
+const app = () => $("app");
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function mistake(){S.mistakes++;save()}
+
+/* ---------- HEADER ---------- */
+function header(){
+  $("hdr").style.display = S.station>=0 ? "flex":"none";
+  $("who").textContent = "🕵️ Detective " + S.name;
+  let h="";
+  for(let i=0;i<5;i++){
+    const cls = i<S.station||S.done ? "done" : (i===S.station?"now":"");
+    h += `<span class="${cls}">${i<4?i+1:"?"}</span>`;
+  }
+  $("prog").innerHTML = h;
+}
+
+/* ---------- OVERLAYS ---------- */
+function closeOv(){ $("ov").classList.remove("show") }
+function showRules(){
+  $("ovc").innerHTML = `
+  <span class="tag">Detective's notebook</span>
+  <h2 class="type">one / ones</h2>
+  <div class="rule"><b class="k">one</b> replaces a <b>singular</b> noun, so you don't repeat it.<br>
+    <span class="ex">I don't like the red cap. I like the green <u>one</u>.</span></div>
+  <div class="rule"><b class="k">ones</b> replaces a <b>plural</b> noun.<br>
+    <span class="ex">Not the black trainers – the white <u>ones</u>.</span></div>
+  <div class="rule">Typical: <span class="ex">the big one, a small one, this one, that one, those ones, which one(s)?, the one on the left</span></div>
+  <div class="rule"><b class="k">No one/ones</b> with nouns you can't count: <i>money, water, coffee, information, music …</i><br>
+    <span class="ex">I need some water. – Here's some.</span> &nbsp;(✗ some one)</div>
+  <p class="de">one/ones ersetzt ein schon genanntes zählbares Nomen: Einzahl → one, Mehrzahl → ones. Bei nicht zählbaren Nomen gibt es kein one/ones.</p>
+  <button class="btn primary" onclick="closeOv()">Got it!</button>`;
+  $("ov").classList.add("show");
+}
+function showClues(){
+  const n = S.done?4:Math.max(0,S.station);
+  let h = `<span class="tag">Case file</span><h2 class="type">Your clues</h2>`;
+  h += n===0 ? `<p>No clues yet. Solve station 1!</p>` : `<ul class="cluelist">${STATIONS.slice(0,n).map((s,i)=>`<li><b>Clue ${i+1}:</b> ${s.clue}</li>`).join("")}</ul>`;
+  h += `<button class="btn primary" onclick="closeOv()">Close</button>`;
+  $("ovc").innerHTML = h; $("ov").classList.add("show");
+}
+
+/* ---------- START ---------- */
+function startScreen(){
+  header();
+  app().innerHTML = `
+  <div class="card">
+    <span class="tag">Case file #24 · Top secret</span>
+    <h1 class="type">The Camden Market Camera Case</h1>
+    <p><b>Saturday, Camden Market, London.</b> Somebody has stolen a vintage silver camera from Mr Patel's stall.
+    The police are busy – so they need <b>you</b>!</p>
+    <p>Talk to four witnesses. Every witness gives you a clue – but only if you use <b>one</b> and <b>ones</b> correctly.
+    At the end, find the thief.</p>
+    <p class="de">Löse jede Station, um einen Hinweis zu bekommen. Du kommst erst weiter, wenn alles richtig ist. Fehler werden gezählt – je weniger, desto höher dein Rang!</p>
+    <p class="task">What's your detective name?</p>
+    <div class="row">
+      <input type="text" id="nm" placeholder="your name" maxlength="20" autocomplete="off">
+      <button class="btn primary" onclick="begin()">Open the case</button>
+    </div>
+    <div class="feedback bad" id="fb"></div>
+    <p><button class="hbtn" style="color:var(--ink);border-color:var(--ink)" onclick="showRules()">📒 Read the rules first (one / ones)</button></p>
+  </div>`;
+}
+function begin(){
+  const n = $("nm").value.trim();
+  if(!n){ $("fb").textContent="Please enter your name. – Bitte gib deinen Namen ein."; return; }
+  S = {name:n, station:0, mistakes:0, start:Date.now(), end:0, done:false};
+  save(); item=0; showRules(); render();
+}
+
+/* ---------- STATION SHELL ---------- */
+function render(){
+  header();
+  if(S.done) return certificate();
+  if(S.station<0) return startScreen();
+  if(S.station>=STATIONS.length) return lineup();
+  const st = STATIONS[S.station];
+  const dots = st.items.map((_,i)=>`<i class="${i<item?"done":i===item?"now":""}"></i>`).join("");
+  app().innerHTML = `
+  <div class="card">
+    <span class="tag">Witness ${S.station+1} of 4</span>
+    <h2 class="type">${st.title}</h2>
+    <div class="witness"><div class="face">${st.face}</div><div><b>${st.witness}</b> ${st.about}</div></div>
+    <div class="task">${st.task}</div>
+    <div class="de">${st.taskDe}</div>
+    <div class="dots">${dots}</div>
+    <div id="ex"></div>
+    <div class="feedback" id="fb"></div>
+  </div>`;
+  ({choice:renderChoice, tap:renderTap, order:renderOrder})[st.type](st, st.items[item]);
+}
+function next(){
+  const st = STATIONS[S.station];
+  item++;
+  if(item < st.items.length) render(); else clueScreen();
+}
+function fb(msg, good){ const f=$("fb"); f.className="feedback "+(good?"good":"bad"); f.innerHTML=msg; }
+
+/* ---------- TYPE: CHOICE ---------- */
+function hintFor(ans){
+  if(ans.startsWith("—")) return "Can you count it? No → no one/ones. <span class='de'>Nicht zählbar → kein one/ones.</span>";
+  if(ans==="one") return "Singular or plural? <span class='de'>Gemeint ist <b>ein</b> Ding → one.</span>";
+  return "Singular or plural? <span class='de'>Gemeint sind <b>mehrere</b> Dinge → ones.</span>";
+}
+function renderChoice(st, it){
+  const [pre, post] = it.a.split("___");
+  $("ex").innerHTML = `
+    <div class="sentence"><span class="speaker">You</span>${it.q}<br><br>
+      <span class="speaker">${st.witness}</span><span id="pre">${pre}</span><span class="gap" id="gap">&nbsp;?&nbsp;</span>${post}</div>
+    <div class="opts">${st.options.map(o=>`<button class="btn" data-o="${o}">${o}</button>`).join("")}</div>`;
+  let locked=false;
+  document.querySelectorAll("#ex .btn").forEach(b=>b.onclick=()=>{
+    if(locked) return;
+    const o=b.dataset.o;
+    if(o===it.ans){
+      locked=true; b.classList.add("right");
+      const g=$("gap");
+      if(o.startsWith("—")){ g.remove(); $("pre").textContent = pre.replace(/\s+$/,""); }
+      else { g.textContent=o; g.classList.add("ok"); }
+      fb("✔ Correct!", true); setTimeout(next, 1100);
+    } else {
+      b.classList.remove("wrong"); void b.offsetWidth; b.classList.add("wrong");
+      mistake(); fb("✘ " + hintFor(it.ans), false);
+    }
+  });
+}
+
+/* ---------- TYPE: TAP ---------- */
+function renderTap(st, it){
+  const toks = it.s.split(" ");
+  const html = toks.map((t,i)=>{
+    const target = t.includes("*");
+    const clean = t.replace(/\*/g,"");
+    const m = clean.match(/^([A-Za-z']+)(.*)$/);
+    const word = m?m[1]:clean, punct = m?m[2]:"";
+    return `<span class="word" data-i="${i}" data-t="${target?1:0}">${word}</span>${punct} `;
+  }).join("");
+  $("ex").innerHTML = `<div class="sentence"><span class="speaker">${st.witness}</span>${html}</div><div id="ch"></div>`;
+  let found=false;
+  document.querySelectorAll("#ex .word").forEach(w=>w.onclick=()=>{
+    if(found) return;
+    if(w.dataset.t==="1"){
+      found=true; w.classList.add("picked");
+      fb("Good! Now replace it: <b>one</b> or <b>ones</b>?", true);
+      $("ch").innerHTML = `<div class="opts"><button class="btn" data-o="one">one</button><button class="btn" data-o="ones">ones</button></div>`;
+      let locked=false;
+      document.querySelectorAll("#ch .btn").forEach(b=>b.onclick=()=>{
+        if(locked) return;
+        if(b.dataset.o===it.ans){
+          locked=true; b.classList.add("right");
+          w.textContent=it.ans; w.classList.remove("picked"); w.classList.add("replaced");
+          fb("✔ Correct! Much better – no repetition.", true); setTimeout(next, 1300);
+        } else {
+          b.classList.remove("wrong"); void b.offsetWidth; b.classList.add("wrong");
+          mistake(); fb("✘ " + hintFor(it.ans), false);
+        }
+      });
+    } else {
+      w.classList.remove("wrong"); void w.offsetWidth; w.classList.add("wrong");
+      setTimeout(()=>w.classList.remove("wrong"),600);
+      mistake(); fb("✘ Not this word. Find the noun that Lily says <b>twice</b>. <span class='de'>Welches Nomen kommt doppelt vor?</span>", false);
+    }
+  });
+}
+
+/* ---------- TYPE: ORDER ---------- */
+function renderOrder(st, it){
+  const target = it.words;
+  let pool = shuffle(target.map((w,i)=>({w,i})));
+  let tries=0;
+  while(pool.map(x=>x.w).join(" ")===target.join(" ") && tries++<10) pool=shuffle(pool);
+  let ans = [];
+  $("ex").innerHTML = `
+    <div class="sentence" style="padding:12px 18px"><span class="speaker">${it.who}</span>
+      <div class="answerline" id="al"></div>
+      <div class="pool" id="pl"></div></div>
+    <div class="row"><button class="btn primary" id="chk">Check</button><button class="btn" id="rs">Reset</button></div>`;
+  function draw(){
+    $("al").innerHTML = ans.map((x,k)=>`<span class="chip" data-k="${k}">${x.w}</span>`).join("");
+    $("pl").innerHTML = pool.map((x,k)=>`<span class="chip" data-k="${k}">${x.w}</span>`).join("");
+    document.querySelectorAll("#pl .chip").forEach(c=>c.onclick=()=>{ans.push(pool.splice(+c.dataset.k,1)[0]);$("al").className="answerline";draw();});
+    document.querySelectorAll("#al .chip").forEach(c=>c.onclick=()=>{pool.push(ans.splice(+c.dataset.k,1)[0]);$("al").className="answerline";draw();});
+  }
+  draw();
+  let locked=false;
+  $("rs").onclick=()=>{ if(locked)return; pool=pool.concat(ans); ans=[]; draw(); };
+  $("chk").onclick=()=>{
+    if(locked) return;
+    if(pool.length){ fb("Use all the words. – Benutze alle Wörter.", false); return; }
+    if(ans.map(x=>x.w).join(" ")===target.join(" ")){
+      locked=true; $("al").className="answerline right"; fb("✔ Correct!", true); setTimeout(next,1200);
+    } else {
+      const al=$("al"); al.className="answerline"; void al.offsetWidth; al.className="answerline wrong";
+      mistake(); fb("✘ Not quite. Check the word order and try again. <span class='de'>Tippe Wörter an, um sie zurückzulegen.</span>", false);
+    }
+  };
+}
+
+/* ---------- CLUE ---------- */
+function clueScreen(){
+  const st = STATIONS[S.station];
+  app().innerHTML = `
+  <div class="card">
+    <div class="stamp green">Clue found</div>
+    <h2 class="type">Clue ${S.station+1}</h2>
+    <div class="clue">${st.clue}</div>
+    <p class="de">Der Hinweis wird in deiner Akte gespeichert (🔍 Clues).</p>
+    <button class="btn primary" id="go">${S.station<3?"Next witness →":"Go to the suspects →"}</button>
+  </div>`;
+  $("go").onclick=()=>{ S.station++; item=0; save(); render(); window.scrollTo(0,0); };
+}
+
+/* ---------- AVATAR ---------- */
+function avatar(p){
+  const capC = p.cap==="green"?"#2f8f4e":"#c8312b";
+  const shoeC = p.shoes==="white"?"#ffffff":"#141414";
+  const shoeStroke = p.shoes==="white"?"#999":"#000";
+  const bag = p.bag==="big"
+    ? `<line x1="38" y1="66" x2="80" y2="92" stroke="#5b3a1e" stroke-width="3"/><rect x="70" y="86" width="26" height="30" rx="4" fill="#8a5a2b" stroke="#4a2f14" stroke-width="2"/>`
+    : `<line x1="38" y1="66" x2="74" y2="96" stroke="#5b3a1e" stroke-width="2"/><rect x="70" y="94" width="12" height="11" rx="2" fill="#8a5a2b" stroke="#4a2f14" stroke-width="2"/>`;
+  const gl = p.glasses==="round"
+    ? `<circle cx="43" cy="41" r="5.5" fill="rgba(255,255,255,.35)" stroke="#111" stroke-width="2"/><circle cx="57" cy="41" r="5.5" fill="rgba(255,255,255,.35)" stroke="#111" stroke-width="2"/><line x1="48.5" y1="41" x2="51.5" y2="41" stroke="#111" stroke-width="2"/>`
+    : `<rect x="36.5" y="36" width="11" height="9" fill="rgba(255,255,255,.35)" stroke="#111" stroke-width="2"/><rect x="52.5" y="36" width="11" height="9" fill="rgba(255,255,255,.35)" stroke="#111" stroke-width="2"/><line x1="47.5" y1="40" x2="52.5" y2="40" stroke="#111" stroke-width="2"/>`;
+  return `<svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+    <rect x="37" y="108" width="11" height="36" fill="#2b3550"/><rect x="52" y="108" width="11" height="36" fill="#2b3550"/>
+    <ellipse cx="41" cy="148" rx="11" ry="6" fill="${shoeC}" stroke="${shoeStroke}" stroke-width="1.5"/>
+    <ellipse cx="59" cy="148" rx="11" ry="6" fill="${shoeC}" stroke="${shoeStroke}" stroke-width="1.5"/>
+    <rect x="28" y="60" width="44" height="52" rx="10" fill="${p.shirt}"/>
+    <rect x="45" y="54" width="10" height="9" fill="${p.skin}"/>
+    <path d="M32 40 Q32 26 50 25 Q68 26 68 40 L68 48 Q60 44 50 44 Q40 44 32 48 Z" fill="${p.hair}"/>
+    <circle cx="50" cy="40" r="15" fill="${p.skin}"/>
+    <path d="M47 50 Q50 52 53 50" stroke="#5a3a2a" stroke-width="1.5" fill="none"/>
+    ${gl}
+    <path d="M34 32 Q34 16 50 16 Q66 16 66 32 Z" fill="${capC}"/>
+    <rect x="58" y="29" width="20" height="4.5" rx="2" fill="${capC}"/>
+    ${bag}
+  </svg>`;
+}
+
+/* ---------- LINEUP ---------- */
+function lineup(){
+  header();
+  app().innerHTML = `
+  <div class="card">
+    <span class="tag">Final task</span>
+    <h2 class="type">Who is the thief?</h2>
+    <p>The police have found six people near the bus stop. Use your four clues and tap the thief.</p>
+    <p class="de">Nur eine Person passt zu allen vier Hinweisen.</p>
+    <ul class="cluelist">${STATIONS.map((s,i)=>`<li><b>Clue ${i+1}:</b> ${s.clue}</li>`).join("")}</ul>
+    <div class="lineup">${SUSPECTS.map((p,i)=>`<div class="suspect" data-i="${i}">${avatar(p)}<div class="nm">${p.name}</div></div>`).join("")}</div>
+    <div class="feedback" id="fb"></div>
+  </div>`;
+  let locked=false;
+  document.querySelectorAll(".suspect").forEach(el=>el.onclick=()=>{
+    if(locked) return;
+    const p = SUSPECTS[+el.dataset.i];
+    const wrongKey = ["cap","shoes","bag","glasses"].find(k=>p[k]!==THIEF[k]);
+    if(!wrongKey){
+      locked=true; el.classList.add("right");
+      fb("✔ Got them!", true);
+      S.done=true; S.end=Date.now(); save();
+      setTimeout(()=>{render();window.scrollTo(0,0)},1300);
+    } else {
+      el.classList.add("wrong"); mistake();
+      fb(`✘ It can't be ${p.name}. Check clue ${CLUE_NO[wrongKey]} again! <span class="de">Schau dir Hinweis ${CLUE_NO[wrongKey]} genau an.</span>`, false);
+    }
+  });
+}
+
+/* ---------- CERTIFICATE ---------- */
+function certificate(){
+  const sec = Math.round((S.end-S.start)/1000), m=Math.floor(sec/60), s=sec%60;
+  const rank = S.mistakes<=2 ? "Chief Inspector 🏆" : S.mistakes<=6 ? "Detective Sergeant 🥈" : "Detective Constable 🥉";
+  app().innerHTML = `
+  <div class="card cert">
+    <div class="stamp">Case closed</div>
+    <h1 class="type">Well done, ${S.name.replace(/[<>&]/g,"")}!</h1>
+    <p>The thief was <b>Sam</b> – the one with the green cap, the white trainers, the small bag and the round glasses.
+    Mr Patel has got his silver camera back. 📷</p>
+    <div class="big">Rank: <b>${rank}</b></div>
+    <p>Mistakes: <b>${S.mistakes}</b> &nbsp;·&nbsp; Time: <b>${m} min ${s} s</b></p>
+    <p class="small">Show this screen to your teacher. – Zeig diesen Bildschirm deiner Lehrkraft.</p>
+    <p><a class="link" href="#" onclick="if(confirm('Start a new case? Your result will be deleted.')){try{localStorage.removeItem('oneCase')}catch(e){};location.reload()};return false;">Play again</a></p>
+  </div>`;
+}
+
+/* ---------- INIT ---------- */
+load();
+if(S.start && !S.done && S.station>=0){ item=0; }
+render();
+</script>
+</body>
+</html>
