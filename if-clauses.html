@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Mission Orion – If clauses</title>
+<style>
+  :root{--bg:#060914;--panel:#0f1830;--panel2:#16224a;--cyan:#4fe3ff;--txt:#e6f1ff;--muted:#8ea3c7;--ok:#4cff9a;--bad:#ff5a6e;--warn:#ffc04d}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;min-height:100%}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:18px;line-height:1.45;min-height:100vh;padding-bottom:40px;
+    background-image:radial-gradient(1px 1px at 10% 20%,#fff8,transparent),radial-gradient(1px 1px at 30% 80%,#fff6,transparent),radial-gradient(1.5px 1.5px at 70% 30%,#fff9,transparent),radial-gradient(1px 1px at 85% 70%,#fff7,transparent),radial-gradient(1px 1px at 50% 50%,#fff5,transparent),radial-gradient(1.5px 1.5px at 20% 55%,#fff8,transparent),radial-gradient(1px 1px at 92% 12%,#fff8,transparent),radial-gradient(ellipse at 50% 120%,#1b2a5a 0%,transparent 60%);
+    background-size:400px 400px,500px 500px,450px 450px,380px 380px,600px 600px,520px 520px,430px 430px,100% 100%}
+  .mono{font-family:"SF Mono",Menlo,Consolas,"Courier New",monospace;letter-spacing:.03em}
+  header{position:sticky;top:0;z-index:5;background:rgba(6,9,20,.9);backdrop-filter:blur(6px);border-bottom:1px solid #22325f}
+  .hin{max-width:900px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+  .o2{display:flex;align-items:center;gap:8px;flex:1;min-width:200px;max-width:360px}
+  .bar{flex:1;height:16px;border-radius:9px;background:#1a2340;overflow:hidden;border:1px solid #2b3a6a}
+  .bar i{display:block;height:100%;background:var(--ok);transition:width .5s,background .5s}
+  .steps{display:flex;gap:6px}
+  .steps span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:2px solid #34457a;color:#6d80aa;font-size:14px}
+  .steps span.done{background:var(--cyan);border-color:var(--cyan);color:#04121c}
+  .steps span.now{border-color:var(--cyan);color:var(--cyan)}
+  .hbtn{background:transparent;color:var(--txt);border:1.5px solid #3a4c80;border-radius:10px;padding:7px 12px;font-size:15px;cursor:pointer}
+  main{max-width:900px;margin:18px auto 0;padding:0 14px}
+  .panel{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid #2c3d73;border-radius:16px;padding:24px;box-shadow:0 0 0 1px #0a1022,0 20px 50px rgba(0,0,0,.5),inset 0 0 40px rgba(79,227,255,.05)}
+  .tag{display:inline-block;color:var(--cyan);border:1px solid var(--cyan);padding:2px 10px;border-radius:20px;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+  h1{font-size:34px;margin:12px 0 6px;line-height:1.15}
+  h2{font-size:26px;margin:10px 0 4px}
+  .de{color:var(--muted);font-size:15px;font-style:italic;margin-top:3px}
+  .radio{display:flex;gap:12px;align-items:flex-start;background:#0b1328;border-left:4px solid var(--cyan);padding:12px 14px;border-radius:8px;margin:14px 0}
+  .radio .ic{font-size:34px;line-height:1}
+  .task{margin:16px 0 4px;font-weight:600}
+  .screen{background:#050b18;border:1px solid #2a3d70;border-radius:12px;padding:18px;margin:12px 0;font-size:23px;line-height:1.7}
+  .gap{display:inline-block;min-width:80px;border-bottom:3px solid var(--cyan);text-align:center;font-weight:700;padding:0 6px;color:var(--cyan)}
+  .gap.ok{color:var(--ok);border-color:var(--ok)}
+  .gap.cur{background:rgba(79,227,255,.12);border-radius:6px 6px 0 0}
+  .hint{color:var(--muted);font-size:17px}
+  .opts{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .btn{font-size:20px;padding:12px 22px;border-radius:12px;border:2px solid #4a5f9c;background:#121d3d;color:var(--txt);cursor:pointer;font-weight:600;min-width:100px}
+  .btn:active{transform:translateY(2px)}
+  .btn.primary{background:var(--cyan);border-color:var(--cyan);color:#04121c}
+  .btn.wrong{border-color:var(--bad);color:var(--bad);background:#2a0f19;animation:shake .35s}
+  .btn.right{border-color:var(--ok);color:var(--ok);background:#0d2a1d}
+  .btn.sel{border-color:var(--warn);color:var(--warn)}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .feedback{min-height:28px;margin-top:12px;font-size:17px;font-weight:600}
+  .feedback.bad{color:var(--bad)} .feedback.good{color:var(--ok)}
+  .dots{display:flex;gap:6px;margin-top:8px}
+  .dots i{width:12px;height:12px;border-radius:50%;background:#2a3a66;display:block}
+  .dots i.done{background:var(--ok)} .dots i.now{background:var(--cyan)}
+  .match{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+  .match .col{display:flex;flex-direction:column;gap:10px}
+  .mcard{background:#0b1430;border:2px solid #34457a;border-radius:12px;padding:12px 14px;font-size:19px;cursor:pointer;text-align:left;color:var(--txt);font-family:inherit}
+  .mcard.sel{border-color:var(--warn);background:#2a2410}
+  .mcard.done{border-color:var(--ok);color:var(--ok);background:#0d2a1d;cursor:default;opacity:.8}
+  .mcard.wrong{border-color:var(--bad);animation:shake .35s}
+  @media(max-width:600px){.match{grid-template-columns:1fr}}
+  input.ty{font-size:21px;padding:6px 10px;border-radius:8px;border:2px solid var(--cyan);background:#0b1430;color:var(--txt);width:170px;font-weight:600}
+  input.ty.ok{border-color:var(--ok);color:var(--ok)}
+  input.ty.bad{border-color:var(--bad);animation:shake .35s}
+  .answerline{min-height:64px;background:#050b18;border:2px solid var(--cyan);border-radius:10px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .answerline.wrong{border-color:var(--bad);animation:shake .35s}
+  .answerline.right{border-color:var(--ok)}
+  .pool{display:flex;flex-wrap:wrap;gap:8px;min-height:56px;margin:10px 0}
+  .chip{font-size:20px;padding:9px 14px;border-radius:10px;background:#16224a;border:2px solid #3a4c80;cursor:pointer;font-weight:600}
+  .answerline .chip{border-color:var(--cyan)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  input.name{font-size:22px;padding:12px 14px;border-radius:10px;border:2px solid var(--cyan);width:100%;max-width:380px;background:#0b1430;color:var(--txt)}
+  .sentlist{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+  .sent{background:#050b18;border:2px solid #2a3d70;border-radius:10px;padding:12px 14px;font-size:20px;cursor:pointer;text-align:left;color:var(--txt);font-family:inherit}
+  .sent.sel{border-color:var(--bad);background:#2a0f19}
+  .sent.ok{border-color:var(--ok)}
+  .sent .fix{display:block;color:var(--ok);font-size:17px;margin-top:4px}
+  .big{font-size:56px;text-align:center;margin:6px 0}
+  .done-msg{text-align:center}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:16px;z-index:20}
+  .overlay.show{display:flex}
+  .overlay .panel{max-width:660px;width:100%;max-height:88vh;overflow:auto}
+  .rule{background:#0b1430;border-radius:10px;padding:12px 14px;margin:10px 0;border:1px solid #2a3d70}
+  .rule b{color:var(--cyan)}
+  .ex{font-style:italic}
+  .small{font-size:14px;color:var(--muted)}
+  a.link{color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<header id="hdr" style="display:none"><div class="hin">
+  <div class="o2"><span class="mono">O₂</span><div class="bar"><i id="o2bar"></i></div><span class="mono" id="o2txt"></span></div>
+  <div class="steps" id="steps"></div>
+  <button class="hbtn" onclick="showRules()">📘 Rules</button>
+</div></header>
+<main id="app"></main>
+<div class="overlay" id="ov" onclick="if(event.target===this)closeOv()"><div class="panel" id="ovc"></div></div>
+
+<script>
+/* ---------- DATA ---------- */
+const STATIONS = [
+ { type:"match", title:"System 1: The radio", icon:"📡",
+   lee:"Can you hear me? The radio is broken – I can only send half sentences!",
+   task:"Match the two halves of Commander Lee's sentences.",
+   taskDe:"Tippe links einen Satzanfang an und dann rechts das passende Ende.",
+   pairs:[
+     ["If we repair the radio,","we will talk to Earth."],
+     ["If the oxygen runs out,","we will have big problems."],
+     ["If you put on your helmet,","you will be safe."],
+     ["If I don't answer,","you will try again."],
+     ["If Earth hears us,","a rescue team will help us."]
+   ],
+   fixed:"RADIO REPAIRED", next:"Great job – I can hear you clearly now! Next problem: the airlock door is stuck." },
+ { type:"pick", title:"System 2: The airlock", icon:"🚪",
+   lee:"The door to the station is stuck. Read the computer's instructions carefully!",
+   task:"Choose the correct verb forms.",
+   taskDe:"If-Satz: simple present · Hauptsatz: will + Verb",
+   items:[
+     {t:"If you {0} the red button, the door {1}.", g:[["press","will press","presses"],["opens","will open","open"]], a:["press","will open"]},
+     {t:"If the door {0}, we {1} the emergency exit.", g:[["won't open","doesn't open","don't open"],["use","uses","will use"]], a:["doesn't open","will use"]},
+     {t:"If Commander Lee {0} the key card, she {1} it to you.", g:[["find","finds","will find"],["will give","gives","give"]], a:["finds","will give"]},
+     {t:"We {0} into the engine room if we {1} the code.", g:[["don't get","won't get","doesn't get"],["won't have","doesn't have","don't have"]], a:["won't get","don't have"]},
+     {t:"If the computer {0} for a password, I {1} “Orion”.", g:[["will ask","asks","ask"],["type","will type","types"]], a:["asks","will type"]},
+     {t:"The alarm {0} if you {1} the door.", g:[["stops","will stop","stop"],["will close","closes","close"]], a:["will stop","close"]}
+   ],
+   fixed:"AIRLOCK OPEN", next:"The door is open! Now go outside to the solar panels – we need energy." },
+ { type:"type", title:"System 3: The solar panels", icon:"☀️",
+   lee:"You're outside now. Be careful! Type the verbs in the right form.",
+   task:"Write the correct form of the verbs in brackets.",
+   taskDe:"Schreibe die richtige Form. Kurzformen (won't, doesn't …) sind erlaubt.",
+   items:[
+     {t:"If the sun {0} on the panels, we {1} energy again.", v:["shine","have"], a:["shines","will have"], c:[0,1]},
+     {t:"If you {0} the cable, it {1} away!", v:["not hold","fly"], a:["don't hold","will fly"], c:[0,1]},
+     {t:"Lee: “If I {0} a broken panel, I {1} you.”", v:["see","tell"], a:["see","will tell"], c:[0,1]},
+     {t:"The computer {0} if the panels {1} sunlight.", v:["not work","not get"], a:["won't work","don't get"], c:[1,0]},
+     {t:"If the screen {0} “100 %”, we {1} ready to fly home.", v:["show","be"], a:["shows","will be"], c:[0,1]}
+   ],
+   fixed:"ENERGY 100 %", next:"Energy is back! Come inside and go to the engine room." },
+ { type:"order", title:"System 4: The engine room", icon:"🚀",
+   lee:"The engine computer only understands perfect sentences. Build them!",
+   task:"Put the words in the right order.",
+   taskDe:"Tippe die Wörter in der richtigen Reihenfolge an. Nochmal tippen = zurück. Achte auf das Komma!",
+   items:[
+     ["If","we","start","the","engine",",","we","will","fly","home","."],
+     ["The","engine","won't","start","if","you","don't","enter","the","code","."],
+     ["If","Earth","sees","our","signal",",","a","team","will","meet","us","."]
+   ],
+   fixed:"ENGINE READY", next:"The engine is ready. One last check before we fly home!" },
+ { type:"spot", title:"Final check: Launch", icon:"🛰️",
+   lee:"The launch computer has found some mistakes in the landing plan. Find them – there are exactly three!",
+   task:"Tap the three wrong sentences. Then press LAUNCH.",
+   taskDe:"Tippe die drei falschen Sätze an und drücke dann auf LAUNCH.",
+   items:[
+     {s:"If the engine will be too hot, we will wait.", wrong:true, fix:"If the engine is too hot, we will wait."},
+     {s:"If everything is OK, we will land in the sea.", wrong:false},
+     {s:"We will see our families if we land safely.", wrong:false},
+     {s:"If the weather is bad, we land tomorrow.", wrong:true, fix:"If the weather is bad, we will land tomorrow."},
+     {s:"If Lee open the door, we will jump into the water.", wrong:true, fix:"If Lee opens the door, we will jump into the water."},
+     {s:"If you feel sick, I will give you some water.", wrong:false}
+   ],
+   fixed:"LANDING PLAN OK", next:"" }
+];
+
+/* ---------- STATE ---------- */
+const KEY="ifMission";
+let S={name:"",st:-1,o2:100,mistakes:0,start:0,end:0,done:false};
+let item=0;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x&&x.name)S=x}catch(e){}}
+const $=id=>document.getElementById(id);
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function mistake(){S.mistakes++;S.o2=Math.max(5,S.o2-4);save();hud()}
+function fb(m,g){const f=$("fb");f.className="feedback "+(g?"good":"bad");f.innerHTML=m}
+function esc(s){return s.replace(/[<>&]/g,"")}
+
+/* ---------- HUD ---------- */
+function hud(){
+  $("hdr").style.display=S.st>=0?"block":"none";
+  const b=$("o2bar");b.style.width=S.o2+"%";
+  b.style.background=S.o2>60?"var(--ok)":S.o2>30?"var(--warn)":"var(--bad)";
+  $("o2txt").textContent=S.o2+" %";
+  $("steps").innerHTML=STATIONS.map((_,i)=>`<span class="${i<S.st||S.done?"done":i===S.st?"now":""}">${i<4?i+1:"★"}</span>`).join("");
+}
+
+/* ---------- RULES ---------- */
+function closeOv(){$("ov").classList.remove("show")}
+function showRules(){
+  $("ovc").innerHTML=`<span class="tag">Mission manual</span><h2>If clauses (type I)</h2>
+  <p>We use them to say what <b style="color:var(--cyan)">will happen</b> if something is true. <span class="de">Was passiert, wenn …</span></p>
+  <div class="rule"><b>if-clause</b>: simple present &nbsp;|&nbsp; <b>main clause</b>: will / won't + verb<br>
+   <span class="ex">If you <u>press</u> the button, the door <u>will open</u>.</span></div>
+  <div class="rule">⚠️ <b>No will</b> in the if-clause!<br><span class="ex">✗ If it will rain … &nbsp; ✓ If it rains …</span></div>
+  <div class="rule">he / she / it → <b>-s</b> &nbsp;·&nbsp; not → <b>don't / doesn't</b><br>
+   <span class="ex">If Lee <u>finds</u> the card … · If the door <u>doesn't open</u> …</span></div>
+  <div class="rule">If-clause first → <b>comma</b>. If-clause second → no comma.<br>
+   <span class="ex">If we start the engine, we will fly home.<br>We will fly home if we start the engine.</span></div>
+  <p class="de">Im if-Satz steht das simple present (nie will!), im Hauptsatz will/won't + Grundform. Steht der if-Satz vorne, kommt ein Komma.</p>
+  <button class="btn primary" onclick="closeOv()">Got it!</button>`;
+  $("ov").classList.add("show");
+}
+
+/* ---------- START ---------- */
+function startScreen(){
+  hud();
+  $("app").innerHTML=`<div class="panel">
+    <span class="tag">Emergency · Year 2084</span>
+    <h1>Mission Orion</h1>
+    <p>You are an astronaut on the space station <b>Orion</b>. A small meteorite has hit the station. The radio, the airlock, the solar panels and the engine are broken – and the <b>oxygen is leaking</b>!</p>
+    <p>Commander Lee is talking to you on the radio. Repair all systems and fly home safely.</p>
+    <p class="de">Repariere alle Systeme. Du kommst erst weiter, wenn alles richtig ist. Jeder Fehler kostet Sauerstoff (O₂) – wie viel bringst du nach Hause?</p>
+    <p class="task">What's your astronaut name?</p>
+    <div class="row"><input class="name" id="nm" placeholder="your name" maxlength="20" autocomplete="off">
+      <button class="btn primary" onclick="begin()">Start mission</button></div>
+    <div class="feedback bad" id="fb"></div>
+    <p><button class="hbtn" onclick="showRules()">📘 Read the mission manual first (if clauses)</button></p>
+  </div>`;
+}
+function begin(){
+  const n=$("nm").value.trim();
+  if(!n){fb("Please enter your name. – Bitte gib deinen Namen ein.");return}
+  S={name:n,st:0,o2:100,mistakes:0,start:Date.now(),end:0,done:false};save();item=0;showRules();render();
+}
+
+/* ---------- SHELL ---------- */
+function render(){
+  hud();
+  if(S.done) return finish();
+  if(S.st<0) return startScreen();
+  const st=STATIONS[S.st];
+  const n=st.items?st.items.length:1;
+  const dots=st.type==="match"||st.type==="spot"?"":`<div class="dots">${Array.from({length:n},(_,i)=>`<i class="${i<item?"done":i===item?"now":""}"></i>`).join("")}</div>`;
+  $("app").innerHTML=`<div class="panel">
+    <span class="tag">${S.st<4?"System "+(S.st+1)+" of 4":"Final check"}</span>
+    <h2>${st.icon} ${st.title}</h2>
+    <div class="radio"><div class="ic">👩🏽‍🚀</div><div><b>Commander Lee:</b> “${st.lee}”</div></div>
+    <div class="task">${st.task}</div><div class="de">${st.taskDe}</div>${dots}
+    <div id="ex"></div><div class="feedback" id="fb"></div></div>`;
+  ({match:rMatch,pick:rPick,type:rType,order:rOrder,spot:rSpot})[st.type](st);
+}
+function nextItem(){const st=STATIONS[S.st];item++;if(item<st.items.length)render();else repaired()}
+
+/* ---------- MATCH ---------- */
+function rMatch(st){
+  const L=st.pairs.map((p,i)=>({t:p[0],i})), R=shuffle(st.pairs.map((p,i)=>({t:p[1],i})));
+  $("ex").innerHTML=`<div class="match"><div class="col">${L.map(x=>`<button class="mcard" data-s="L" data-i="${x.i}">${x.t}</button>`).join("")}</div>
+    <div class="col">${R.map(x=>`<button class="mcard" data-s="R" data-i="${x.i}">${x.t}</button>`).join("")}</div></div>`;
+  let selL=null,found=0;
+  document.querySelectorAll(".mcard").forEach(c=>c.onclick=()=>{
+    if(c.classList.contains("done"))return;
+    if(c.dataset.s==="L"){document.querySelectorAll('.mcard[data-s="L"]').forEach(x=>x.classList.remove("sel"));c.classList.add("sel");selL=c;fb("");return}
+    if(!selL){fb("First tap the beginning of a sentence on the left. <span class='de'>Zuerst links tippen.</span>");return}
+    if(c.dataset.i===selL.dataset.i){
+      c.classList.add("done");selL.classList.remove("sel");selL.classList.add("done");selL=null;found++;
+      fb("✔ Correct!",true);if(found===st.pairs.length)setTimeout(repaired,900);
+    }else{c.classList.remove("wrong");void c.offsetWidth;c.classList.add("wrong");mistake();fb("✘ That doesn't make sense. Try another ending. <span class='de'>Passt inhaltlich nicht.</span>")}
+  });
+}
+
+/* ---------- PICK ---------- */
+function pickHint(right,chosen){
+  if(chosen.includes("will")&&!right.includes("will"))return "No <b>will</b> in the if-clause! <span class='de'>Im if-Satz: simple present.</span>";
+  if(right.includes("will")||right.includes("won't"))return "Main clause: <b>will / won't + verb</b>. <span class='de'>Im Hauptsatz steht will.</span>";
+  return "Check the subject: he / she / it → <b>-s</b>, I / you / we / they → no -s. <span class='de'>he/she/it – das s muss mit!</span>";
+}
+function rPick(st){
+  const it=st.items[item];let g=0;
+  const parts=it.t.split(/\{(\d)\}/);
+  function draw(){
+    const html=parts.map((p,k)=>{if(k%2===0)return p;const i=+p;
+      if(i<g)return `<span class="gap ok">${it.a[i]}</span>`;
+      return `<span class="gap ${i===g?"cur":""}">&nbsp;?&nbsp;</span>`}).join("");
+    $("ex").innerHTML=`<div class="screen">${html}</div>${g<2?`<div class="opts">${it.g[g].map(o=>`<button class="btn" data-o="${o}">${o}</button>`).join("")}</div>`:""}`;
+    document.querySelectorAll("#ex .btn").forEach(b=>b.onclick=()=>{
+      if(b.dataset.o===it.a[g]){g++;fb("✔ Correct!",true);draw();if(g===2)setTimeout(nextItem,1000)}
+      else{b.classList.remove("wrong");void b.offsetWidth;b.classList.add("wrong");mistake();fb("✘ "+pickHint(it.a[g],b.dataset.o))}
+    });
+  }
+  draw();
+}
+
+/* ---------- TYPE ---------- */
+function norm(s){
+  s=s.toLowerCase().replace(/[’‘`´]/g,"'").replace(/\s+/g," ").trim();
+  s=s.replace(/\bwon't\b/g,"will not").replace(/\bdon't\b/g,"do not").replace(/\bdoesn't\b/g,"does not").replace(/^'ll /,"will ");
+  return s;
+}
+function typeHint(right,val){
+  const v=norm(val), r=norm(right);
+  if(!v)return "Please write something. – Bitte etwas eintragen.";
+  if(!r.startsWith("will")&&v.includes("will"))return "No <b>will</b> in the if-clause! <span class='de'>Im if-Satz: simple present.</span>";
+  if(r.startsWith("will")&&!v.startsWith("will"))return "Main clause: <b>will / won't + verb</b>. <span class='de'>Im Hauptsatz fehlt will.</span>";
+  if(r.endsWith("s")&&!v.endsWith("s")&&!r.startsWith("will"))return "he / she / it → <b>-s</b>! <span class='de'>Das s fehlt.</span>";
+  if(r.includes("not"))return "Use <b>don't / doesn't</b> or <b>won't</b>. <span class='de'>Verneinung prüfen.</span>";
+  return "Check your spelling and the verb form. <span class='de'>Rechtschreibung und Verbform prüfen.</span>";
+}
+function rType(st){
+  const it=st.items[item];
+  const parts=it.t.split(/\{(\d)\}/);
+  const html=parts.map((p,k)=>{if(k%2===0)return p;const i=+p;
+    return `<input class="ty" id="in${i}" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false"> <span class="hint">(${it.v[i]})</span>`}).join("");
+  $("ex").innerHTML=`<div class="screen">${html}</div><button class="btn primary" id="chk">Check</button>`;
+  let locked=false;
+  $("chk").onclick=()=>{
+    if(locked)return;
+    let allOk=true,msg="";
+    for(let i=0;i<2;i++){
+      const inp=$("in"+i);
+      if(norm(inp.value)===norm(it.a[i])){inp.classList.remove("bad");inp.classList.add("ok");inp.readOnly=true}
+      else{allOk=false;inp.classList.remove("bad");void inp.offsetWidth;inp.classList.add("bad");if(!msg)msg=typeHint(it.a[i],inp.value)}
+    }
+    if(allOk){locked=true;fb("✔ Correct!",true);setTimeout(nextItem,1100)}
+    else{mistake();fb("✘ "+msg)}
+  };
+}
+
+/* ---------- ORDER ---------- */
+function rOrder(st){
+  const target=st.items[item];
+  let pool=shuffle(target.map(w=>({w}))),t=0;
+  while(pool.map(x=>x.w).join(" ")===target.join(" ")&&t++<10)pool=shuffle(pool);
+  let ans=[];
+  $("ex").innerHTML=`<div class="answerline" id="al"></div><div class="pool" id="pl"></div>
+    <div class="row"><button class="btn primary" id="chk">Check</button><button class="btn" id="rs">Reset</button></div>`;
+  function draw(){
+    $("al").innerHTML=ans.map((x,k)=>`<span class="chip" data-k="${k}">${x.w}</span>`).join("");
+    $("pl").innerHTML=pool.map((x,k)=>`<span class="chip" data-k="${k}">${x.w}</span>`).join("");
+    document.querySelectorAll("#pl .chip").forEach(c=>c.onclick=()=>{ans.push(pool.splice(+c.dataset.k,1)[0]);$("al").className="answerline";draw()});
+    document.querySelectorAll("#al .chip").forEach(c=>c.onclick=()=>{pool.push(ans.splice(+c.dataset.k,1)[0]);$("al").className="answerline";draw()});
+  }
+  draw();let locked=false;
+  $("rs").onclick=()=>{if(locked)return;pool=pool.concat(ans);ans=[];draw()};
+  $("chk").onclick=()=>{
+    if(locked)return;
+    if(pool.length){fb("Use all the words. – Benutze alle Wörter.");return}
+    if(ans.map(x=>x.w).join(" ")===target.join(" ")){locked=true;$("al").className="answerline right";fb("✔ Correct!",true);setTimeout(nextItem,1100)}
+    else{const al=$("al");al.className="answerline";void al.offsetWidth;al.className="answerline wrong";mistake();
+      fb("✘ Not quite. Where is the <b>if</b>? Where is <b>will</b>? Where is the comma? <span class='de'>Tippe Wörter an, um sie zurückzulegen.</span>")}
+  };
+}
+
+/* ---------- SPOT ---------- */
+function rSpot(st){
+  const sel=new Set();
+  $("ex").innerHTML=`<div class="sentlist">${st.items.map((x,i)=>`<button class="sent" data-i="${i}">${x.s}</button>`).join("")}</div>
+    <button class="btn primary" id="launch">🚀 LAUNCH</button>`;
+  let locked=false;
+  document.querySelectorAll(".sent").forEach(b=>b.onclick=()=>{
+    if(locked)return;const i=+b.dataset.i;
+    if(sel.has(i)){sel.delete(i);b.classList.remove("sel")}else{sel.add(i);b.classList.add("sel")}fb("");
+  });
+  $("launch").onclick=()=>{
+    if(locked)return;
+    if(sel.size!==3){fb(`You have marked ${sel.size} sentence(s). Mark exactly <b>three</b>. <span class='de'>Markiere genau drei Sätze.</span>`);return}
+    const right=[...sel].filter(i=>st.items[i].wrong).length;
+    if(right===3){
+      locked=true;
+      document.querySelectorAll(".sent").forEach(b=>{const x=st.items[+b.dataset.i];
+        if(x.wrong){b.classList.remove("sel");b.classList.add("ok");b.innerHTML=`<s>${x.s}</s><span class="fix">✔ ${x.fix}</span>`}});
+      fb("✔ Perfect! The computer has corrected the landing plan.",true);
+      $("launch").textContent="🚀 Fly home";$("launch").onclick=()=>repaired();
+    }else{mistake();fb(`✘ ${right} of 3 correct. Look for: <b>will</b> in the if-clause, a missing <b>will</b>, a missing <b>-s</b>. <span class='de'>Prüfe die markierten Sätze noch einmal.</span>`)}
+  };
+}
+
+/* ---------- REPAIRED ---------- */
+function repaired(){
+  const st=STATIONS[S.st];
+  if(S.st===STATIONS.length-1){S.done=true;S.end=Date.now();save();render();window.scrollTo(0,0);return}
+  $("app").innerHTML=`<div class="panel done-msg">
+    <div class="big">✅</div><h2 class="mono" style="color:var(--ok)">${st.fixed}</h2>
+    <div class="radio" style="text-align:left"><div class="ic">👩🏽‍🚀</div><div><b>Commander Lee:</b> “${st.next}”</div></div>
+    <button class="btn primary" id="go">Next system →</button></div>`;
+  $("go").onclick=()=>{S.st++;item=0;save();render();window.scrollTo(0,0)};
+}
+
+/* ---------- FINISH ---------- */
+function finish(){
+  hud();
+  const sec=Math.round((S.end-S.start)/1000),m=Math.floor(sec/60),s=sec%60;
+  const rank=S.o2>=80?"Mission Commander 🏆":S.o2>=50?"Senior Astronaut 🥈":"Space Cadet 🥉";
+  $("app").innerHTML=`<div class="panel done-msg">
+    <div class="big">🌍</div><span class="tag">Mission complete</span>
+    <h1>Welcome home, ${esc(S.name)}!</h1>
+    <p>The capsule has landed safely in the Pacific Ocean. Commander Lee says: “If they ask me, I will say you were the best astronaut on Orion!”</p>
+    <p style="font-size:22px">Oxygen left: <b style="color:var(--cyan)">${S.o2} %</b></p>
+    <p style="font-size:22px">Rank: <b>${rank}</b></p>
+    <p>Mistakes: <b>${S.mistakes}</b> · Time: <b>${m} min ${s} s</b></p>
+    <p class="small">Show this screen to your teacher. – Zeig diesen Bildschirm deiner Lehrkraft.</p>
+    <p><a class="link" href="#" onclick="if(confirm('Start a new mission? Your result will be deleted.')){try{localStorage.removeItem('${KEY}')}catch(e){};location.reload()};return false;">Play again</a></p>
+  </div>`;
+}
+
+load();render();
+</script>
+</body>
+</html>
