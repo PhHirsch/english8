@@ -10,6 +10,7 @@
   const DEFAULT = { skin: "skin2", eyes: "eye-brown", lashes: "lash-off", face: "face-none", hairstyle: "hs-short", haircolor: "hc-brown", top: "top-tshirt-white", hat: "hat-none", glasses: "gl-none", jewellery: "jw-none", extra: "ex-none", aura: "aura-none", bg: "bg-plain" };
   const LEVEL_XP = [0, 50, 120, 220, 350, 500, 700, 950, 1250, 1600, 2000, 2500];
   const LEVEL_NAMES = ["", "Rookie", "Rookie", "Explorer", "Explorer", "Pro", "Pro", "Master", "Master", "Legend", "Legend", "Legend+"];
+  const ACTIVE_UNITS = /*UNITS*/;
   const SKEY = "e8session", MAXAGE = 90 * 60 * 1000;
 
   function getSession() {

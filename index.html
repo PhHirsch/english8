@@ -77,12 +77,14 @@
 </div>
 <div class="ov" id="ov"><div class="shop" id="shop"></div></div>
 
-<script src="game.js?v=5"></script>
-<script src="bosses.js?v=5"></script>
-<script src="vocab-u2.js?v=5"></script>
+<script src="game.js?v=6"></script>
+<script src="bosses.js?v=6"></script>
+<script src="vocab-u2.js?v=6"></script>
 <script>
 /* Grammatik- und Story-Spiele (id = Spiel-ID). Vokabel-Bosse kommen automatisch aus vocab-*.js */
 const GRAMMAR = [
+  {id:"modals-time", unit:"u2", file:"time-machine.html", icon:"⏳", topic:"Modal auxiliaries", name:"The Time Machine", info:"Jump between 1870 and today – and fix the machine.", color:"linear-gradient(135deg,#4a3418,#8a6a2a)"},
+  {id:"modals-storm", unit:"u2", file:"storm-chasers.html", icon:"🌪️", topic:"Modal auxiliaries", name:"Storm Chasers", info:"Race Team Twister to the tornado!", color:"linear-gradient(135deg,#2a3440,#5a6a7c)"},
   {id:"if-clauses", unit:"u2", file:"if-clauses.html", icon:"🚀", topic:"If clauses (type I)", name:"Mission Orion", info:"Repair the space station and fly home.", color:"linear-gradient(135deg,#16224a,#2b4a8f)"},
   {id:"one-ones", unit:"u2", file:"one-ones.html", icon:"🕵️", topic:"one / ones", name:"The Camden Market Camera Case", info:"Talk to the witnesses and find the thief.", color:"linear-gradient(135deg,#4a3a22,#8a6a36)"}
 ];
@@ -207,13 +209,13 @@ function drawShop(msg, ok){
   if(changed) action+=` <button class="btn small" id="reset">Undo</button>`;
   const slots=E8.TABS[tab][1];
   const sections=slots.map(slot=>{
-    const items=E8.CATALOG.filter(i=>i.slot===slot && (E8.inSeason(i)||isMine(i.id)));
+    const items=E8.CATALOG.filter(i=>i.slot===slot && ((E8.inSeason(i)&&E8.available(i))||isMine(i.id)));
     return (slots.length>1?`<h3 style="margin:14px 0 8px">${E8.SLOTNAME[slot]}</h3>`:"")+`<div class="items">`+items.map(i=>{
       const t=Object.assign({},trying,{[slot]:i.id}), r=E8.rarity(i.price), mine=isMine(i.id), locked=i.lvl&&lv<i.lvl&&!mine;
       return `<div class="item ${trying[slot]===i.id?"sel":""} ${worn[slot]===i.id?"wear":""}" data-slot="${slot}" data-id="${i.id}" style="border-top:4px solid ${r.color}">
         ${locked?`<span class="lock">🔒 Level ${i.lvl}</span>`:""}
         <div class="mini">${E8.avatarSVG(t)}</div><div class="iname">${i.name}</div>
-        <div class="rar" style="color:${r.color}">${i.price?r.name:"&nbsp;"}${i.months?" · "+seasonText(i):""}</div>
+        <div class="rar" style="color:${r.color}">${i.price?r.name:"&nbsp;"}${i.unit?" · Unit "+i.unit:""}${i.months?" · "+seasonText(i):""}</div>
         <div class="price ${mine?"own":""}">${i.price===0?"free":mine?"✔ yours":i.price+" 🪙"}</div></div>`;
     }).join("")+`</div>`;
   }).join("");

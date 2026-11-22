@@ -1058,5 +1058,184 @@
 "price": 1200,
 "kind": "aurora",
 "lvl": 7
+},
+{
+"id": "hat-liberty",
+"slot": "hat",
+"name": "Liberty crown 🗽",
+"price": 250,
+"kind": "liberty",
+"unit": 1
+},
+{
+"id": "ex-taxi",
+"slot": "extra",
+"name": "Yellow cab 🚕",
+"price": 300,
+"kind": "taxi",
+"unit": 1
+},
+{
+"id": "bg-nyc",
+"slot": "bg",
+"name": "New York at night",
+"price": 200,
+"kind": "nyc",
+"unit": 1
+},
+{
+"id": "top-stormchaser",
+"slot": "top",
+"name": "Storm chaser jacket",
+"price": 200,
+"kind": "stormchaser",
+"color": "#f6c21a",
+"unit": 2
+},
+{
+"id": "ex-pompoms",
+"slot": "extra",
+"name": "Cheer pompoms",
+"price": 150,
+"kind": "pompoms",
+"unit": 2
+},
+{
+"id": "hat-football",
+"slot": "hat",
+"name": "Football helmet 🏈",
+"price": 350,
+"kind": "football",
+"unit": 2
+},
+{
+"id": "bg-schoolbus",
+"slot": "bg",
+"name": "School bus",
+"price": 150,
+"kind": "schoolbus",
+"unit": 2
+},
+{
+"id": "bg-niagara",
+"slot": "bg",
+"name": "Niagara Falls ✨",
+"price": 300,
+"kind": "niagara",
+"unit": 3
+},
+{
+"id": "bg-amish",
+"slot": "bg",
+"name": "Amish Country ✨",
+"price": 200,
+"kind": "amish",
+"unit": 3
+},
+{
+"id": "hat-pilgrim",
+"slot": "hat",
+"name": "Pilgrim hat",
+"price": 150,
+"kind": "pilgrim",
+"unit": 3
+},
+{
+"id": "ex-turkey",
+"slot": "extra",
+"name": "Thanksgiving turkey 🦃",
+"price": 300,
+"kind": "turkey",
+"unit": 3
+},
+{
+"id": "ex-surfboard",
+"slot": "extra",
+"name": "Surfboard 🏄",
+"price": 250,
+"kind": "surfboard",
+"unit": 4
+},
+{
+"id": "jw-nugget",
+"slot": "jewellery",
+"name": "Gold nugget necklace",
+"price": 300,
+"kind": "nugget",
+"unit": 4
+},
+{
+"id": "bg-goldengate",
+"slot": "bg",
+"name": "Golden Gate Bridge ✨",
+"price": 300,
+"kind": "goldengate",
+"unit": 4
+},
+{
+"id": "bg-walkoffame",
+"slot": "bg",
+"name": "Walk of Fame ⭐",
+"price": 250,
+"kind": "walkoffame",
+"unit": 4
+},
+{
+"id": "top-tech",
+"slot": "top",
+"name": "Silicon Valley hoodie ✨",
+"price": 400,
+"kind": "tech",
+"color": "#23262e",
+"unit": 4
+},
+{
+"id": "ex-trumpet",
+"slot": "extra",
+"name": "Jazz trumpet 🎺",
+"price": 250,
+"kind": "trumpet",
+"unit": 5
+},
+{
+"id": "ex-alligator",
+"slot": "extra",
+"name": "Alligator 🐊",
+"price": 450,
+"kind": "alligator",
+"unit": 5
+},
+{
+"id": "bg-steamboat",
+"slot": "bg",
+"name": "Mississippi steamboat ✨",
+"price": 300,
+"kind": "steamboat",
+"unit": 5
+},
+{
+"id": "top-racing",
+"slot": "top",
+"name": "Racing suit 🏁",
+"price": 350,
+"kind": "racing",
+"color": "#d23b3b",
+"unit": 5
+},
+{
+"id": "bg-racetrack",
+"slot": "bg",
+"name": "Speedway ✨",
+"price": 400,
+"kind": "racetrack",
+"unit": 5
+},
+{
+"id": "jw-equality",
+"slot": "jewellery",
+"name": "Equal rights button",
+"price": 50,
+"kind": "equality",
+"unit": 5
 }
 ]
