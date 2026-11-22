@@ -100,4 +100,8 @@ VOCAB["u2"] = { unit: "Unit 2 · Titel", sections: [
 - Für eine neue Klasse nur `SITE` (Titel/Untertitel), `<title>`, `GRAMMAR`, Vokabel-Dateien und Abzeichen anpassen – Aufbau und Optik bleiben gleich, damit alle Klassenseiten dasselbe Prinzip haben. Eine eigene Akzentfarbe pro Klasse ist erlaubt.
 
 ### Tutorial-Tour
-`index.html` enthält eine geführte Tour (Array `TOUR`, 8 Schritte, Englisch + deutsche Hilfe). Sie startet beim ersten Besuch automatisch (Merker `localStorage` „e8tour“), jederzeit über den „?“-Button oben rechts oder per Link `…/#tour` (zum Vorführen am Beamer). Für eine neue Klasse nur die Texte anpassen (Belohnungen, Unit-Namen); die Selektoren bleiben gleich.
+`index.html` enthält eine geführte Tour (Array `TOUR`, 8 Schritte, Englisch + deutsche Hilfe). Sie startet **nicht automatisch**, sondern nur über den Button „❓ HOW IT WORKS“ (Gäste) bzw. „?“ (eingeloggt) oder per Link `…/#tour` (zum Vorführen am Beamer). Für eine neue Klasse nur die Texte anpassen; die Selektoren bleiben gleich.
+
+### Eigene PIN
+Die Lehrkraft vergibt eine Start-PIN (Spalte B im Blatt „Spieler“). Beim ersten Login muss jede:r eine eigene 4-stellige PIN wählen (zweimal eingeben; zu einfache PINs wie 1234, 1111 oder die eigene Nummer werden abgelehnt). Danach steht in Spalte I „Eigene PIN“ = „ja“, und die neue PIN steht in Spalte B – die Lehrkraft kann sie bei Bedarf nachschauen. Zurücksetzen: neue Start-PIN in Spalte B eintragen und „ja“ in Spalte I löschen. Später lässt sich die PIN über „🔑 Change PIN“ unter dem Avatar ändern. Server: Aktion `setpin`, Feld `mustSetPin` im State.
+Login-Karten (Word, 8 pro A4-Seite, QR-Code + Felder für Nummer, Start-PIN, eigene PIN) lassen sich für jede Klasse mit eigener URL erzeugen.
