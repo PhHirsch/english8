@@ -54,5 +54,77 @@ add("bg-snow","bg","Snowy night 🎄",120,kind="snow",months=[12])
 add("bg-space","bg","Space",250,kind="space")
 add("bg-gold","bg","Gold glitter ✨",900,kind="gold")
 add("bg-galaxy","bg","Galaxy (animated) ✨",1500,kind="galaxy")
+
+# ---- Augen-Spezial
+add("eye-hetero","eyes","Two colours",0,color="#3c7fc4",kind="hetero")
+add("eye-cat","eyes","Cat eyes",400,color="#c8b820",kind="cat")
+add("eye-galaxy","eyes","Galaxy eyes ✨",500,color="#8a3cc4",kind="galaxy")
+add("eye-glow","eyes","Glowing eyes ✨",700,color="#3ff0ff",kind="glow",lvl=5)
+# ---- Gesicht
+add("face-none","face","Nothing")
+add("face-freckles","face","Freckles",kind="freckles")
+add("face-star","face","Star sticker",80,kind="star")
+add("face-glitter","face","Glitter cheeks ✨",120,kind="glitter")
+add("face-tiger","face","Tiger paint",300,kind="tiger")
+add("face-mask","face","Hero mask",350,kind="mask")
+add("face-cyborg","face","Cyborg ✨",900,kind="cyborg",lvl=6)
+# ---- Haare Spezial
+add("hc-split","haircolor","Half & half",400,color="#e66aa8",fx="split")
+add("hc-neon","haircolor","Neon glow ✨",600,color="#2ff3e0",fx="neon")
+add("hc-fire","haircolor","Fire hair 🔥",900,color="#ff7a1a",fx="fire",lvl=6)
+add("hc-galaxy","haircolor","Galaxy hair ✨",1000,color="#5a2ca0",fx="galaxy",lvl=7)
+# ---- Kleidung Spezial + Höxter
+add("top-hoexter","top","Höxter hoodie",120,kind="hoodie",color="#1f4e8c",text="HÖXTER")
+add("top-school","top","School hoodie",150,kind="hoodie",color="#2a2b30",text="SEK HX")
+add("top-hero","top","Superhero suit",500,kind="hero",color="#2f5fd0")
+add("top-galaxy","top","Galaxy hoodie ✨",700,kind="galaxyhoodie",color="#2a1d5c")
+add("top-armor","top","Knight armour",800,kind="armor",color="#b9c1cc",lvl=5)
+add("top-led","top","LED jacket ✨",1000,kind="led",color="#1d1f26",lvl=7)
+# ---- Hüte Spezial
+add("hat-party","hat","Party hat",100,kind="party")
+add("hat-chef","hat","Chef's hat",150,kind="chef")
+add("hat-catears","hat","Cat ears",200,kind="catears")
+add("hat-devil","hat","Devil horns",300,kind="devil")
+add("hat-pirate","hat","Pirate hat",400,kind="pirate")
+add("hat-viking","hat","Viking helmet",450,kind="viking")
+add("hat-propeller","hat","Propeller cap ✨",450,kind="propeller")
+add("hat-wizard","hat","Wizard hat ✨",500,kind="wizard")
+add("hat-unicorn","hat","Unicorn horn 🦄",700,kind="unicorn",lvl=4)
+add("hat-astro","hat","Astronaut helmet",800,kind="astro",lvl=5)
+add("hat-halo","hat","Halo ✨",1000,kind="halo",lvl=7)
+# ---- Brillen Spezial
+add("gl-3d","glasses","3D glasses",150,kind="3d")
+add("gl-monocle","glasses","Monocle",250,kind="monocle")
+add("gl-pixel","glasses","Pixel shades",300,kind="pixel")
+add("gl-vr","glasses","VR headset",500,kind="vr")
+add("gl-visor","glasses","Cyber visor ✨",900,kind="visor",lvl=6)
+# ---- Extras Spezial
+add("ex-hamster","extra","Hamster",300,kind="hamster")
+add("ex-parrot","extra","Parrot",400,kind="parrot")
+add("ex-owl","extra","Owl",450,kind="owl")
+add("ex-drone","extra","Robot drone ✨",700,kind="drone",lvl=5)
+add("ex-dragon","extra","Baby dragon ✨",1500,kind="dragon",lvl=8)
+# ---- Aura
+add("aura-none","aura","No aura")
+add("aura-hearts","aura","Floating hearts ✨",300,kind="hearts")
+add("aura-sparkle","aura","Sparkles ✨",500,kind="sparkle")
+add("aura-lightning","aura","Lightning ⚡",900,kind="lightning",lvl=6)
+add("aura-fire","aura","Fire aura 🔥",1000,kind="fire",lvl=7)
+add("aura-gold","aura","Golden aura ✨",1200,kind="gold",lvl=8)
+# ---- Hintergründe Spezial + Höxter
+add("bg-corvey","bg","Schloss Corvey",150,kind="corvey")
+add("bg-weser","bg","Weser",150,kind="weser")
+add("bg-underwater","bg","Underwater ✨",400,kind="underwater")
+add("bg-disco","bg","Disco ✨",600,kind="disco")
+add("bg-volcano","bg","Volcano ✨",700,kind="volcano",lvl=4)
+add("bg-code","bg","Code rain ✨",800,kind="code",lvl=5)
+add("bg-fireworks","bg","Fireworks ✨",1000,kind="fireworks",lvl=6)
+add("bg-aurora","bg","Northern lights ✨",1200,kind="aurora",lvl=7)
+# Level-Sperren für bestehende legendäre Teile
+for c in C:
+    if c["id"] in ("hat-crown",): c["lvl"]=6
+    if c["id"] in ("bg-gold",): c["lvl"]=5
+    if c["id"] in ("bg-galaxy",): c["lvl"]=8
+    if c["id"] in ("hc-rainbow",): c["lvl"]=4
 json.dump(C,open("catalog.json","w"),ensure_ascii=False,indent=0)
 print(len(C), sum(c["price"] for c in C))

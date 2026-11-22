@@ -4,10 +4,12 @@
   const API_URL = "/*API_URL*/";
 
   const CATALOG = /*CATALOG*/;
-  const SLOTS = ["skin", "eyes", "lashes", "hairstyle", "haircolor", "top", "hat", "glasses", "jewellery", "extra", "bg"];
-  const TABS = [["Face", ["skin", "eyes", "lashes"]], ["Hair", ["hairstyle", "haircolor"]], ["Clothes", ["top"]], ["Hats", ["hat"]], ["Glasses", ["glasses"]], ["Jewellery", ["jewellery"]], ["Extras", ["extra"]], ["Backgrounds", ["bg"]]];
-  const SLOTNAME = { skin: "Skin tone", eyes: "Eye colour", lashes: "Eyes", hairstyle: "Hairstyle", haircolor: "Hair colour", top: "Clothes", hat: "Hats", glasses: "Glasses", jewellery: "Jewellery", extra: "Extras", bg: "Backgrounds" };
-  const DEFAULT = { skin: "skin2", eyes: "eye-brown", lashes: "lash-off", hairstyle: "hs-short", haircolor: "hc-brown", top: "top-tshirt-white", hat: "hat-none", glasses: "gl-none", jewellery: "jw-none", extra: "ex-none", bg: "bg-plain" };
+  const SLOTS = ["skin", "eyes", "lashes", "face", "hairstyle", "haircolor", "top", "hat", "glasses", "jewellery", "extra", "aura", "bg"];
+  const TABS = [["Face", ["skin", "eyes", "lashes", "face"]], ["Hair", ["hairstyle", "haircolor"]], ["Clothes", ["top"]], ["Hats", ["hat"]], ["Glasses", ["glasses"]], ["Jewellery", ["jewellery"]], ["Extras", ["extra", "aura"]], ["Backgrounds", ["bg"]]];
+  const SLOTNAME = { skin: "Skin tone", eyes: "Eyes", lashes: "Eye shape", face: "Face paint & stickers", hairstyle: "Hairstyle", haircolor: "Hair colour", top: "Clothes", hat: "Hats", glasses: "Glasses", jewellery: "Jewellery", extra: "Pets & gadgets", aura: "Aura", bg: "Backgrounds" };
+  const DEFAULT = { skin: "skin2", eyes: "eye-brown", lashes: "lash-off", face: "face-none", hairstyle: "hs-short", haircolor: "hc-brown", top: "top-tshirt-white", hat: "hat-none", glasses: "gl-none", jewellery: "jw-none", extra: "ex-none", aura: "aura-none", bg: "bg-plain" };
+  const LEVEL_XP = [0, 50, 120, 220, 350, 500, 700, 950, 1250, 1600, 2000, 2500];
+  const LEVEL_NAMES = ["", "Rookie", "Rookie", "Explorer", "Explorer", "Pro", "Pro", "Master", "Master", "Legend", "Legend", "Legend+"];
   const SKEY = "e8session", MAXAGE = 90 * 60 * 1000;
 
   function getSession() {
@@ -49,7 +51,8 @@
       locked: "Too many wrong tries. Wait 5 minutes. – Zu viele Fehlversuche, warte 5 Minuten.",
       coins: "Not enough coins. – Nicht genug Münzen.",
       nologin: "Please log in on the start page. – Bitte auf der Startseite anmelden.",
-      server: "Server error. Try again. – Serverfehler, versuch es nochmal."
+      server: "Server error. Try again. – Serverfehler, versuch es nochmal.",
+      level: "You need a higher level for this. – Dafür brauchst du ein höheres Level."
     })[e] || ("Error: " + e);
   }
 
@@ -59,17 +62,20 @@
     if (!box) return;
     if (!API_URL || API_URL.indexOf("/*") === 0) { box.style.display = "none"; return; }
     const se = getSession();
+    const prevLevel = se && se.state ? se.state.level : 0;
     const show = r => {
       let t = `<div style="font-size:24px;font-weight:700">+${r.earned} 🪙</div>`;
       t += `<div>${"⭐".repeat(r.stars)}${"☆".repeat(3 - r.stars)} · You have <b>${r.state.coins} 🪙</b> now.</div>`;
-      if (!r.first && !r.improved) t += `<div style="font-size:14px;opacity:.75">Played before: fewer coins. Get more stars for more coins! – Wiederholung: weniger Münzen, mehr Sterne bringen mehr.</div>`;
+      if (!r.first && !r.improved && !r.daily) t += `<div style="font-size:14px;opacity:.75">Played before: fewer coins. Get more stars for more coins! – Wiederholung: weniger Münzen, mehr Sterne bringen mehr.</div>`;
       if (r.improved) t += `<div style="font-size:14px;opacity:.75">New best! – Neuer Rekord!</div>`;
+      if (r.daily && !r.earned) t += `<div style="font-size:14px;opacity:.75">Daily coins only once a day. – Tagesmünzen gibt es nur 1x pro Tag.</div>`;
+      if (prevLevel && r.state.level > prevLevel) t += `<div style="font-size:22px;font-weight:800;margin-top:6px">🎉 LEVEL UP! Level ${r.state.level}</div>`;
       box.innerHTML = t;
     };
     if (!se) { box.innerHTML = "🪙 Log in on the start page to earn coins. <div style='font-size:14px;opacity:.75'>Melde dich auf der Startseite an, um Münzen zu sammeln.</div>"; return; }
     if (S.reportedResult) { show(S.reportedResult); return; }
     box.textContent = "Saving your coins … 🪙";
-    call("result", { game: game, mistakes: S.mistakes }).then(r => {
+    call("result", { game: game, mistakes: S.mistakes, secs: S.end && S.start ? Math.round((S.end - S.start) / 1000) : 0, total: S.total || 0 }).then(r => {
       if (r.ok) { S.reportedResult = r; save(); show(r); }
       else box.innerHTML = "⚠️ " + errText(r.error) + " <button onclick='location.reload()' style='font-size:16px'>Try again</button>";
     });

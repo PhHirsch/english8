@@ -11,14 +11,17 @@ const MAX_FEHLVERSUCHE = 5;     // danach wird die Nummer kurz gesperrt
 const SPERRE_MINUTEN = 5;
 const MUENZEN_WIEDERHOLUNG = 2; // Münzen für eine Wiederholung ohne Verbesserung
 const MAX_BELOHNTE_WDH_PRO_TAG = 3;
+const MUENZEN_DAILY_PRO_STERN = 5; // Tages-Challenge: 1x pro Tag
+const LEVEL_XP = [0, 50, 120, 220, 350, 500, 700, 950, 1250, 1600, 2000, 2500];
 
 // Shop-Katalog (muss zu game.js passen – nicht von Hand ändern)
-const ITEMS = {"skin1": {"slot": "skin", "price": 0}, "skin2": {"slot": "skin", "price": 0}, "skin3": {"slot": "skin", "price": 0}, "skin4": {"slot": "skin", "price": 0}, "skin5": {"slot": "skin", "price": 0}, "skin6": {"slot": "skin", "price": 0}, "eye-brown": {"slot": "eyes", "price": 0}, "eye-dark": {"slot": "eyes", "price": 0}, "eye-blue": {"slot": "eyes", "price": 0}, "eye-green": {"slot": "eyes", "price": 0}, "eye-grey": {"slot": "eyes", "price": 0}, "lash-off": {"slot": "lashes", "price": 0}, "lash-on": {"slot": "lashes", "price": 0}, "hs-short": {"slot": "hairstyle", "price": 0}, "hs-buzz": {"slot": "hairstyle", "price": 0}, "hs-curly": {"slot": "hairstyle", "price": 0}, "hs-bob": {"slot": "hairstyle", "price": 0}, "hs-long": {"slot": "hairstyle", "price": 0}, "hs-ponytail": {"slot": "hairstyle", "price": 0}, "hs-bun": {"slot": "hairstyle", "price": 0}, "hs-braids": {"slot": "hairstyle", "price": 0}, "hc-black": {"slot": "haircolor", "price": 0}, "hc-darkbrown": {"slot": "haircolor", "price": 0}, "hc-brown": {"slot": "haircolor", "price": 0}, "hc-lightbrown": {"slot": "haircolor", "price": 0}, "hc-blonde": {"slot": "haircolor", "price": 0}, "hc-ginger": {"slot": "haircolor", "price": 0}, "hc-blue": {"slot": "haircolor", "price": 150}, "hc-pink": {"slot": "haircolor", "price": 150}, "hc-purple": {"slot": "haircolor", "price": 150}, "hc-green": {"slot": "haircolor", "price": 150}, "hc-silver": {"slot": "haircolor", "price": 200}, "hc-rainbow": {"slot": "haircolor", "price": 800}, "top-tshirt-white": {"slot": "top", "price": 0}, "top-tshirt-navy": {"slot": "top", "price": 40}, "top-tshirt-red": {"slot": "top", "price": 40}, "top-tshirt-yellow": {"slot": "top", "price": 40}, "top-hoodie-grey": {"slot": "top", "price": 60}, "top-hoodie-pink": {"slot": "top", "price": 70}, "top-hoodie-green": {"slot": "top", "price": 70}, "top-hoodie-black": {"slot": "top", "price": 80}, "top-sweater-purple": {"slot": "top", "price": 90}, "top-sweater-cream": {"slot": "top", "price": 90}, "top-jacket": {"slot": "top", "price": 180}, "top-football": {"slot": "top", "price": 200}, "top-dress-teal": {"slot": "top", "price": 200}, "top-dress-red": {"slot": "top", "price": 220}, "top-detective": {"slot": "top", "price": 400}, "top-space": {"slot": "top", "price": 450}, "top-xmas": {"slot": "top", "price": 150, "months": [12]}, "hat-none": {"slot": "hat", "price": 0}, "hat-bow": {"slot": "hat", "price": 50}, "hat-cap-red": {"slot": "hat", "price": 60}, "hat-cap-blue": {"slot": "hat", "price": 60}, "hat-beanie-yellow": {"slot": "hat", "price": 70}, "hat-beanie-grey": {"slot": "hat", "price": 70}, "hat-santa": {"slot": "hat", "price": 100, "months": [12]}, "hat-bunny": {"slot": "hat", "price": 120, "months": [3, 4]}, "hat-flowers": {"slot": "hat", "price": 120, "months": [6, 7]}, "hat-detective": {"slot": "hat", "price": 350}, "hat-crown": {"slot": "hat", "price": 1200}, "gl-none": {"slot": "glasses", "price": 0}, "gl-round": {"slot": "glasses", "price": 50}, "gl-square": {"slot": "glasses", "price": 60}, "gl-sun": {"slot": "glasses", "price": 180}, "gl-heart": {"slot": "glasses", "price": 350}, "gl-star": {"slot": "glasses", "price": 400}, "jw-none": {"slot": "jewellery", "price": 0}, "jw-studs": {"slot": "jewellery", "price": 50}, "jw-hoops": {"slot": "jewellery", "price": 80}, "ex-none": {"slot": "extra", "price": 0}, "ex-headphones": {"slot": "extra", "price": 220}, "ex-cat": {"slot": "extra", "price": 450}, "ex-dog": {"slot": "extra", "price": 450}, "bg-plain": {"slot": "bg", "price": 0}, "bg-blue": {"slot": "bg", "price": 0}, "bg-mint": {"slot": "bg", "price": 40}, "bg-sunset": {"slot": "bg", "price": 120}, "bg-london": {"slot": "bg", "price": 150}, "bg-beach": {"slot": "bg", "price": 150}, "bg-snow": {"slot": "bg", "price": 120, "months": [12]}, "bg-space": {"slot": "bg", "price": 250}, "bg-gold": {"slot": "bg", "price": 900}, "bg-galaxy": {"slot": "bg", "price": 1500}};
-const SLOTS = ["skin","eyes","lashes","hairstyle","haircolor","top","hat","glasses","jewellery","extra","bg"];
-const DEFAULT = {skin:"skin2",eyes:"eye-brown",lashes:"lash-off",hairstyle:"hs-short",haircolor:"hc-brown",top:"top-tshirt-white",hat:"hat-none",glasses:"gl-none",jewellery:"jw-none",extra:"ex-none",bg:"bg-plain"};
+const ITEMS = {"skin1": {"slot": "skin", "price": 0}, "skin2": {"slot": "skin", "price": 0}, "skin3": {"slot": "skin", "price": 0}, "skin4": {"slot": "skin", "price": 0}, "skin5": {"slot": "skin", "price": 0}, "skin6": {"slot": "skin", "price": 0}, "eye-brown": {"slot": "eyes", "price": 0}, "eye-dark": {"slot": "eyes", "price": 0}, "eye-blue": {"slot": "eyes", "price": 0}, "eye-green": {"slot": "eyes", "price": 0}, "eye-grey": {"slot": "eyes", "price": 0}, "lash-off": {"slot": "lashes", "price": 0}, "lash-on": {"slot": "lashes", "price": 0}, "hs-short": {"slot": "hairstyle", "price": 0}, "hs-buzz": {"slot": "hairstyle", "price": 0}, "hs-curly": {"slot": "hairstyle", "price": 0}, "hs-bob": {"slot": "hairstyle", "price": 0}, "hs-long": {"slot": "hairstyle", "price": 0}, "hs-ponytail": {"slot": "hairstyle", "price": 0}, "hs-bun": {"slot": "hairstyle", "price": 0}, "hs-braids": {"slot": "hairstyle", "price": 0}, "hc-black": {"slot": "haircolor", "price": 0}, "hc-darkbrown": {"slot": "haircolor", "price": 0}, "hc-brown": {"slot": "haircolor", "price": 0}, "hc-lightbrown": {"slot": "haircolor", "price": 0}, "hc-blonde": {"slot": "haircolor", "price": 0}, "hc-ginger": {"slot": "haircolor", "price": 0}, "hc-blue": {"slot": "haircolor", "price": 150}, "hc-pink": {"slot": "haircolor", "price": 150}, "hc-purple": {"slot": "haircolor", "price": 150}, "hc-green": {"slot": "haircolor", "price": 150}, "hc-silver": {"slot": "haircolor", "price": 200}, "hc-rainbow": {"slot": "haircolor", "price": 800, "lvl": 4}, "top-tshirt-white": {"slot": "top", "price": 0}, "top-tshirt-navy": {"slot": "top", "price": 40}, "top-tshirt-red": {"slot": "top", "price": 40}, "top-tshirt-yellow": {"slot": "top", "price": 40}, "top-hoodie-grey": {"slot": "top", "price": 60}, "top-hoodie-pink": {"slot": "top", "price": 70}, "top-hoodie-green": {"slot": "top", "price": 70}, "top-hoodie-black": {"slot": "top", "price": 80}, "top-sweater-purple": {"slot": "top", "price": 90}, "top-sweater-cream": {"slot": "top", "price": 90}, "top-jacket": {"slot": "top", "price": 180}, "top-football": {"slot": "top", "price": 200}, "top-dress-teal": {"slot": "top", "price": 200}, "top-dress-red": {"slot": "top", "price": 220}, "top-detective": {"slot": "top", "price": 400}, "top-space": {"slot": "top", "price": 450}, "top-xmas": {"slot": "top", "price": 150, "months": [12]}, "hat-none": {"slot": "hat", "price": 0}, "hat-bow": {"slot": "hat", "price": 50}, "hat-cap-red": {"slot": "hat", "price": 60}, "hat-cap-blue": {"slot": "hat", "price": 60}, "hat-beanie-yellow": {"slot": "hat", "price": 70}, "hat-beanie-grey": {"slot": "hat", "price": 70}, "hat-santa": {"slot": "hat", "price": 100, "months": [12]}, "hat-bunny": {"slot": "hat", "price": 120, "months": [3, 4]}, "hat-flowers": {"slot": "hat", "price": 120, "months": [6, 7]}, "hat-detective": {"slot": "hat", "price": 350}, "hat-crown": {"slot": "hat", "price": 1200, "lvl": 6}, "gl-none": {"slot": "glasses", "price": 0}, "gl-round": {"slot": "glasses", "price": 50}, "gl-square": {"slot": "glasses", "price": 60}, "gl-sun": {"slot": "glasses", "price": 180}, "gl-heart": {"slot": "glasses", "price": 350}, "gl-star": {"slot": "glasses", "price": 400}, "jw-none": {"slot": "jewellery", "price": 0}, "jw-studs": {"slot": "jewellery", "price": 50}, "jw-hoops": {"slot": "jewellery", "price": 80}, "ex-none": {"slot": "extra", "price": 0}, "ex-headphones": {"slot": "extra", "price": 220}, "ex-cat": {"slot": "extra", "price": 450}, "ex-dog": {"slot": "extra", "price": 450}, "bg-plain": {"slot": "bg", "price": 0}, "bg-blue": {"slot": "bg", "price": 0}, "bg-mint": {"slot": "bg", "price": 40}, "bg-sunset": {"slot": "bg", "price": 120}, "bg-london": {"slot": "bg", "price": 150}, "bg-beach": {"slot": "bg", "price": 150}, "bg-snow": {"slot": "bg", "price": 120, "months": [12]}, "bg-space": {"slot": "bg", "price": 250}, "bg-gold": {"slot": "bg", "price": 900, "lvl": 5}, "bg-galaxy": {"slot": "bg", "price": 1500, "lvl": 8}, "eye-hetero": {"slot": "eyes", "price": 0}, "eye-cat": {"slot": "eyes", "price": 400}, "eye-galaxy": {"slot": "eyes", "price": 500}, "eye-glow": {"slot": "eyes", "price": 700, "lvl": 5}, "face-none": {"slot": "face", "price": 0}, "face-freckles": {"slot": "face", "price": 0}, "face-star": {"slot": "face", "price": 80}, "face-glitter": {"slot": "face", "price": 120}, "face-tiger": {"slot": "face", "price": 300}, "face-mask": {"slot": "face", "price": 350}, "face-cyborg": {"slot": "face", "price": 900, "lvl": 6}, "hc-split": {"slot": "haircolor", "price": 400}, "hc-neon": {"slot": "haircolor", "price": 600}, "hc-fire": {"slot": "haircolor", "price": 900, "lvl": 6}, "hc-galaxy": {"slot": "haircolor", "price": 1000, "lvl": 7}, "top-hoexter": {"slot": "top", "price": 120}, "top-school": {"slot": "top", "price": 150}, "top-hero": {"slot": "top", "price": 500}, "top-galaxy": {"slot": "top", "price": 700}, "top-armor": {"slot": "top", "price": 800, "lvl": 5}, "top-led": {"slot": "top", "price": 1000, "lvl": 7}, "hat-party": {"slot": "hat", "price": 100}, "hat-chef": {"slot": "hat", "price": 150}, "hat-catears": {"slot": "hat", "price": 200}, "hat-devil": {"slot": "hat", "price": 300}, "hat-pirate": {"slot": "hat", "price": 400}, "hat-viking": {"slot": "hat", "price": 450}, "hat-propeller": {"slot": "hat", "price": 450}, "hat-wizard": {"slot": "hat", "price": 500}, "hat-unicorn": {"slot": "hat", "price": 700, "lvl": 4}, "hat-astro": {"slot": "hat", "price": 800, "lvl": 5}, "hat-halo": {"slot": "hat", "price": 1000, "lvl": 7}, "gl-3d": {"slot": "glasses", "price": 150}, "gl-monocle": {"slot": "glasses", "price": 250}, "gl-pixel": {"slot": "glasses", "price": 300}, "gl-vr": {"slot": "glasses", "price": 500}, "gl-visor": {"slot": "glasses", "price": 900, "lvl": 6}, "ex-hamster": {"slot": "extra", "price": 300}, "ex-parrot": {"slot": "extra", "price": 400}, "ex-owl": {"slot": "extra", "price": 450}, "ex-drone": {"slot": "extra", "price": 700, "lvl": 5}, "ex-dragon": {"slot": "extra", "price": 1500, "lvl": 8}, "aura-none": {"slot": "aura", "price": 0}, "aura-hearts": {"slot": "aura", "price": 300}, "aura-sparkle": {"slot": "aura", "price": 500}, "aura-lightning": {"slot": "aura", "price": 900, "lvl": 6}, "aura-fire": {"slot": "aura", "price": 1000, "lvl": 7}, "aura-gold": {"slot": "aura", "price": 1200, "lvl": 8}, "bg-corvey": {"slot": "bg", "price": 150}, "bg-weser": {"slot": "bg", "price": 150}, "bg-underwater": {"slot": "bg", "price": 400}, "bg-disco": {"slot": "bg", "price": 600}, "bg-volcano": {"slot": "bg", "price": 700, "lvl": 4}, "bg-code": {"slot": "bg", "price": 800, "lvl": 5}, "bg-fireworks": {"slot": "bg", "price": 1000, "lvl": 6}, "bg-aurora": {"slot": "bg", "price": 1200, "lvl": 7}};
+const SLOTS = ["skin", "eyes", "lashes", "face", "hairstyle", "haircolor", "top", "hat", "glasses", "jewellery", "extra", "aura", "bg"];
+const DEFAULT = {"skin": "skin2", "eyes": "eye-brown", "lashes": "lash-off", "face": "face-none", "hairstyle": "hs-short", "haircolor": "hc-brown", "top": "top-tshirt-white", "hat": "hat-none", "glasses": "gl-none", "jewellery": "jw-none", "extra": "ex-none", "aura": "aura-none", "bg": "bg-plain"};
 
 // Spalten im Blatt "Spieler"
 const C = {NR:0, PIN:1, MUENZEN:2, GEKAUFT:3, AVATAR:4, FEHL:5, GESPERRT:6, LOGIN:7};
+const TZ = "Europe/Berlin";
 
 /** Einmal ausführen: legt die Blätter an. */
 function einrichten() {
@@ -35,19 +38,23 @@ function einrichten() {
     sp.getRange(2, 1, rows.length, 8).setValues(rows);
     sp.setFrozenRows(1);
     sp.getRange("1:1").setFontWeight("bold");
-    sp.setColumnWidth(4, 260); sp.setColumnWidth(5, 200);
   }
   let er = ss.getSheetByName("Ergebnisse");
   if (!er) er = ss.insertSheet("Ergebnisse", 1);
   if (er.getLastRow() === 0) {
-    er.appendRow(["Zeitpunkt", "Nr", "Spiel", "Fehler", "Sterne", "Münzen +", "Durchgang"]);
+    er.appendRow(["Zeitpunkt", "Nr", "Spiel", "Fehler", "Sterne", "Münzen +", "Durchgang", "Zeit (s)", "Aufgaben"]);
     er.setFrozenRows(1);
     er.getRange("1:1").setFontWeight("bold");
   }
-  ["Tabellenblatt1", "Sheet1"].forEach(n => {
-    const s = ss.getSheetByName(n);
-    if (s && s.getLastRow() === 0 && ss.getSheets().length > 2) ss.deleteSheet(s);
-  });
+  ensureSheets();
+  uebersicht();
+}
+
+function ensureSheets() {
+  const ss = SpreadsheetApp.getActive();
+  const er = ss.getSheetByName("Ergebnisse");
+  if (er && er.getRange(1, 8).getValue() === "") er.getRange(1, 8, 1, 2).setValues([["Zeit (s)", "Aufgaben"]]).setFontWeight("bold");
+  if (!ss.getSheetByName("Übersicht")) ss.insertSheet("Übersicht", 0);
 }
 
 function doGet() { return out({ ok: true, msg: "English 8 Speicher läuft." }); }
@@ -71,6 +78,7 @@ function out(o) {
 
 function handle(d) {
   if (!d || typeof d.action !== "string") return { ok: false, error: "bad" };
+  if (d.action === "scores") return { ok: true, scores: scores() };
   const a = auth(d);
   if (a.error) return { ok: false, error: a.error };
   const p = a.p;
@@ -85,11 +93,14 @@ function handle(d) {
   return { ok: false, error: "bad" };
 }
 
-function player(nr) {
+function players() {
   const sh = SpreadsheetApp.getActive().getSheetByName("Spieler");
-  const v = sh.getDataRange().getValues();
-  for (let i = 1; i < v.length; i++) {
-    if (String(v[i][C.NR]).trim() === String(nr)) return { sh: sh, row: i + 1, v: v[i] };
+  return { sh: sh, v: sh.getDataRange().getValues() };
+}
+function player(nr) {
+  const P = players();
+  for (let i = 1; i < P.v.length; i++) {
+    if (String(P.v[i][C.NR]).trim() === String(nr)) return { sh: P.sh, row: i + 1, v: P.v[i] };
   }
   return null;
 }
@@ -115,54 +126,82 @@ function auth(d) {
   return { p: p };
 }
 
-function owned(p) { return String(p.v[C.GEKAUFT] || "").split(",").map(s => s.trim()).filter(s => ITEMS[s]); }
-function equipped(p) {
+function owned(v) { return String(v[C.GEKAUFT] || "").split(",").map(s => s.trim()).filter(s => ITEMS[s]); }
+function equippedOf(v) {
   let e = {};
-  try { e = JSON.parse(p.v[C.AVATAR] || "{}"); } catch (x) {}
+  try { e = JSON.parse(v[C.AVATAR] || "{}"); } catch (x) {}
   const r = Object.assign({}, DEFAULT);
   SLOTS.forEach(s => { if (ITEMS[e[s]] && ITEMS[e[s]].slot === s) r[s] = e[s]; });
   return r;
 }
-function resultsOf(nr) {
+function allResults() {
   const er = SpreadsheetApp.getActive().getSheetByName("Ergebnisse");
-  return er.getDataRange().getValues().slice(1).filter(r => String(r[1]) === String(nr));
+  return er.getDataRange().getValues().slice(1);
 }
+function levelOf(xp) { let l = 0; LEVEL_XP.forEach(t => { if (xp >= t) l++; }); return l; }
+
 function state(p) {
-  const stars = {};
-  resultsOf(p.v[C.NR]).forEach(r => { stars[r[2]] = Math.max(stars[r[2]] || 0, Number(r[4]) || 0); });
-  return { fresh: !p.v[C.AVATAR], nr: String(p.v[C.NR]), coins: Number(p.v[C.MUENZEN]) || 0, owned: owned(p), equipped: equipped(p), stars: stars };
+  const res = allResults().filter(r => String(r[1]) === String(p.v[C.NR]));
+  const stars = {}, plays = {};
+  let xp = 0, home = false, improved = false, daily = 0;
+  res.forEach(r => {
+    const g = r[2], s = Number(r[4]) || 0;
+    xp += Number(r[5]) || 0;
+    if (r[0] instanceof Date) {
+      const t = Utilities.formatDate(r[0], TZ, "u H").split(" ").map(Number);
+      if (t[0] >= 6 || t[1] >= 15 || t[1] < 7) home = true;
+    }
+    if (g === "daily") { daily++; return; }
+    if (plays[g] && s > (stars[g] || 0)) improved = true;
+    stars[g] = Math.max(stars[g] || 0, s);
+    plays[g] = (plays[g] || 0) + 1;
+  });
+  const today = Utilities.formatDate(new Date(), TZ, "yyyy-MM-dd");
+  const dailyToday = res.some(r => r[2] === "daily" && r[0] instanceof Date && Utilities.formatDate(r[0], TZ, "yyyy-MM-dd") === today);
+  return {
+    fresh: !p.v[C.AVATAR], nr: String(p.v[C.NR]), coins: Number(p.v[C.MUENZEN]) || 0,
+    owned: owned(p.v), equipped: equippedOf(p.v), stars: stars,
+    xp: xp, level: levelOf(xp), stats: { plays: res.length, home: home, improved: improved, daily: daily, dailyToday: dailyToday }
+  };
 }
 
 function result(p, d) {
   const game = String(d.game || "");
   const mistakes = Math.floor(Number(d.mistakes));
+  const secs = Math.max(0, Math.min(36000, Math.floor(Number(d.secs) || 0)));
+  const total = Math.floor(Number(d.total) || 0);
   if (!/^[a-z0-9-]{1,40}$/.test(game) || !(mistakes >= 0 && mistakes < 1000)) return { ok: false, error: "bad" };
-  const stars = mistakes <= 2 ? 3 : mistakes <= 6 ? 2 : 1;
-  const prev = resultsOf(p.v[C.NR]).filter(r => r[2] === game);
+  let stars;
+  if (total > 0 && total <= 300) { const q = mistakes / total; stars = q <= 0.1 ? 3 : q <= 0.25 ? 2 : 1; }
+  else stars = mistakes <= 2 ? 3 : mistakes <= 6 ? 2 : 1;
+  const prev = allResults().filter(r => String(r[1]) === String(p.v[C.NR]) && r[2] === game);
   const best = prev.reduce((m, r) => Math.max(m, Number(r[4]) || 0), 0);
-  const today = new Date().toDateString();
-  const todayCount = prev.filter(r => r[0] instanceof Date && r[0].toDateString() === today).length;
+  const today = Utilities.formatDate(new Date(), TZ, "yyyy-MM-dd");
+  const todayCount = prev.filter(r => r[0] instanceof Date && Utilities.formatDate(r[0], TZ, "yyyy-MM-dd") === today).length;
   let earned;
-  if (prev.length === 0) earned = 10 + stars * 10;
+  if (game === "daily") earned = todayCount === 0 ? stars * MUENZEN_DAILY_PRO_STERN : 0;
+  else if (prev.length === 0) earned = 10 + stars * 10;
   else if (stars > best) earned = (stars - best) * 10;
   else earned = todayCount < MAX_BELOHNTE_WDH_PRO_TAG ? MUENZEN_WIEDERHOLUNG : 0;
   SpreadsheetApp.getActive().getSheetByName("Ergebnisse")
-    .appendRow([new Date(), Number(p.v[C.NR]), game, mistakes, stars, earned, prev.length + 1]);
+    .appendRow([new Date(), Number(p.v[C.NR]), game, mistakes, stars, earned, prev.length + 1, secs, total || ""]);
   const coins = (Number(p.v[C.MUENZEN]) || 0) + earned;
   p.sh.getRange(p.row, C.MUENZEN + 1).setValue(coins);
   p.v[C.MUENZEN] = coins;
-  return { ok: true, earned: earned, stars: stars, first: prev.length === 0, improved: prev.length > 0 && stars > best, state: state(p) };
+  try { uebersicht(); } catch (x) {}
+  return { ok: true, earned: earned, stars: stars, first: prev.length === 0, improved: prev.length > 0 && stars > best, daily: game === "daily", state: state(p) };
 }
 
 function buy(p, d) {
   const it = ITEMS[d.item];
   if (!it || it.price <= 0) return { ok: false, error: "bad" };
-  const o = owned(p);
+  const o = owned(p.v);
   if (o.indexOf(d.item) >= 0) return { ok: false, error: "owned" };
   if (it.months) {
-    const m = Number(Utilities.formatDate(new Date(), "Europe/Berlin", "M"));
+    const m = Number(Utilities.formatDate(new Date(), TZ, "M"));
     if (it.months.indexOf(m) < 0) return { ok: false, error: "season" };
   }
+  if (it.lvl && state(p).level < it.lvl) return { ok: false, error: "level" };
   const coins = Number(p.v[C.MUENZEN]) || 0;
   if (coins < it.price) return { ok: false, error: "coins" };
   o.push(d.item);
@@ -173,10 +212,10 @@ function buy(p, d) {
 
 function equip(p, d) {
   const want = d.equipped || {};
-  const o = owned(p);
+  const o = owned(p.v);
   const e = {};
   for (const s of SLOTS) {
-    const id = want[s];
+    const id = want[s] || DEFAULT[s];
     const it = ITEMS[id];
     if (!it || it.slot !== s || (it.price > 0 && o.indexOf(id) < 0)) return { ok: false, error: "bad" };
     e[s] = id;
@@ -184,4 +223,55 @@ function equip(p, d) {
   p.sh.getRange(p.row, C.AVATAR + 1).setValue(JSON.stringify(e));
   p.v[C.AVATAR] = JSON.stringify(e);
   return { ok: true, state: state(p) };
+}
+
+/** Top 3 pro Spiel: wenigste Fehler, bei Gleichstand schnellste Zeit. */
+function scores() {
+  const best = {}, xp = {};
+  const res = allResults();
+  res.forEach(r => {
+    const g = r[2], nr = String(r[1]);
+    xp[nr] = (xp[nr] || 0) + (Number(r[5]) || 0);
+    if (!g || g === "daily") return;
+    const m = Number(r[3]) || 0, t = Number(r[7]) || 99999;
+    best[g] = best[g] || {};
+    const b = best[g][nr];
+    if (!b || m < b.m || (m === b.m && t < b.t)) best[g][nr] = { m: m, t: t };
+  });
+  const P = players(), eq = {};
+  for (let i = 1; i < P.v.length; i++) eq[String(P.v[i][C.NR])] = equippedOf(P.v[i]);
+  const out = {};
+  Object.keys(best).forEach(g => {
+    out[g] = Object.keys(best[g]).map(nr => ({ nr: nr, mistakes: best[g][nr].m, secs: best[g][nr].t === 99999 ? null : best[g][nr].t }))
+      .sort((a, b) => a.mistakes - b.mistakes || (a.secs || 99999) - (b.secs || 99999)).slice(0, 3)
+      .map(x => Object.assign(x, { eq: eq[x.nr] || DEFAULT, level: levelOf(xp[x.nr] || 0) }));
+  });
+  return out;
+}
+
+/** Blatt "Übersicht": eine Zeile pro Spieler, eine Spalte pro Spiel (beste Sterne). */
+function uebersicht() {
+  ensureSheets();
+  const ss = SpreadsheetApp.getActive(), sh = ss.getSheetByName("Übersicht");
+  const P = players(), res = allResults();
+  const games = [...new Set(res.map(r => r[2]).filter(g => g && g !== "daily"))].sort();
+  const data = {};
+  res.forEach(r => {
+    const nr = String(r[1]); data[nr] = data[nr] || { xp: 0, g: {}, last: null, daily: 0 };
+    const d = data[nr]; d.xp += Number(r[5]) || 0;
+    if (r[0] instanceof Date && (!d.last || r[0] > d.last)) d.last = r[0];
+    if (r[2] === "daily") d.daily++; else d.g[r[2]] = Math.max(d.g[r[2]] || 0, Number(r[4]) || 0);
+  });
+  const rows = [["Nr", "Level", "XP", "Münzen", "Zuletzt gespielt", "Tages-Challenges"].concat(games)];
+  for (let i = 1; i < P.v.length; i++) {
+    const nr = String(P.v[i][C.NR]); if (!nr) continue;
+    const d = data[nr] || { xp: 0, g: {}, last: "", daily: 0 };
+    rows.push([Number(nr), levelOf(d.xp), d.xp, Number(P.v[i][C.MUENZEN]) || 0, d.last || "", d.daily]
+      .concat(games.map(g => d.g[g] ? "⭐".repeat(d.g[g]) : "–")));
+  }
+  sh.clearContents();
+  sh.getRange(1, 1, rows.length, rows[0].length).setValues(rows);
+  sh.getRange(1, 1, 1, rows[0].length).setFontWeight("bold");
+  sh.setFrozenRows(1); sh.setFrozenColumns(1);
+  if (rows.length > 1) sh.getRange(2, 5, rows.length - 1, 1).setNumberFormat("dd.MM. HH:mm");
 }

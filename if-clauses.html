@@ -86,14 +86,14 @@
 </head>
 <body>
 <header id="hdr" style="display:none"><div class="hin">
-  <div class="o2"><span class="mono">O₂</span><div class="bar"><i id="o2bar"></i></div><span class="mono" id="o2txt"></span></div>
+  <span id="me" style="width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid var(--cyan);flex:none"></span><div class="o2"><span class="mono">O₂</span><div class="bar"><i id="o2bar"></i></div><span class="mono" id="o2txt"></span></div>
   <div class="steps" id="steps"></div>
   <button class="hbtn" onclick="showRules()">📘 Rules</button>
 </div></header>
 <main id="app"></main>
 <div class="overlay" id="ov" onclick="if(event.target===this)closeOv()"><div class="panel" id="ovc"></div></div>
 
-<script src="game.js?v=4"></script>
+<script src="game.js?v=5"></script>
 <script>
 /* ---------- DATA ---------- */
 const STATIONS = [
@@ -176,6 +176,7 @@ function esc(s){return s.replace(/[<>&]/g,"")}
 /* ---------- HUD ---------- */
 function hud(){
   $("hdr").style.display=S.st>=0?"block":"none";
+  if($("me")&&!$("me").innerHTML)$("me").innerHTML=E8.myAvatar();
   const b=$("o2bar");b.style.width=S.o2+"%";
   b.style.background=S.o2>60?"var(--ok)":S.o2>30?"var(--warn)":"var(--bad)";
   $("o2txt").textContent=S.o2+" %";
@@ -380,7 +381,7 @@ function finish(){
   const sec=Math.round((S.end-S.start)/1000),m=Math.floor(sec/60),s=sec%60;
   const rank=S.o2>=80?"Mission Commander 🏆":S.o2>=50?"Senior Astronaut 🥈":"Space Cadet 🥉";
   $("app").innerHTML=`<div class="panel done-msg">
-    <div class="big">🌍</div><span class="tag">Mission complete</span>
+    <div style="width:160px;margin:0 auto 8px;border-radius:50%;overflow:hidden;border:4px solid var(--cyan);box-shadow:0 0 24px rgba(79,227,255,.4)">${E8.myAvatar()}</div><div class="big">🌍</div><span class="tag">Mission complete</span>
     <h1>Welcome home, ${esc(S.name)}!</h1>
     <p>The capsule has landed safely in the Pacific Ocean. Commander Lee says: “If they ask me, I will say you were the best astronaut on Orion!”</p>
     <p style="font-size:22px">Oxygen left: <b style="color:var(--cyan)">${S.o2} %</b></p>

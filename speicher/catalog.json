@@ -227,7 +227,8 @@
 "name": "Rainbow ✨",
 "price": 800,
 "color": "#e66aa8",
-"fx": "rainbow"
+"fx": "rainbow",
+"lvl": 4
 },
 {
 "id": "top-tshirt-white",
@@ -464,7 +465,8 @@
 "price": 1200,
 "kind": "crown",
 "color": "#f2c230",
-"fx": "sparkle"
+"fx": "sparkle",
+"lvl": 6
 },
 {
 "id": "gl-none",
@@ -621,13 +623,440 @@
 "slot": "bg",
 "name": "Gold glitter ✨",
 "price": 900,
-"kind": "gold"
+"kind": "gold",
+"lvl": 5
 },
 {
 "id": "bg-galaxy",
 "slot": "bg",
 "name": "Galaxy (animated) ✨",
 "price": 1500,
+"kind": "galaxy",
+"lvl": 8
+},
+{
+"id": "eye-hetero",
+"slot": "eyes",
+"name": "Two colours",
+"price": 0,
+"color": "#3c7fc4",
+"kind": "hetero"
+},
+{
+"id": "eye-cat",
+"slot": "eyes",
+"name": "Cat eyes",
+"price": 400,
+"color": "#c8b820",
+"kind": "cat"
+},
+{
+"id": "eye-galaxy",
+"slot": "eyes",
+"name": "Galaxy eyes ✨",
+"price": 500,
+"color": "#8a3cc4",
 "kind": "galaxy"
+},
+{
+"id": "eye-glow",
+"slot": "eyes",
+"name": "Glowing eyes ✨",
+"price": 700,
+"color": "#3ff0ff",
+"kind": "glow",
+"lvl": 5
+},
+{
+"id": "face-none",
+"slot": "face",
+"name": "Nothing",
+"price": 0
+},
+{
+"id": "face-freckles",
+"slot": "face",
+"name": "Freckles",
+"price": 0,
+"kind": "freckles"
+},
+{
+"id": "face-star",
+"slot": "face",
+"name": "Star sticker",
+"price": 80,
+"kind": "star"
+},
+{
+"id": "face-glitter",
+"slot": "face",
+"name": "Glitter cheeks ✨",
+"price": 120,
+"kind": "glitter"
+},
+{
+"id": "face-tiger",
+"slot": "face",
+"name": "Tiger paint",
+"price": 300,
+"kind": "tiger"
+},
+{
+"id": "face-mask",
+"slot": "face",
+"name": "Hero mask",
+"price": 350,
+"kind": "mask"
+},
+{
+"id": "face-cyborg",
+"slot": "face",
+"name": "Cyborg ✨",
+"price": 900,
+"kind": "cyborg",
+"lvl": 6
+},
+{
+"id": "hc-split",
+"slot": "haircolor",
+"name": "Half & half",
+"price": 400,
+"color": "#e66aa8",
+"fx": "split"
+},
+{
+"id": "hc-neon",
+"slot": "haircolor",
+"name": "Neon glow ✨",
+"price": 600,
+"color": "#2ff3e0",
+"fx": "neon"
+},
+{
+"id": "hc-fire",
+"slot": "haircolor",
+"name": "Fire hair 🔥",
+"price": 900,
+"color": "#ff7a1a",
+"fx": "fire",
+"lvl": 6
+},
+{
+"id": "hc-galaxy",
+"slot": "haircolor",
+"name": "Galaxy hair ✨",
+"price": 1000,
+"color": "#5a2ca0",
+"fx": "galaxy",
+"lvl": 7
+},
+{
+"id": "top-hoexter",
+"slot": "top",
+"name": "Höxter hoodie",
+"price": 120,
+"kind": "hoodie",
+"color": "#1f4e8c",
+"text": "HÖXTER"
+},
+{
+"id": "top-school",
+"slot": "top",
+"name": "School hoodie",
+"price": 150,
+"kind": "hoodie",
+"color": "#2a2b30",
+"text": "SEK HX"
+},
+{
+"id": "top-hero",
+"slot": "top",
+"name": "Superhero suit",
+"price": 500,
+"kind": "hero",
+"color": "#2f5fd0"
+},
+{
+"id": "top-galaxy",
+"slot": "top",
+"name": "Galaxy hoodie ✨",
+"price": 700,
+"kind": "galaxyhoodie",
+"color": "#2a1d5c"
+},
+{
+"id": "top-armor",
+"slot": "top",
+"name": "Knight armour",
+"price": 800,
+"kind": "armor",
+"color": "#b9c1cc",
+"lvl": 5
+},
+{
+"id": "top-led",
+"slot": "top",
+"name": "LED jacket ✨",
+"price": 1000,
+"kind": "led",
+"color": "#1d1f26",
+"lvl": 7
+},
+{
+"id": "hat-party",
+"slot": "hat",
+"name": "Party hat",
+"price": 100,
+"kind": "party"
+},
+{
+"id": "hat-chef",
+"slot": "hat",
+"name": "Chef's hat",
+"price": 150,
+"kind": "chef"
+},
+{
+"id": "hat-catears",
+"slot": "hat",
+"name": "Cat ears",
+"price": 200,
+"kind": "catears"
+},
+{
+"id": "hat-devil",
+"slot": "hat",
+"name": "Devil horns",
+"price": 300,
+"kind": "devil"
+},
+{
+"id": "hat-pirate",
+"slot": "hat",
+"name": "Pirate hat",
+"price": 400,
+"kind": "pirate"
+},
+{
+"id": "hat-viking",
+"slot": "hat",
+"name": "Viking helmet",
+"price": 450,
+"kind": "viking"
+},
+{
+"id": "hat-propeller",
+"slot": "hat",
+"name": "Propeller cap ✨",
+"price": 450,
+"kind": "propeller"
+},
+{
+"id": "hat-wizard",
+"slot": "hat",
+"name": "Wizard hat ✨",
+"price": 500,
+"kind": "wizard"
+},
+{
+"id": "hat-unicorn",
+"slot": "hat",
+"name": "Unicorn horn 🦄",
+"price": 700,
+"kind": "unicorn",
+"lvl": 4
+},
+{
+"id": "hat-astro",
+"slot": "hat",
+"name": "Astronaut helmet",
+"price": 800,
+"kind": "astro",
+"lvl": 5
+},
+{
+"id": "hat-halo",
+"slot": "hat",
+"name": "Halo ✨",
+"price": 1000,
+"kind": "halo",
+"lvl": 7
+},
+{
+"id": "gl-3d",
+"slot": "glasses",
+"name": "3D glasses",
+"price": 150,
+"kind": "3d"
+},
+{
+"id": "gl-monocle",
+"slot": "glasses",
+"name": "Monocle",
+"price": 250,
+"kind": "monocle"
+},
+{
+"id": "gl-pixel",
+"slot": "glasses",
+"name": "Pixel shades",
+"price": 300,
+"kind": "pixel"
+},
+{
+"id": "gl-vr",
+"slot": "glasses",
+"name": "VR headset",
+"price": 500,
+"kind": "vr"
+},
+{
+"id": "gl-visor",
+"slot": "glasses",
+"name": "Cyber visor ✨",
+"price": 900,
+"kind": "visor",
+"lvl": 6
+},
+{
+"id": "ex-hamster",
+"slot": "extra",
+"name": "Hamster",
+"price": 300,
+"kind": "hamster"
+},
+{
+"id": "ex-parrot",
+"slot": "extra",
+"name": "Parrot",
+"price": 400,
+"kind": "parrot"
+},
+{
+"id": "ex-owl",
+"slot": "extra",
+"name": "Owl",
+"price": 450,
+"kind": "owl"
+},
+{
+"id": "ex-drone",
+"slot": "extra",
+"name": "Robot drone ✨",
+"price": 700,
+"kind": "drone",
+"lvl": 5
+},
+{
+"id": "ex-dragon",
+"slot": "extra",
+"name": "Baby dragon ✨",
+"price": 1500,
+"kind": "dragon",
+"lvl": 8
+},
+{
+"id": "aura-none",
+"slot": "aura",
+"name": "No aura",
+"price": 0
+},
+{
+"id": "aura-hearts",
+"slot": "aura",
+"name": "Floating hearts ✨",
+"price": 300,
+"kind": "hearts"
+},
+{
+"id": "aura-sparkle",
+"slot": "aura",
+"name": "Sparkles ✨",
+"price": 500,
+"kind": "sparkle"
+},
+{
+"id": "aura-lightning",
+"slot": "aura",
+"name": "Lightning ⚡",
+"price": 900,
+"kind": "lightning",
+"lvl": 6
+},
+{
+"id": "aura-fire",
+"slot": "aura",
+"name": "Fire aura 🔥",
+"price": 1000,
+"kind": "fire",
+"lvl": 7
+},
+{
+"id": "aura-gold",
+"slot": "aura",
+"name": "Golden aura ✨",
+"price": 1200,
+"kind": "gold",
+"lvl": 8
+},
+{
+"id": "bg-corvey",
+"slot": "bg",
+"name": "Schloss Corvey",
+"price": 150,
+"kind": "corvey"
+},
+{
+"id": "bg-weser",
+"slot": "bg",
+"name": "Weser",
+"price": 150,
+"kind": "weser"
+},
+{
+"id": "bg-underwater",
+"slot": "bg",
+"name": "Underwater ✨",
+"price": 400,
+"kind": "underwater"
+},
+{
+"id": "bg-disco",
+"slot": "bg",
+"name": "Disco ✨",
+"price": 600,
+"kind": "disco"
+},
+{
+"id": "bg-volcano",
+"slot": "bg",
+"name": "Volcano ✨",
+"price": 700,
+"kind": "volcano",
+"lvl": 4
+},
+{
+"id": "bg-code",
+"slot": "bg",
+"name": "Code rain ✨",
+"price": 800,
+"kind": "code",
+"lvl": 5
+},
+{
+"id": "bg-fireworks",
+"slot": "bg",
+"name": "Fireworks ✨",
+"price": 1000,
+"kind": "fireworks",
+"lvl": 6
+},
+{
+"id": "bg-aurora",
+"slot": "bg",
+"name": "Northern lights ✨",
+"price": 1200,
+"kind": "aurora",
+"lvl": 7
 }
 ]

@@ -121,7 +121,7 @@
   <div class="card" id="ovc"></div>
 </div>
 
-<script src="game.js?v=4"></script>
+<script src="game.js?v=5"></script>
 <script>
 /* ---------- DATA ---------- */
 const STATIONS = [
@@ -223,7 +223,7 @@ function mistake(){S.mistakes++;save()}
 /* ---------- HEADER ---------- */
 function header(){
   $("hdr").style.display = S.station>=0 ? "flex":"none";
-  $("who").textContent = "🕵️ Detective " + S.name;
+  $("who").innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px"><span style="width:38px;height:38px;border-radius:50%;overflow:hidden;display:inline-block;border:2px solid var(--gold)">${E8.myAvatar()}</span>Detective ${S.name.replace(/[<>&]/g,"")}</span>`;
   let h="";
   for(let i=0;i<5;i++){
     const cls = i<S.station||S.done ? "done" : (i===S.station?"now":"");
@@ -491,6 +491,7 @@ function certificate(){
   const rank = S.mistakes<=2 ? "Chief Inspector 🏆" : S.mistakes<=6 ? "Detective Sergeant 🥈" : "Detective Constable 🥉";
   app().innerHTML = `
   <div class="card cert">
+    <div style="width:150px;margin:0 auto 6px;border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.3)">${E8.myAvatar()}</div>
     <div class="stamp">Case closed</div>
     <h1 class="type">Well done, ${S.name.replace(/[<>&]/g,"")}!</h1>
     <p>The thief was <b>Sam</b> – the one with the green cap, the white trainers, the small bag and the round glasses.
