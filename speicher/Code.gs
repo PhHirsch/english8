@@ -14,10 +14,27 @@ const MAX_BELOHNTE_WDH_PRO_TAG = 3;
 const MUENZEN_DAILY_PRO_STERN = 5; // Tages-Challenge: 1x pro Tag
 const LEVEL_XP = [0, 50, 120, 220, 350, 500, 700, 950, 1250, 1600, 2000, 2500];
 
-// Shop-Katalog (muss zu game.js passen – nicht von Hand ändern)
-const ITEMS = {"skin1": {"slot": "skin", "price": 0}, "skin2": {"slot": "skin", "price": 0}, "skin3": {"slot": "skin", "price": 0}, "skin4": {"slot": "skin", "price": 0}, "skin5": {"slot": "skin", "price": 0}, "skin6": {"slot": "skin", "price": 0}, "eye-brown": {"slot": "eyes", "price": 0}, "eye-dark": {"slot": "eyes", "price": 0}, "eye-blue": {"slot": "eyes", "price": 0}, "eye-green": {"slot": "eyes", "price": 0}, "eye-grey": {"slot": "eyes", "price": 0}, "lash-off": {"slot": "lashes", "price": 0}, "lash-on": {"slot": "lashes", "price": 0}, "hs-short": {"slot": "hairstyle", "price": 0}, "hs-buzz": {"slot": "hairstyle", "price": 0}, "hs-curly": {"slot": "hairstyle", "price": 0}, "hs-bob": {"slot": "hairstyle", "price": 0}, "hs-long": {"slot": "hairstyle", "price": 0}, "hs-ponytail": {"slot": "hairstyle", "price": 0}, "hs-bun": {"slot": "hairstyle", "price": 0}, "hs-braids": {"slot": "hairstyle", "price": 0}, "hc-black": {"slot": "haircolor", "price": 0}, "hc-darkbrown": {"slot": "haircolor", "price": 0}, "hc-brown": {"slot": "haircolor", "price": 0}, "hc-lightbrown": {"slot": "haircolor", "price": 0}, "hc-blonde": {"slot": "haircolor", "price": 0}, "hc-ginger": {"slot": "haircolor", "price": 0}, "hc-blue": {"slot": "haircolor", "price": 150}, "hc-pink": {"slot": "haircolor", "price": 150}, "hc-purple": {"slot": "haircolor", "price": 150}, "hc-green": {"slot": "haircolor", "price": 150}, "hc-silver": {"slot": "haircolor", "price": 200}, "hc-rainbow": {"slot": "haircolor", "price": 800, "lvl": 4}, "top-tshirt-white": {"slot": "top", "price": 0}, "top-tshirt-navy": {"slot": "top", "price": 40}, "top-tshirt-red": {"slot": "top", "price": 40}, "top-tshirt-yellow": {"slot": "top", "price": 40}, "top-hoodie-grey": {"slot": "top", "price": 60}, "top-hoodie-pink": {"slot": "top", "price": 70}, "top-hoodie-green": {"slot": "top", "price": 70}, "top-hoodie-black": {"slot": "top", "price": 80}, "top-sweater-purple": {"slot": "top", "price": 90}, "top-sweater-cream": {"slot": "top", "price": 90}, "top-jacket": {"slot": "top", "price": 180}, "top-football": {"slot": "top", "price": 200}, "top-dress-teal": {"slot": "top", "price": 200}, "top-dress-red": {"slot": "top", "price": 220}, "top-detective": {"slot": "top", "price": 400}, "top-space": {"slot": "top", "price": 450}, "top-xmas": {"slot": "top", "price": 150, "months": [12]}, "hat-none": {"slot": "hat", "price": 0}, "hat-bow": {"slot": "hat", "price": 50}, "hat-cap-red": {"slot": "hat", "price": 60}, "hat-cap-blue": {"slot": "hat", "price": 60}, "hat-beanie-yellow": {"slot": "hat", "price": 70}, "hat-beanie-grey": {"slot": "hat", "price": 70}, "hat-santa": {"slot": "hat", "price": 100, "months": [12]}, "hat-bunny": {"slot": "hat", "price": 120, "months": [3, 4]}, "hat-flowers": {"slot": "hat", "price": 120, "months": [6, 7]}, "hat-detective": {"slot": "hat", "price": 350}, "hat-crown": {"slot": "hat", "price": 1200, "lvl": 6}, "gl-none": {"slot": "glasses", "price": 0}, "gl-round": {"slot": "glasses", "price": 50}, "gl-square": {"slot": "glasses", "price": 60}, "gl-sun": {"slot": "glasses", "price": 180}, "gl-heart": {"slot": "glasses", "price": 350}, "gl-star": {"slot": "glasses", "price": 400}, "jw-none": {"slot": "jewellery", "price": 0}, "jw-studs": {"slot": "jewellery", "price": 50}, "jw-hoops": {"slot": "jewellery", "price": 80}, "ex-none": {"slot": "extra", "price": 0}, "ex-headphones": {"slot": "extra", "price": 220}, "ex-cat": {"slot": "extra", "price": 450}, "ex-dog": {"slot": "extra", "price": 450}, "bg-plain": {"slot": "bg", "price": 0}, "bg-blue": {"slot": "bg", "price": 0}, "bg-mint": {"slot": "bg", "price": 40}, "bg-sunset": {"slot": "bg", "price": 120}, "bg-london": {"slot": "bg", "price": 150}, "bg-beach": {"slot": "bg", "price": 150}, "bg-snow": {"slot": "bg", "price": 120, "months": [12]}, "bg-space": {"slot": "bg", "price": 250}, "bg-gold": {"slot": "bg", "price": 900, "lvl": 5}, "bg-galaxy": {"slot": "bg", "price": 1500, "lvl": 8}, "eye-hetero": {"slot": "eyes", "price": 0}, "eye-cat": {"slot": "eyes", "price": 400}, "eye-galaxy": {"slot": "eyes", "price": 500}, "eye-glow": {"slot": "eyes", "price": 700, "lvl": 5}, "face-none": {"slot": "face", "price": 0}, "face-freckles": {"slot": "face", "price": 0}, "face-star": {"slot": "face", "price": 80}, "face-glitter": {"slot": "face", "price": 120}, "face-tiger": {"slot": "face", "price": 300}, "face-mask": {"slot": "face", "price": 350}, "face-cyborg": {"slot": "face", "price": 900, "lvl": 6}, "hc-split": {"slot": "haircolor", "price": 400}, "hc-neon": {"slot": "haircolor", "price": 600}, "hc-fire": {"slot": "haircolor", "price": 900, "lvl": 6}, "hc-galaxy": {"slot": "haircolor", "price": 1000, "lvl": 7}, "top-hoexter": {"slot": "top", "price": 120}, "top-school": {"slot": "top", "price": 150}, "top-hero": {"slot": "top", "price": 500}, "top-galaxy": {"slot": "top", "price": 700}, "top-armor": {"slot": "top", "price": 800, "lvl": 5}, "top-led": {"slot": "top", "price": 1000, "lvl": 7}, "hat-party": {"slot": "hat", "price": 100}, "hat-chef": {"slot": "hat", "price": 150}, "hat-catears": {"slot": "hat", "price": 200}, "hat-devil": {"slot": "hat", "price": 300}, "hat-pirate": {"slot": "hat", "price": 400}, "hat-viking": {"slot": "hat", "price": 450}, "hat-propeller": {"slot": "hat", "price": 450}, "hat-wizard": {"slot": "hat", "price": 500}, "hat-unicorn": {"slot": "hat", "price": 700, "lvl": 4}, "hat-astro": {"slot": "hat", "price": 800, "lvl": 5}, "hat-halo": {"slot": "hat", "price": 1000, "lvl": 7}, "gl-3d": {"slot": "glasses", "price": 150}, "gl-monocle": {"slot": "glasses", "price": 250}, "gl-pixel": {"slot": "glasses", "price": 300}, "gl-vr": {"slot": "glasses", "price": 500}, "gl-visor": {"slot": "glasses", "price": 900, "lvl": 6}, "ex-hamster": {"slot": "extra", "price": 300}, "ex-parrot": {"slot": "extra", "price": 400}, "ex-owl": {"slot": "extra", "price": 450}, "ex-drone": {"slot": "extra", "price": 700, "lvl": 5}, "ex-dragon": {"slot": "extra", "price": 1500, "lvl": 8}, "aura-none": {"slot": "aura", "price": 0}, "aura-hearts": {"slot": "aura", "price": 300}, "aura-sparkle": {"slot": "aura", "price": 500}, "aura-lightning": {"slot": "aura", "price": 900, "lvl": 6}, "aura-fire": {"slot": "aura", "price": 1000, "lvl": 7}, "aura-gold": {"slot": "aura", "price": 1200, "lvl": 8}, "bg-corvey": {"slot": "bg", "price": 150}, "bg-weser": {"slot": "bg", "price": 150}, "bg-underwater": {"slot": "bg", "price": 400}, "bg-disco": {"slot": "bg", "price": 600}, "bg-volcano": {"slot": "bg", "price": 700, "lvl": 4}, "bg-code": {"slot": "bg", "price": 800, "lvl": 5}, "bg-fireworks": {"slot": "bg", "price": 1000, "lvl": 6}, "bg-aurora": {"slot": "bg", "price": 1200, "lvl": 7}};
-const SLOTS = ["skin", "eyes", "lashes", "face", "hairstyle", "haircolor", "top", "hat", "glasses", "jewellery", "extra", "aura", "bg"];
-const DEFAULT = {"skin": "skin2", "eyes": "eye-brown", "lashes": "lash-off", "face": "face-none", "hairstyle": "hs-short", "haircolor": "hc-brown", "top": "top-tshirt-white", "hat": "hat-none", "glasses": "gl-none", "jewellery": "jw-none", "extra": "ex-none", "aura": "aura-none", "bg": "bg-plain"};
+// Shop-Katalog wird automatisch von der Website geladen (keine Änderung hier nötig)
+const KATALOG_URL = "https://phhirsch.github.io/english8/shop.json";
+let ITEMS = {}, SLOTS = [], DEFAULT = {};
+function loadCat() {
+  const cache = CacheService.getScriptCache(), props = PropertiesService.getScriptProperties();
+  let t = cache.get("cat");
+  if (!t) {
+    try {
+      const r = UrlFetchApp.fetch(KATALOG_URL + "?t=" + Date.now(), { muteHttpExceptions: true });
+      if (r.getResponseCode() !== 200) throw new Error("http");
+      t = r.getContentText(); JSON.parse(t);
+      cache.put("cat", t, 600);
+      try { props.setProperty("cat", t); } catch (x) {}
+    } catch (e) { t = props.getProperty("cat") || '{"items":{},"slots":[],"default":{}}'; }
+  }
+  const c = JSON.parse(t);
+  ITEMS = {}; Object.keys(c.items).forEach(id => { const a = c.items[id]; ITEMS[id] = { slot: a[0], price: a[1], lvl: a[2] || 0, months: a[3] || null }; });
+  SLOTS = c.slots; DEFAULT = c.default;
+}
+/** Nach dem Einfügen einmal ausführen, um den Katalog-Zugriff zu testen. */
+function katalogTesten() { CacheService.getScriptCache().remove("cat"); loadCat(); Logger.log(Object.keys(ITEMS).length + " Shop-Teile geladen."); }
 
 // Spalten im Blatt "Spieler"
 const C = {NR:0, PIN:1, MUENZEN:2, GEKAUFT:3, AVATAR:4, FEHL:5, GESPERRT:6, LOGIN:7};
@@ -48,6 +65,7 @@ function einrichten() {
   }
   ensureSheets();
   uebersicht();
+  katalogTesten();
 }
 
 function ensureSheets() {
@@ -78,6 +96,7 @@ function out(o) {
 
 function handle(d) {
   if (!d || typeof d.action !== "string") return { ok: false, error: "bad" };
+  loadCat();
   if (d.action === "scores") return { ok: true, scores: scores() };
   const a = auth(d);
   if (a.error) return { ok: false, error: a.error };

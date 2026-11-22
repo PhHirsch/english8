@@ -14,10 +14,27 @@ const MAX_BELOHNTE_WDH_PRO_TAG = 3;
 const MUENZEN_DAILY_PRO_STERN = 5; // Tages-Challenge: 1x pro Tag
 const LEVEL_XP = [0, 50, 120, 220, 350, 500, 700, 950, 1250, 1600, 2000, 2500];
 
-// Shop-Katalog (muss zu game.js passen – nicht von Hand ändern)
-const ITEMS = /*ITEMS*/;
-const SLOTS = /*SLOTS*/;
-const DEFAULT = /*DEFAULT*/;
+// Shop-Katalog wird automatisch von der Website geladen (keine Änderung hier nötig)
+const KATALOG_URL = "https://phhirsch.github.io/english8/shop.json";
+let ITEMS = {}, SLOTS = [], DEFAULT = {};
+function loadCat() {
+  const cache = CacheService.getScriptCache(), props = PropertiesService.getScriptProperties();
+  let t = cache.get("cat");
+  if (!t) {
+    try {
+      const r = UrlFetchApp.fetch(KATALOG_URL + "?t=" + Date.now(), { muteHttpExceptions: true });
+      if (r.getResponseCode() !== 200) throw new Error("http");
+      t = r.getContentText(); JSON.parse(t);
+      cache.put("cat", t, 600);
+      try { props.setProperty("cat", t); } catch (x) {}
+    } catch (e) { t = props.getProperty("cat") || '{"items":{},"slots":[],"default":{}}'; }
+  }
+  const c = JSON.parse(t);
+  ITEMS = {}; Object.keys(c.items).forEach(id => { const a = c.items[id]; ITEMS[id] = { slot: a[0], price: a[1], lvl: a[2] || 0, months: a[3] || null }; });
+  SLOTS = c.slots; DEFAULT = c.default;
+}
+/** Nach dem Einfügen einmal ausführen, um den Katalog-Zugriff zu testen. */
+function katalogTesten() { CacheService.getScriptCache().remove("cat"); loadCat(); Logger.log(Object.keys(ITEMS).length + " Shop-Teile geladen."); }
 
 // Spalten im Blatt "Spieler"
 const C = {NR:0, PIN:1, MUENZEN:2, GEKAUFT:3, AVATAR:4, FEHL:5, GESPERRT:6, LOGIN:7};
@@ -48,6 +65,7 @@ function einrichten() {
   }
   ensureSheets();
   uebersicht();
+  katalogTesten();
 }
 
 function ensureSheets() {
@@ -78,6 +96,7 @@ function out(o) {
 
 function handle(d) {
   if (!d || typeof d.action !== "string") return { ok: false, error: "bad" };
+  loadCat();
   if (d.action === "scores") return { ok: true, scores: scores() };
   const a = auth(d);
   if (a.error) return { ok: false, error: a.error };

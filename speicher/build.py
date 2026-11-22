@@ -13,6 +13,8 @@ for c in cat:
     if "months" in c: d["months"]=c["months"]
     if "lvl" in c: d["lvl"]=c["lvl"]
     items[c["id"]]=d
-s=open("Code.gs.tpl").read().replace("/*ITEMS*/",json.dumps(items)).replace("/*SLOTS*/",json.dumps(slots)).replace("/*DEFAULT*/",json.dumps(default))
+s=open("Code.gs.tpl").read()
 open("Code.gs","w").write(s)
+shop={"items":{c["id"]:[c["slot"],c["price"],c.get("lvl",0)]+([c["months"]] if "months" in c else []) for c in cat},"slots":slots,"default":default}
+open("/home/claude/english8/shop.json","w").write(json.dumps(shop,separators=(",",":")))
 print(len(cat),"items", slots)
