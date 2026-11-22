@@ -121,6 +121,7 @@
   <div class="card" id="ovc"></div>
 </div>
 
+<script src="game.js"></script>
 <script>
 /* ---------- DATA ---------- */
 const STATIONS = [
@@ -210,8 +211,10 @@ const CLUE_NO = {cap:1, shoes:2, bag:3, glasses:4};
 /* ---------- STATE ---------- */
 let S = {name:"", station:-1, mistakes:0, start:0, end:0, done:false};
 let item = 0;
-function save(){ try{localStorage.setItem("oneCase",JSON.stringify(S))}catch(e){} }
-function load(){ try{const x=JSON.parse(localStorage.getItem("oneCase")); if(x&&x.name) S=x;}catch(e){} }
+function save(){ try{sessionStorage.setItem("oneCase",JSON.stringify(S))}catch(e){} }
+function load(){ try{const x=JSON.parse(sessionStorage.getItem("oneCase")); if(x&&x.name) S=x;}catch(e){} }
+function me(){ const s=window.E8&&E8.getSession(); return s?s.nr:null; }
+function resetGame(){ S={name:"", station:-1, mistakes:0, start:0, end:0, done:false}; try{sessionStorage.removeItem("oneCase")}catch(e){} item=0; render(); window.scrollTo(0,0); }
 const $ = id => document.getElementById(id);
 const app = () => $("app");
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
@@ -269,7 +272,7 @@ function startScreen(){
     <p class="de">Löse jede Station, um einen Hinweis zu bekommen. Du kommst erst weiter, wenn alles richtig ist. Fehler werden gezählt – je weniger, desto höher dein Rang!</p>
     <p class="task">What's your detective name?</p>
     <div class="row">
-      <input type="text" id="nm" placeholder="your name" maxlength="20" autocomplete="off">
+      <input type="text" id="nm" placeholder="your name" maxlength="20" autocomplete="off" value="${me()?"No. "+me():""}">
       <button class="btn primary" onclick="begin()">Open the case</button>
     </div>
     <div class="feedback bad" id="fb"></div>
@@ -279,7 +282,7 @@ function startScreen(){
 function begin(){
   const n = $("nm").value.trim();
   if(!n){ $("fb").textContent="Please enter your name. – Bitte gib deinen Namen ein."; return; }
-  S = {name:n, station:0, mistakes:0, start:Date.now(), end:0, done:false};
+  S = {name:n, nr:me(), station:0, mistakes:0, start:Date.now(), end:0, done:false};
   save(); item=0; showRules(); render();
 }
 
@@ -494,15 +497,26 @@ function certificate(){
     Mr Patel has got his silver camera back. 📷</p>
     <div class="big">Rank: <b>${rank}</b></div>
     <p>Mistakes: <b>${S.mistakes}</b> &nbsp;·&nbsp; Time: <b>${m} min ${s} s</b></p>
+    <div id="coinbox" style="margin:14px auto;padding:12px;background:#fffaf0;border:2px solid var(--gold);border-radius:8px;max-width:460px"></div>
     <p class="small">Show this screen to your teacher. – Zeig diesen Bildschirm deiner Lehrkraft.</p>
-    <p><a class="link" href="#" onclick="if(confirm('Start a new case? Your result will be deleted.')){try{localStorage.removeItem('oneCase')}catch(e){};location.reload()};return false;">Play again</a></p>
+    <p class="row" style="justify-content:center"><button class="btn primary" onclick="resetGame()">New player / play again</button>
+      <button class="btn" onclick="location.href='./'">← All exercises</button></p>
   </div>`;
+  if(window.E8) E8.reportInto("coinbox","one-ones",S,save);
+}
+function resumeScreen(){
+  header();
+  app().innerHTML = `<div class="card"><span class="tag">Case file #24</span>
+    <h2 class="type">Welcome back!</h2>
+    <p>Someone has already started this case on this iPad. – Auf diesem iPad hat schon jemand angefangen.</p>
+    <p class="row"><button class="btn primary" onclick="render()">Continue as ${S.name.replace(/[<>&]/g,"")}</button>
+      <button class="btn" onclick="resetGame()">I'm a new player</button></p></div>`;
 }
 
 /* ---------- INIT ---------- */
 load();
-if(S.start && !S.done && S.station>=0){ item=0; }
-render();
+if(S.name && me() && S.nr!==me()){ S={name:"", station:-1, mistakes:0, start:0, end:0, done:false}; save(); }
+if(S.name && !S.done && S.station>=0) resumeScreen(); else render();
 </script>
 </body>
 </html>

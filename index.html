@@ -2,45 +2,178 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>English 8 – Practice</title>
 <style>
-  *{box-sizing:border-box}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    background:#1d2433;color:#eef2f8;padding:28px 16px 40px}
+    background:#1d2433;color:#eef2f8;padding:24px 16px 40px;font-size:17px}
   .wrap{max-width:900px;margin:0 auto}
-  h1{font-size:34px;margin:0 0 4px}
-  .sub{color:#a9b4c8;margin:0 0 24px;font-size:17px}
+  h1{font-size:32px;margin:0 0 4px}
+  .sub{color:#a9b4c8;margin:0 0 20px}
+  .box{background:#273048;border-radius:16px;padding:18px;margin-bottom:22px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  input{font-size:22px;padding:10px 12px;border-radius:10px;border:2px solid #4a5a80;background:#1a2133;color:#fff;width:120px;text-align:center}
+  label{font-size:14px;color:#a9b4c8;display:block;margin-bottom:4px}
+  .btn{font-size:18px;padding:11px 20px;border-radius:12px;border:2px solid #5b6c96;background:#33405f;color:#fff;cursor:pointer;font-weight:600}
+  .btn.primary{background:#f2c230;border-color:#f2c230;color:#2a2200}
+  .btn.small{font-size:15px;padding:7px 12px}
+  .btn:disabled{opacity:.45}
+  .msg{min-height:22px;margin-top:8px;font-weight:600;color:#ff8a8a}
+  .msg.ok{color:#7dffb0}
+  .me{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .av{width:110px;border-radius:14px;overflow:hidden;flex:none;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+  .coins{font-size:26px;font-weight:800;color:#f2c230}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
-  a.tile{display:block;text-decoration:none;color:inherit;border-radius:16px;padding:20px;min-height:170px;
-    box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .15s}
+  a.tile{display:block;text-decoration:none;color:inherit;border-radius:16px;padding:20px;min-height:170px;position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,.35)}
   a.tile:active{transform:scale(.98)}
   .icon{font-size:44px;line-height:1}
-  .topic{display:inline-block;margin-top:12px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;
-    background:rgba(255,255,255,.18);padding:3px 10px;border-radius:20px}
+  .topic{display:inline-block;margin-top:12px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,255,255,.18);padding:3px 10px;border-radius:20px}
   .name{font-size:22px;font-weight:700;margin-top:8px}
   .info{font-size:15px;opacity:.85;margin-top:4px}
+  .stars{position:absolute;top:16px;right:16px;font-size:20px;letter-spacing:2px}
+  .de{font-size:14px;color:#a9b4c8;font-style:italic}
+  /* wardrobe */
+  .ov{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;z-index:10;overflow:auto;padding:16px}
+  .ov.show{display:block}
+  .shop{max-width:900px;margin:0 auto;background:#273048;border-radius:16px;padding:18px}
+  .shoptop{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+  .preview{width:180px;border-radius:16px;overflow:hidden;flex:none}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
+  .tab{font-size:15px;padding:7px 12px;border-radius:20px;border:2px solid #4a5a80;background:transparent;color:#fff;cursor:pointer}
+  .tab.on{background:#f2c230;border-color:#f2c230;color:#2a2200;font-weight:700}
+  .items{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+  .item{background:#1a2133;border:3px solid transparent;border-radius:12px;padding:6px;cursor:pointer;text-align:center;font-size:14px;color:#fff}
+  .item .mini{border-radius:8px;overflow:hidden}
+  .item.sel{border-color:#f2c230}
+  .item.wear{box-shadow:0 0 0 2px #7dffb0 inset}
+  .price{font-weight:700;color:#f2c230}
+  .price.own{color:#7dffb0}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>📚 English 8</h1>
   <p class="sub">Choose an exercise. – Wähle eine Übung.</p>
+  <div class="box" id="acct"></div>
   <div class="grid" id="grid"></div>
 </div>
+
+<div class="ov" id="ov"><div class="shop" id="shop"></div></div>
+
+<script src="game.js"></script>
 <script>
-/* Neue Übungen hier eintragen (neueste oben) */
+/* Neue Übungen hier eintragen (neueste oben). id = Spiel-ID für Münzen/Sterne */
 const EXERCISES = [
-  {file:"if-clauses.html", icon:"🚀", topic:"If clauses (type I)", name:"Mission Orion", info:"Repair the space station and fly home.", color:"linear-gradient(135deg,#16224a,#2b4a8f)"},
-  {file:"one-ones.html", icon:"🕵️", topic:"one / ones", name:"The Camden Market Camera Case", info:"Talk to the witnesses and find the thief.", color:"linear-gradient(135deg,#4a3a22,#8a6a36)"}
+  {id:"if-clauses", file:"if-clauses.html", icon:"🚀", topic:"If clauses (type I)", name:"Mission Orion", info:"Repair the space station and fly home.", color:"linear-gradient(135deg,#16224a,#2b4a8f)"},
+  {id:"one-ones", file:"one-ones.html", icon:"🕵️", topic:"one / ones", name:"The Camden Market Camera Case", info:"Talk to the witnesses and find the thief.", color:"linear-gradient(135deg,#4a3a22,#8a6a36)"}
 ];
-document.getElementById("grid").innerHTML = EXERCISES.map(e=>`
-  <a class="tile" href="${e.file}" style="background:${e.color}">
-    <div class="icon">${e.icon}</div>
-    <div class="topic">${e.topic}</div>
-    <div class="name">${e.name}</div>
-    <div class="info">${e.info}</div>
-  </a>`).join("");
+const $ = id => document.getElementById(id);
+
+function tiles(){
+  const se = E8.getSession(), st = se ? se.state.stars : {};
+  $("grid").innerHTML = EXERCISES.map(e=>{
+    const n = st[e.id]||0;
+    const stars = se ? `<div class="stars">${"⭐".repeat(n)}${"☆".repeat(3-n)}</div>` : "";
+    return `<a class="tile" href="${e.file}" style="background:${e.color}">${stars}
+      <div class="icon">${e.icon}</div><div class="topic">${e.topic}</div>
+      <div class="name">${e.name}</div><div class="info">${e.info}</div></a>`;
+  }).join("");
+}
+
+function acct(){
+  const se = E8.getSession();
+  if(!E8.online()){ $("acct").style.display="none"; tiles(); return; }
+  if(!se){
+    $("acct").innerHTML = `
+      <b>Log in to collect coins 🪙 and dress your avatar!</b>
+      <div class="de">Melde dich an, um Münzen zu sammeln und deinen Avatar einzukleiden.</div>
+      <div class="row" style="margin-top:12px;align-items:flex-end">
+        <div><label>Number</label><input id="nr" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off"></div>
+        <div><label>PIN</label><input id="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off"></div>
+        <button class="btn primary" id="go">Log in</button>
+      </div>
+      <div class="msg" id="msg"></div>
+      <div class="de">You can also play without logging in – but you won't get coins. – Ohne Anmeldung spielen geht auch, aber ohne Münzen.</div>`;
+    $("go").onclick = async ()=>{
+      const nr=$("nr").value.trim(), pin=$("pin").value.trim();
+      if(!nr||pin.length!==3){ $("msg").textContent="Enter your number and your 3-digit PIN. – Nummer und dreistellige PIN eingeben."; return; }
+      $("go").disabled=true; $("msg").className="msg ok"; $("msg").textContent="Checking …";
+      const r = await E8.login(nr,pin);
+      $("go").disabled=false;
+      if(r.ok){ acct(); } else { $("msg").className="msg"; $("msg").textContent=E8.errText(r.error); }
+    };
+    $("pin").addEventListener("keydown",e=>{ if(e.key==="Enter") $("go").click(); });
+  } else {
+    const s = se.state;
+    $("acct").innerHTML = `<div class="me">
+      <div class="av">${E8.avatarSVG(s.equipped)}</div>
+      <div><div style="font-size:20px;font-weight:700">Player No. ${s.nr}</div>
+        <div class="coins">${s.coins} 🪙</div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn primary" id="wardrobe">👕 Wardrobe & shop</button>
+          <button class="btn small" id="out">Log out</button>
+        </div>
+        <div class="de" style="margin-top:6px">Please log out when you're finished! – Bitte abmelden, wenn du fertig bist!</div>
+      </div></div>`;
+    $("out").onclick=()=>{ E8.logout(); acct(); };
+    $("wardrobe").onclick=openShop;
+  }
+  tiles();
+}
+
+/* ---------- Wardrobe ---------- */
+let tab="top", trying=null, busy=false;
+function openShop(){ const se=E8.getSession(); if(!se) return; trying=Object.assign({},se.state.equipped); $("ov").classList.add("show"); drawShop(); window.scrollTo(0,0); }
+function closeShop(){ $("ov").classList.remove("show"); acct(); }
+function isMine(id){ const it=E8.item(id), s=E8.getSession().state; return it.price===0 || s.owned.indexOf(id)>=0; }
+function drawShop(msg, ok){
+  const se=E8.getSession(); if(!se){ closeShop(); return; }
+  const s=se.state, cur=trying[tab], it=E8.item(cur);
+  const changed = JSON.stringify(trying)!==JSON.stringify(Object.assign({},E8.DEFAULT,s.equipped));
+  const allMine = E8.SLOTS.every(([k])=>isMine(trying[k]));
+  let action = "";
+  if(!isMine(cur)) action = `<button class="btn primary" id="buy" ${s.coins<it.price?"disabled":""}>Buy ${it.name} for ${it.price} 🪙</button>`;
+  else if(changed && allMine) action = `<button class="btn primary" id="wear">✔ Wear this</button>`;
+  $("shop").innerHTML = `
+    <div class="shoptop">
+      <div class="preview">${E8.avatarSVG(trying)}</div>
+      <div style="flex:1;min-width:220px">
+        <div class="row" style="justify-content:space-between"><div class="coins">${s.coins} 🪙</div><button class="btn small" id="close">✕ Close</button></div>
+        <p>Tap an item to try it on. – Tippe auf ein Teil, um es anzuprobieren.</p>
+        <div class="row">${action}</div>
+        <div class="msg ${ok?"ok":""}" id="smsg">${msg||(!allMine?"You can only wear things you own. – Nur gekaufte Teile können getragen werden.":"")}</div>
+      </div>
+    </div>
+    <div class="tabs">${E8.SLOTS.map(([k,n])=>`<button class="tab ${k===tab?"on":""}" data-k="${k}">${n}</button>`).join("")}</div>
+    <div class="items">${E8.CATALOG.filter(i=>i.slot===tab).map(i=>{
+      const t=Object.assign({},trying,{[tab]:i.id});
+      const wearing = Object.assign({},E8.DEFAULT,s.equipped)[tab]===i.id;
+      return `<div class="item ${i.id===cur?"sel":""} ${wearing?"wear":""}" data-id="${i.id}">
+        <div class="mini">${E8.avatarSVG(t)}</div><div>${i.name}</div>
+        <div class="price ${isMine(i.id)?"own":""}">${i.price===0?"free":isMine(i.id)?"✔ yours":i.price+" 🪙"}</div></div>`;
+    }).join("")}</div>`;
+  $("close").onclick=closeShop;
+  document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{tab=b.dataset.k;drawShop();});
+  document.querySelectorAll(".item").forEach(b=>b.onclick=()=>{trying[tab]=b.dataset.id;drawShop();});
+  if($("buy")) $("buy").onclick=async()=>{
+    if(busy) return; busy=true; $("buy").disabled=true; $("smsg").textContent="…";
+    const r=await E8.call("buy",{item:cur}); busy=false;
+    if(!r.ok){ if(!E8.getSession()) return closeShop(); return drawShop(E8.errText(r.error)); }
+    if(E8.SLOTS.every(([k])=>isMine(trying[k]))){ const r2=await E8.call("equip",{equipped:trying}); return drawShop(r2.ok?"🎉 Bought and put on!":E8.errText(r2.error), r2.ok); }
+    drawShop("🎉 Bought!",true);
+  };
+  if($("wear")) $("wear").onclick=async()=>{
+    if(busy) return; busy=true; $("wear").disabled=true;
+    const r=await E8.call("equip",{equipped:trying}); busy=false;
+    if(!r.ok && !E8.getSession()) return closeShop();
+    drawShop(r.ok?"✔ Saved!":E8.errText(r.error), r.ok);
+  };
+}
+
+acct();
+if(E8.getSession()) E8.call("login").then(()=>acct());
 </script>
 </body>
 </html>
