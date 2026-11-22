@@ -98,3 +98,6 @@ VOCAB["u2"] = { unit: "Unit 2 · Titel", sections: [
 - Darunter Reihen (seitlich wischbar): „Today“ (Tages-Challenge), pro Unit „Grammar missions“ und „Vocabulary bosses“. Karten mit Cover, Sternen, Fortschrittsbalken, NEW-Schild.
 - Unten fixe Navigation: PLAY · LOCKER (nur eigene Teile) · SHOP · TROPHIES (Abzeichen + alle Top-3-Listen).
 - Für eine neue Klasse nur `SITE` (Titel/Untertitel), `<title>`, `GRAMMAR`, Vokabel-Dateien und Abzeichen anpassen – Aufbau und Optik bleiben gleich, damit alle Klassenseiten dasselbe Prinzip haben. Eine eigene Akzentfarbe pro Klasse ist erlaubt.
+
+### Tutorial-Tour
+`index.html` enthält eine geführte Tour (Array `TOUR`, 8 Schritte, Englisch + deutsche Hilfe). Sie startet beim ersten Besuch automatisch (Merker `localStorage` „e8tour“), jederzeit über den „?“-Button oben rechts oder per Link `…/#tour` (zum Vorführen am Beamer). Für eine neue Klasse nur die Texte anpassen (Belohnungen, Unit-Namen); die Selektoren bleiben gleich.
