@@ -43,12 +43,15 @@
   .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
   .tab{font-size:15px;padding:7px 12px;border-radius:20px;border:2px solid #4a5a80;background:transparent;color:#fff;cursor:pointer}
   .tab.on{background:#f2c230;border-color:#f2c230;color:#2a2200;font-weight:700}
-  .items{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+  .items{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
   .item{background:#1a2133;border:3px solid transparent;border-radius:12px;padding:6px;cursor:pointer;text-align:center;font-size:14px;color:#fff}
   .item .mini{border-radius:8px;overflow:hidden}
   .item.sel{border-color:#f2c230}
   .item.wear{box-shadow:0 0 0 2px #7dffb0 inset}
   .price{font-weight:700;color:#f2c230}
+  .iname{font-weight:600;margin-top:4px;line-height:1.2}
+  .rar{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin:2px 0}
+  h3{font-size:17px;color:#c9d2e3}
   .price.own{color:#7dffb0}
 </style>
 </head>
@@ -62,7 +65,7 @@
 
 <div class="ov" id="ov"><div class="shop" id="shop"></div></div>
 
-<script src="game.js?v=3"></script>
+<script src="game.js?v=4"></script>
 <script>
 /* Neue Übungen hier eintragen (neueste oben). id = Spiel-ID für Münzen/Sterne */
 const EXERCISES = [
@@ -102,7 +105,7 @@ function acct(){
       $("go").disabled=true; $("msg").className="msg ok"; $("msg").textContent="Checking …";
       const r = await E8.login(nr,pin);
       $("go").disabled=false;
-      if(r.ok){ acct(); } else { $("msg").className="msg"; $("msg").textContent=E8.errText(r.error); }
+      if(r.ok){ acct(); if(r.state.fresh){ tab=0; openShop(); drawShop("👋 Welcome! Create your avatar first – everything here is free. – Gestalte zuerst deinen Avatar, alles hier ist kostenlos.",true); } } else { $("msg").className="msg"; $("msg").textContent=E8.errText(r.error); }
     };
     $("pin").addEventListener("keydown",e=>{ if(e.key==="Enter") $("go").click(); });
   } else {
@@ -124,45 +127,59 @@ function acct(){
 }
 
 /* ---------- Wardrobe ---------- */
-let tab="top", trying=null, busy=false;
-function openShop(){ const se=E8.getSession(); if(!se) return; trying=Object.assign({},se.state.equipped); $("ov").classList.add("show"); drawShop(); window.scrollTo(0,0); }
+let tab=0, trying=null, busy=false;
+const MON=["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function seasonText(it){ if(!it.months) return ""; const m=it.months; return (m.length===1?MON[m[0]]:MON[m[0]]+"–"+MON[m[m.length-1]])+" only"; }
+function openShop(){ const se=E8.getSession(); if(!se) return; trying=E8.clean(se.state.equipped); $("ov").classList.add("show"); drawShop(); window.scrollTo(0,0); }
 function closeShop(){ $("ov").classList.remove("show"); acct(); }
 function isMine(id){ const it=E8.item(id), s=E8.getSession().state; return it.price===0 || s.owned.indexOf(id)>=0; }
 function drawShop(msg, ok){
   const se=E8.getSession(); if(!se){ closeShop(); return; }
-  const s=se.state, cur=trying[tab], it=E8.item(cur);
-  const changed = JSON.stringify(trying)!==JSON.stringify(Object.assign({},E8.DEFAULT,s.equipped));
-  const allMine = E8.SLOTS.every(([k])=>isMine(trying[k]));
-  let action = "";
-  if(!isMine(cur)) action = `<button class="btn primary" id="buy" ${s.coins<it.price?"disabled":""}>Buy ${it.name} for ${it.price} 🪙</button>`;
-  else if(changed && allMine) action = `<button class="btn primary" id="wear">✔ Wear this</button>`;
+  const s=se.state, worn=E8.clean(s.equipped);
+  const notMine=E8.SLOTS.filter(k=>!isMine(trying[k]));
+  const changed=JSON.stringify(trying)!==JSON.stringify(worn);
+  let action="";
+  if(notMine.length===1){
+    const it=E8.item(trying[notMine[0]]), can=E8.inSeason(it);
+    action=`<button class="btn primary" id="buy" ${(!can||s.coins<it.price)?"disabled":""}>Buy “${it.name}” for ${it.price} 🪙</button>`;
+    if(!can) msg=msg||"Not available right now. – Gerade nicht erhältlich.";
+    else if(s.coins<it.price) msg=msg||`You need ${it.price-s.coins} more coins. – Dir fehlen noch ${it.price-s.coins} Münzen.`;
+  } else if(notMine.length>1){ msg=msg||"You're trying on several things you don't own. Buy them one by one. – Mehrere Teile sind noch nicht gekauft."; }
+  else if(changed) action=`<button class="btn primary" id="wear">✔ Save my look</button>`;
+  if(changed) action+=` <button class="btn small" id="reset">Undo</button>`;
+  const [tabName,slots]=E8.TABS[tab];
+  const sections=slots.map(slot=>{
+    const items=E8.CATALOG.filter(i=>i.slot===slot && (E8.inSeason(i)||isMine(i.id)));
+    return (slots.length>1?`<h3 style="margin:14px 0 8px">${E8.SLOTNAME[slot]}</h3>`:"")+`<div class="items">`+items.map(i=>{
+      const t=Object.assign({},trying,{[slot]:i.id}), r=E8.rarity(i.price), mine=isMine(i.id);
+      return `<div class="item ${trying[slot]===i.id?"sel":""} ${worn[slot]===i.id?"wear":""}" data-slot="${slot}" data-id="${i.id}" style="border-top:4px solid ${r.color}">
+        <div class="mini">${E8.avatarSVG(t)}</div><div class="iname">${i.name}</div>
+        <div class="rar" style="color:${r.color}">${i.price?r.name:"&nbsp;"}${i.months?" · "+seasonText(i):""}</div>
+        <div class="price ${mine?"own":""}">${i.price===0?"free":mine?"✔ yours":i.price+" 🪙"}</div></div>`;
+    }).join("")+`</div>`;
+  }).join("");
   $("shop").innerHTML = `
     <div class="shoptop">
       <div class="preview">${E8.avatarSVG(trying)}</div>
       <div style="flex:1;min-width:220px">
         <div class="row" style="justify-content:space-between"><div class="coins">${s.coins} 🪙</div><button class="btn small" id="close">✕ Close</button></div>
-        <p>Tap an item to try it on. – Tippe auf ein Teil, um es anzuprobieren.</p>
+        <p style="margin:8px 0">Tap something to try it on. – Tippe auf ein Teil, um es anzuprobieren.</p>
         <div class="row">${action}</div>
-        <div class="msg ${ok?"ok":""}" id="smsg">${msg||(!allMine?"You can only wear things you own. – Nur gekaufte Teile können getragen werden.":"")}</div>
+        <div class="msg ${ok?"ok":""}" id="smsg">${msg||""}</div>
       </div>
     </div>
-    <div class="tabs">${E8.SLOTS.map(([k,n])=>`<button class="tab ${k===tab?"on":""}" data-k="${k}">${n}</button>`).join("")}</div>
-    <div class="items">${E8.CATALOG.filter(i=>i.slot===tab).map(i=>{
-      const t=Object.assign({},trying,{[tab]:i.id});
-      const wearing = Object.assign({},E8.DEFAULT,s.equipped)[tab]===i.id;
-      return `<div class="item ${i.id===cur?"sel":""} ${wearing?"wear":""}" data-id="${i.id}">
-        <div class="mini">${E8.avatarSVG(t)}</div><div>${i.name}</div>
-        <div class="price ${isMine(i.id)?"own":""}">${i.price===0?"free":isMine(i.id)?"✔ yours":i.price+" 🪙"}</div></div>`;
-    }).join("")}</div>`;
+    <div class="tabs">${E8.TABS.map(([n],i)=>`<button class="tab ${i===tab?"on":""}" data-i="${i}">${n}</button>`).join("")}</div>
+    ${sections}`;
   $("close").onclick=closeShop;
-  document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{tab=b.dataset.k;drawShop();});
-  document.querySelectorAll(".item").forEach(b=>b.onclick=()=>{trying[tab]=b.dataset.id;drawShop();});
+  if($("reset")) $("reset").onclick=()=>{trying=E8.clean(s.equipped);drawShop();};
+  document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{tab=+b.dataset.i;drawShop();});
+  document.querySelectorAll(".item").forEach(b=>b.onclick=()=>{trying[b.dataset.slot]=b.dataset.id;drawShop();});
   if($("buy")) $("buy").onclick=async()=>{
-    if(busy) return; busy=true; $("buy").disabled=true; $("smsg").textContent="…";
-    const r=await E8.call("buy",{item:cur}); busy=false;
+    if(busy) return; busy=true; $("buy").disabled=true; $("smsg").className="msg ok"; $("smsg").textContent="…";
+    const r=await E8.call("buy",{item:trying[notMine[0]]}); busy=false;
     if(!r.ok){ if(!E8.getSession()) return closeShop(); return drawShop(E8.errText(r.error)); }
-    if(E8.SLOTS.every(([k])=>isMine(trying[k]))){ const r2=await E8.call("equip",{equipped:trying}); return drawShop(r2.ok?"🎉 Bought and put on!":E8.errText(r2.error), r2.ok); }
-    drawShop("🎉 Bought!",true);
+    const r2=await E8.call("equip",{equipped:trying});
+    drawShop(r2.ok?"🎉 Bought and saved!":E8.errText(r2.error), r2.ok);
   };
   if($("wear")) $("wear").onclick=async()=>{
     if(busy) return; busy=true; $("wear").disabled=true;

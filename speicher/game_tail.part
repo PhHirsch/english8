@@ -1,0 +1,2 @@
+  window.E8 = { CATALOG: CATALOG, SLOTS: SLOTS, TABS: TABS, SLOTNAME: SLOTNAME, DEFAULT: DEFAULT, getSession: getSession, login: login, logout: logout, call: call, errText: errText, reportInto: reportInto, avatarSVG: avatarSVG, clean: clean, rarity: rarity, inSeason: inSeason, item: id => byId[id], online: () => !!API_URL && API_URL.indexOf("/*") !== 0 };
+})();

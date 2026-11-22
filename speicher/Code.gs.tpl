@@ -14,8 +14,8 @@ const MAX_BELOHNTE_WDH_PRO_TAG = 3;
 
 // Shop-Katalog (muss zu game.js passen – nicht von Hand ändern)
 const ITEMS = /*ITEMS*/;
-const SLOTS = ["skin","hair","top","hat","glasses","acc","bg"];
-const DEFAULT = {skin:"skin1",hair:"hair-brown",top:"top-tshirt",hat:"hat-none",glasses:"gl-none",acc:"acc-none",bg:"bg-plain"};
+const SLOTS = ["skin","eyes","lashes","hairstyle","haircolor","top","hat","glasses","jewellery","extra","bg"];
+const DEFAULT = {skin:"skin2",eyes:"eye-brown",lashes:"lash-off",hairstyle:"hs-short",haircolor:"hc-brown",top:"top-tshirt-white",hat:"hat-none",glasses:"gl-none",jewellery:"jw-none",extra:"ex-none",bg:"bg-plain"};
 
 // Spalten im Blatt "Spieler"
 const C = {NR:0, PIN:1, MUENZEN:2, GEKAUFT:3, AVATAR:4, FEHL:5, GESPERRT:6, LOGIN:7};
@@ -115,11 +115,13 @@ function auth(d) {
   return { p: p };
 }
 
-function owned(p) { return String(p.v[C.GEKAUFT] || "").split(",").map(s => s.trim()).filter(Boolean); }
+function owned(p) { return String(p.v[C.GEKAUFT] || "").split(",").map(s => s.trim()).filter(s => ITEMS[s]); }
 function equipped(p) {
   let e = {};
   try { e = JSON.parse(p.v[C.AVATAR] || "{}"); } catch (x) {}
-  return Object.assign({}, DEFAULT, e);
+  const r = Object.assign({}, DEFAULT);
+  SLOTS.forEach(s => { if (ITEMS[e[s]] && ITEMS[e[s]].slot === s) r[s] = e[s]; });
+  return r;
 }
 function resultsOf(nr) {
   const er = SpreadsheetApp.getActive().getSheetByName("Ergebnisse");
@@ -128,7 +130,7 @@ function resultsOf(nr) {
 function state(p) {
   const stars = {};
   resultsOf(p.v[C.NR]).forEach(r => { stars[r[2]] = Math.max(stars[r[2]] || 0, Number(r[4]) || 0); });
-  return { nr: String(p.v[C.NR]), coins: Number(p.v[C.MUENZEN]) || 0, owned: owned(p), equipped: equipped(p), stars: stars };
+  return { fresh: !p.v[C.AVATAR], nr: String(p.v[C.NR]), coins: Number(p.v[C.MUENZEN]) || 0, owned: owned(p), equipped: equipped(p), stars: stars };
 }
 
 function result(p, d) {
@@ -157,6 +159,10 @@ function buy(p, d) {
   if (!it || it.price <= 0) return { ok: false, error: "bad" };
   const o = owned(p);
   if (o.indexOf(d.item) >= 0) return { ok: false, error: "owned" };
+  if (it.months) {
+    const m = Number(Utilities.formatDate(new Date(), "Europe/Berlin", "M"));
+    if (it.months.indexOf(m) < 0) return { ok: false, error: "season" };
+  }
   const coins = Number(p.v[C.MUENZEN]) || 0;
   if (coins < it.price) return { ok: false, error: "coins" };
   o.push(d.item);
