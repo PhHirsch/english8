@@ -15,7 +15,8 @@ Diese Datei beschreibt das System, das für den E-Kurs Englisch 8 gebaut wurde (
 
 | Datei | Zweck |
 |---|---|
-| `index.html` | Startseite: Login, Avatar, Level/XP, Abzeichen, Münzen, Shop („Wardrobe & shop“), Kacheln für alle Spiele mit Sternen und Top 3, Tages-Challenge |
+| `index.html` | Startseite im Spiele-Lobby-Stil (siehe Abschnitt 8): Avatar auf Podest, Level/XP, Münzen, Abzeichen, ausgewähltes Spiel mit PLAY und Top 3, Hintergrund passt sich dem Spiel an, Spielreihen pro Unit, Navigation Play · Locker · Shop · Trophies |
+| `covers.js` | Cover-Grafiken (SVG, gern animiert) für Grammatik-/Story-Spiele und die Tages-Challenge (`COVERS[spiel-id]`) |
 | `game.js` | **Gemeinsames Modul (generiert, nicht von Hand bearbeiten!)**: Login/API, `E8.reportInto()`, Avatar-Zeichnung (`E8.avatarSVG`, `E8.myAvatar`), Shop-Katalog, Level |
 | `shop.json` | **Generiert**: Shop-Katalog für das Google-Skript (nur Teile freigeschalteter Units) |
 | `bosses.js` | SVG-Grafiken der Vokabel-Bosse (`BOSSART[kind]`) |
@@ -66,7 +67,8 @@ python3 build.py "<WEB-APP-URL>"        # erzeugt ../game.js, ../shop.json, Code
   - `<script src="game.js?v=N"></script>` einbinden; Spielstand `S` in `sessionStorage` mit eigenem `KEY`; `S.nr = E8.getSession()?.nr`; wenn eingeloggte Nummer ≠ `S.nr` → neu starten; angefangenes Spiel → „Welcome back – Continue / I'm a new player“.
   - `S.start`, `S.end`, `S.mistakes`, `S.total` (Anzahl Aufgaben) setzen; am Ende `E8.reportInto("coinbox", "<spiel-id>", S, save)`.
   - Ende: Buttons „New player / play again“ und „← All exercises“; „← All exercises“ auch oben.
-  - In `index.html` in `GRAMMAR` eintragen (`id`, `unit`, `file`, `icon`, `topic`, `name`, `info`, `color`). Mit `unit` erscheint es unter der passenden Unit.
+  - In `index.html` in `GRAMMAR` eintragen (`id`, `unit`, `file`, `topic`, `name`, `info` (1–2 spannende Sätze), `accent` (Hauptfarbe, steuert den Hintergrund), `color` (Karten-Verlauf), optional `isNew:true`). Mit `unit` erscheint es in der Reihe der Unit. Älteren Spielen `isNew` wieder entfernen.
+  - **Für jedes neue Spiel ein Cover in `covers.js`** anlegen (SVG, viewBox 0 0 220 140, gern leicht animiert, passend zur Story).
 - Vor dem Pushen mit Playwright (`/usr/bin/google-chrome`) + `mock.js` komplett durchspielen, auch mit Fehlern.
 
 ## 6. Vokabel-Bosse
@@ -87,3 +89,12 @@ VOCAB["u2"] = { unit: "Unit 2 · Titel", sections: [
 - **Freischalten neuer Units:** Wenn die Lehrkraft Spiele zu einer neuen Unit bestellt, diese Unit in `ACTIVE_UNITS` aufnehmen und neu bauen.
 - Bewusst **nicht**: Zufallsboxen/Loot-Boxen, Bestenlisten mit Namen (nur Nummern), Bonus-Münzen durch die Lehrkraft, Kostüme von Religionsgemeinschaften o. Ä.
 - Abzeichen (in `index.html`, `ACH`) und Top 3 pro Spiel (wenigste Fehler, dann schnellste Zeit).
+
+## 8. Startseite (Lobby-Stil)
+- Aussehen wie ein aktuelles Konsolen-/Mobile-Spiel, **nicht** wie ein Browser-Spiel: dunkler Hintergrund mit Lichtstrahlen, Schrift Anton (Überschriften) + Inter (Text) von Google Fonts.
+- Oben links: Avatar groß im Kreis auf leuchtendem Podest, darunter „PLAYER #Nr“, Klassenname (`SITE.sub`) und Abzeichen. Ohne Login steht dort das Login-Feld.
+- Kopfzeile: Level-Sechseck, XP-Leiste, Münzen, Sterne, Log out. Ohne Login: `SITE.title`.
+- Rechts: das **ausgewählte Spiel** (Kicker, großer Titel, Beschreibung, Sterne, PLAY-Knopf, Top 3). Der **Hintergrund (Farbe `accent` + große Cover-Grafik) wechselt** weich zum ausgewählten Spiel. Erstes Antippen einer Karte wählt aus, zweites startet.
+- Darunter Reihen (seitlich wischbar): „Today“ (Tages-Challenge), pro Unit „Grammar missions“ und „Vocabulary bosses“. Karten mit Cover, Sternen, Fortschrittsbalken, NEW-Schild.
+- Unten fixe Navigation: PLAY · LOCKER (nur eigene Teile) · SHOP · TROPHIES (Abzeichen + alle Top-3-Listen).
+- Für eine neue Klasse nur `SITE` (Titel/Untertitel), `<title>`, `GRAMMAR`, Vokabel-Dateien und Abzeichen anpassen – Aufbau und Optik bleiben gleich, damit alle Klassenseiten dasselbe Prinzip haben. Eine eigene Akzentfarbe pro Klasse ist erlaubt.
