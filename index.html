@@ -83,8 +83,8 @@
 <script>
 /* Grammatik- und Story-Spiele (id = Spiel-ID). Vokabel-Bosse kommen automatisch aus vocab-*.js */
 const GRAMMAR = [
-  {id:"if-clauses", file:"if-clauses.html", icon:"🚀", topic:"If clauses (type I)", name:"Mission Orion", info:"Repair the space station and fly home.", color:"linear-gradient(135deg,#16224a,#2b4a8f)"},
-  {id:"one-ones", file:"one-ones.html", icon:"🕵️", topic:"one / ones", name:"The Camden Market Camera Case", info:"Talk to the witnesses and find the thief.", color:"linear-gradient(135deg,#4a3a22,#8a6a36)"}
+  {id:"if-clauses", unit:"u2", file:"if-clauses.html", icon:"🚀", topic:"If clauses (type I)", name:"Mission Orion", info:"Repair the space station and fly home.", color:"linear-gradient(135deg,#16224a,#2b4a8f)"},
+  {id:"one-ones", unit:"u2", file:"one-ones.html", icon:"🕵️", topic:"one / ones", name:"The Camden Market Camera Case", info:"Talk to the witnesses and find the thief.", color:"linear-gradient(135deg,#4a3a22,#8a6a36)"}
 ];
 const BOSSCOL = {tornado:"linear-gradient(135deg,#3a4256,#6a7a96)",robot:"linear-gradient(135deg,#2a3a4a,#4a6a8a)",ghost:"linear-gradient(135deg,#2a2a5a,#5a5aa0)",bossy:"linear-gradient(135deg,#5a1e1a,#a0402a)",slime:"linear-gradient(135deg,#1e4a24,#3f8a2a)",manager:"linear-gradient(135deg,#2e1d5a,#6a3cb0)",locker:"linear-gradient(135deg,#12305a,#2a68b8)"};
 const $ = id => document.getElementById(id);
@@ -122,14 +122,17 @@ function games(){
   const se = E8.getSession();
   const done = se && se.state.stats && se.state.stats.dailyToday;
   h += `<div class="grid" style="margin-bottom:8px">${tile({id:"daily",href:"boss.html?id=daily",color:"linear-gradient(135deg,#7a2a8a,#e0533a)",icon:"🔥",topic:"Daily Challenge",name:"Boss of the Day",info:(done?"✔ Done today – you can still practise!":"10 random words · new every day · up to 15 🪙")})}</div>`;
-  Object.values(VOCAB).forEach(u => {
+  Object.entries(VOCAB).forEach(([key,u]) => {
     h += `<h2>${u.unit}</h2>`;
     const parts = [...new Set(u.sections.map(s => s.part))];
     parts.forEach(p => {
       h += `<h4>${p}</h4><div class="grid">` + u.sections.filter(s => s.part === p).map(s => tile({id:s.id, href:"boss.html?id="+s.id, color:BOSSCOL[s.boss]||"#333", img:`<div class="bossimg">${BOSSART[s.boss]}</div>`, topic:"Vocabulary boss", name:s.title, info:`${s.bossName} · ${s.words.length} words<br>${s.pages}`})).join("") + `</div>`;
     });
+    const gr = GRAMMAR.filter(g => g.unit === key);
+    if (gr.length) h += `<h4>Grammar</h4><div class="grid">` + gr.map(g => tile({id:g.id, href:g.file, color:g.color, icon:g.icon, topic:g.topic, name:g.name, info:g.info})).join("") + `</div>`;
   });
-  h += `<h2>Grammar</h2><div class="grid">` + GRAMMAR.map(g => tile({id:g.id, href:g.file, color:g.color, icon:g.icon, topic:g.topic, name:g.name, info:g.info})).join("") + `</div>`;
+  const other = GRAMMAR.filter(g => !VOCAB[g.unit]);
+  if (other.length) h += `<h2>Grammar</h2><div class="grid">` + other.map(g => tile({id:g.id, href:g.file, color:g.color, icon:g.icon, topic:g.topic, name:g.name, info:g.info})).join("") + `</div>`;
   $("games").innerHTML = h;
 }
 
