@@ -91,14 +91,14 @@ function acct(){
       <div class="de">Melde dich an, um Münzen zu sammeln und deinen Avatar einzukleiden.</div>
       <div class="row" style="margin-top:12px;align-items:flex-end">
         <div><label>Number</label><input id="nr" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off"></div>
-        <div><label>PIN</label><input id="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off"></div>
+        <div><label>PIN</label><input id="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off"></div>
         <button class="btn primary" id="go">Log in</button>
       </div>
       <div class="msg" id="msg"></div>
       <div class="de">You can also play without logging in – but you won't get coins. – Ohne Anmeldung spielen geht auch, aber ohne Münzen.</div>`;
     $("go").onclick = async ()=>{
       const nr=$("nr").value.trim(), pin=$("pin").value.trim();
-      if(!nr||pin.length!==3){ $("msg").textContent="Enter your number and your 3-digit PIN. – Nummer und dreistellige PIN eingeben."; return; }
+      if(!nr||pin.length!==4){ $("msg").textContent="Enter your number and your 4-digit PIN. – Nummer und vierstellige PIN eingeben."; return; }
       $("go").disabled=true; $("msg").className="msg ok"; $("msg").textContent="Checking …";
       const r = await E8.login(nr,pin);
       $("go").disabled=false;

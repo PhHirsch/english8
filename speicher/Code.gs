@@ -30,7 +30,7 @@ function einrichten() {
     sp.getRange("B:B").setNumberFormat("@");
     const rows = [];
     for (let i = 1; i <= ANZAHL_SPIELER; i++) {
-      rows.push([i, String(Math.floor(Math.random() * 1000)).padStart(3, "0"), 0, "", "", 0, "", ""]);
+      rows.push([i, String(Math.floor(Math.random() * 10000)).padStart(4, "0"), 0, "", "", 0, "", ""]);
     }
     sp.getRange(2, 1, rows.length, 8).setValues(rows);
     sp.setFrozenRows(1);
@@ -96,12 +96,12 @@ function player(nr) {
 
 function auth(d) {
   const nr = String(d.nr || "").trim(), pin = String(d.pin || "").trim();
-  if (!/^\d{1,4}$/.test(nr) || !/^\d{3}$/.test(pin)) return { error: "login" };
+  if (!/^\d{1,4}$/.test(nr) || !/^\d{4}$/.test(pin)) return { error: "login" };
   const p = player(nr);
   if (!p) return { error: "login" };
   const until = p.v[C.GESPERRT] instanceof Date ? p.v[C.GESPERRT].getTime() : 0;
   if (until > Date.now()) return { error: "locked" };
-  const realPin = String(p.v[C.PIN]).trim().padStart(3, "0");
+  const realPin = String(p.v[C.PIN]).trim().padStart(4, "0");
   if (realPin !== pin) {
     const f = (Number(p.v[C.FEHL]) || 0) + 1;
     if (f >= MAX_FEHLVERSUCHE) {
