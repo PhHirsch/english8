@@ -76,6 +76,7 @@
   /* Navigation */
   .nav{position:fixed;left:0;right:0;bottom:0;z-index:5;height:64px;background:rgba(5,6,12,.75);backdrop-filter:blur(12px);border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:center;gap:clamp(18px,6vw,60px);align-items:center}
   .nav button{background:none;border:none;color:#cfd6e4;font-size:20px;cursor:pointer;padding:6px 4px;border-bottom:3px solid transparent}
+  @media(max-width:480px){.nav button{font-size:16px;padding:6px 2px}.nav{gap:14px!important}}
   .nav button.on{color:#ffd23a;border-bottom-color:#ffd23a}
   /* Overlays */
   .ov{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;z-index:10;overflow:auto;padding:16px 16px 90px}
@@ -136,14 +137,14 @@
   </div>
   <div id="shelves"></div>
 </div>
-<nav class="nav"><button class="D on" data-n="play">PLAY</button><button class="D" data-n="locker">LOCKER</button><button class="D" data-n="shop">SHOP</button><button class="D" data-n="trophies">TROPHIES</button></nav>
+<nav class="nav"><button class="D on" data-n="play">PLAY</button><button class="D" data-n="locker">LOCKER</button><button class="D" data-n="shop">SHOP</button><button class="D" data-n="home">HOME</button><button class="D" data-n="trophies">TROPHIES</button></nav>
 <div class="ov" id="ov"><div class="sheet" id="shop"></div></div>
 <div class="ov" id="pinov" style="z-index:40"><div class="sheet pinbox" id="pinbox"></div></div>
 <div class="tour" id="tour"><div class="hole" id="hole"></div><div class="tip" id="tip"></div></div>
 
-<script src="game.js?v=8"></script>
+<script src="game.js?v=10"></script>
 <script src="bosses.js?v=7"></script>
-<script src="covers.js?v=7"></script>
+<script src="covers.js?v=10"></script>
 <script src="vocab-u2.js?v=7"></script>
 <script>
 /* ===== Seiten-Einstellungen (für jede Klasse anpassen) ===== */
@@ -163,6 +164,7 @@ let SCORES = {}, SEL = null;
 /* Alle Spiele als Liste */
 const ALL = [];
 ALL.push({id:"daily", href:"boss.html?id=daily", topic:"Daily Challenge", name:"Boss of the Day", info:"10 random words from all units – a new boss every day. Up to 15 coins, once a day!", art:COVERS.daily, accent:"#e0533a", color:"linear-gradient(135deg,#7a2a8a,#e0533a)", shelf:"daily"});
+ALL.push({id:"review", href:"boss.html?id=review", topic:"Mistake box", name:"The Mistake Monster", info:"A boss made of the words you got wrong. Get them right and they leave your box! Coins once a day.", art:COVERS.review||"", accent:"#3fae5a", color:"linear-gradient(135deg,#1e4a24,#3fae5a)", shelf:"daily", only:() => { const s = state(); return !!(s && s.review && s.review.length); }});
 const SHELVES = [{key:"daily", title:"Today"}];
 Object.entries(VOCAB).forEach(([key,u]) => {
   const gr = GRAMMAR.filter(g => g.unit === key);
@@ -243,18 +245,18 @@ function feat(){
   const g = SEL, s = state(), n = starsOf(g.id), l = SCORES[g.id]||[];
   const done = g.id==="daily" && s && s.stats && s.stats.dailyToday;
   $("feat").innerHTML = `<div class="kicker">${g.isNew?"NEW · ":""}${g.topic.toUpperCase()}</div><h1 class="D">${g.name.toUpperCase()}</h1><p>${g.info}</p>
-    <div class="meta">${s && g.id!=="daily" ? `<span class="st">${stStr(n)}</span>` : ""}${done?`<span>✔ Done today – you can still practise!</span>`:""}</div>
+    <div class="meta">${s && g.id!=="daily" && g.id!=="review" ? `<span class="st">${stStr(n)}</span>` : ""}${done?`<span>✔ Done today – you can still practise!</span>`:""}</div>
     <a class="play D" href="${g.href}"><span>PLAY ▶</span></a>
     ${l.length?`<div class="top3">🏆 TOP 3 ${l.map((x,i)=>`<span class="p ${["g","s","b"][i]}"><div>${E8.avatarSVG(x.eq)}</div>#${x.nr}</span>`).join("")}</div>`:""}`;
 }
 /* ===== Reihen ===== */
 function shelves(){
   $("shelves").innerHTML = SHELVES.map(sh => {
-    const games = ALL.filter(g => g.shelf === sh.key);
+    const games = ALL.filter(g => g.shelf === sh.key && (!g.only || g.only()));
     return `<div class="shelf"><h3 class="D">${sh.title.toUpperCase()}${sh.sub?`<small>${sh.sub}</small>`:""}</h3><div class="strip">${games.map(g => {
       const n = starsOf(g.id);
       return `<div class="card ${SEL&&SEL.id===g.id?"sel":""}" data-id="${g.id}" style="background:${g.color}">${g.isNew?`<span class="new">NEW</span>`:""}<div class="art">${g.art}</div>
-        <div class="lab"><small>${g.topic.toUpperCase()}</small>${g.name}${state()&&g.id!=="daily"?` <span style="color:#ffd23a;font-size:12px">${stStr(n)}</span>`:""}</div>${n?`<div class="prog" style="width:${n*33.4}%"></div>`:""}</div>`;
+        <div class="lab"><small>${g.topic.toUpperCase()}</small>${g.name}${state()&&g.id!=="daily"&&g.id!=="review"?` <span style="color:#ffd23a;font-size:12px">${stStr(n)}</span>`:""}</div>${n?`<div class="prog" style="width:${n*33.4}%"></div>`:""}</div>`;
     }).join("")}</div></div>`;
   }).join("");
   document.querySelectorAll(".card").forEach(c => c.onclick = () => {
@@ -276,6 +278,7 @@ document.querySelectorAll(".nav button").forEach(b => b.onclick = () => {
   const n = b.dataset.n;
   if (n === "play") { closeShop(); window.scrollTo({top:0,behavior:"smooth"}); return; }
   if (!state()) { closeShop(); window.scrollTo({top:0,behavior:"smooth"}); if($("msg")) $("msg").textContent="Please log in first. – Bitte zuerst anmelden."; return; }
+  if (n === "home") { location.href = "home.html"; return; }
   if (n === "trophies") return openTrophies();
   tab = 0; openShop(n);
 });
@@ -286,7 +289,7 @@ function openTrophies(){
   const s = state(); setNav("trophies"); $("ov").classList.add("show");
   $("shop").innerHTML = `<div class="row" style="justify-content:space-between"><div class="D" style="font-size:30px">TROPHIES</div><button class="btn small" onclick="closeShop()">✕ Close</button></div>
     <h3 class="sec">Badges</h3><div class="ach">${ACH.map(a=>`<div class="${s.stats&&a[3](s)?"":"off"}"><b>${a[0]}</b><span><strong>${a[1]}</strong><br><span class="de" style="font-style:normal">${a[2]}</span></span></div>`).join("")}</div>
-    <h3 class="sec">Top 3</h3>${ALL.filter(g=>g.id!=="daily").map(g=>{const l=SCORES[g.id]||[];return `<div class="trow"><span class="nm">${g.name}</span>${l.length?l.map((x,i)=>`<span class="top3" style="margin:0"><span class="p ${["g","s","b"][i]}"><div>${E8.avatarSVG(x.eq)}</div>#${x.nr}</span></span>`).join(""):`<span class="de">Nobody yet – be the first!</span>`}</div>`}).join("")}`;
+    <h3 class="sec">Top 3</h3>${ALL.filter(g=>g.id!=="daily"&&g.id!=="review").map(g=>{const l=SCORES[g.id]||[];return `<div class="trow"><span class="nm">${g.name}</span>${l.length?l.map((x,i)=>`<span class="top3" style="margin:0"><span class="p ${["g","s","b"][i]}"><div>${E8.avatarSVG(x.eq)}</div>#${x.nr}</span></span>`).join(""):`<span class="de">Nobody yet – be the first!</span>`}</div>`}).join("")}`;
 }
 
 /* ===== Locker & Shop ===== */
@@ -394,6 +397,8 @@ const TOUR = [
   {sel:".strip .card[data-id='daily']", t:"DAILY CHALLENGE", p:"Every day there is a new boss with 10 words from all units. Play it every day for extra coins!", de:"Jeden Tag neu – Münzen gibt es einmal am Tag."},
   {sel:"#top", t:"COINS & LEVEL", p:"First time: 20–40 coins (more stars = more coins). Play again and get more stars for more coins. Every coin you win also gives you XP for your <b>level</b>.", de:"Mehr Sterne = mehr Münzen. Mit Münzen steigst du auch im Level auf – Level schalten besondere Shop-Teile frei."},
   {sel:".nav", t:"LOCKER, SHOP & TROPHIES", p:"<b>Shop</b>: buy clothes, hats, pets and crazy effects. <b>Locker</b>: change your look. <b>Trophies</b>: your badges and the top 3 of every game.", de:"Im Shop kaufst du, im Locker ziehst du dich um, bei Trophies siehst du Abzeichen und Bestenlisten."},
+  {sel:".nav button[data-n='home']", t:"YOUR HOME", p:"Build your own house! Your <b>stars</b> make it bigger: tent → hut → house → villa → mansion. With <b>coins</b> you choose walls, roof, windows and garden. You can also visit your classmates' houses.", de:"Sterne lassen dein Haus wachsen, mit Münzen gestaltest du es. Du kannst auch die Häuser der anderen besuchen."},
+  {sel:".strip .card[data-id='review']", t:"MISTAKE BOX", p:"After a vocabulary boss, the words you got wrong go into your <b>mistake box</b>. Beat the Mistake Monster and the words disappear!", de:"Wörter, die du falsch hattest, landen in deiner Fehler-Kiste. Wenn du sie richtig hast, verschwinden sie wieder."},
   {sel:null, t:"ONE LAST THING!", p:"On a school iPad, always press <b>Log out</b> when you are finished. Now – have fun! 🎮", de:"Auf Schul-iPads am Ende immer abmelden! Viel Spaß!"}
 ];
 let TI = 0;
@@ -401,6 +406,7 @@ function tour(){ TI = 0; $("tour").classList.add("show"); window.scrollTo(0,0); 
 function tourEnd(){ $("tour").classList.remove("show"); }
 function tourStep(){
   const s = TOUR[TI], el = s.sel && document.querySelector(s.sel), hole = $("hole"), tip = $("tip");
+  if (s.sel && !el && s.sel.indexOf("review") >= 0) { s.sel = null; }
   if (el) { el.scrollIntoView({block:"center", behavior:"instant"}); }
   setTimeout(() => {
     const vw = innerWidth, vh = innerHeight;

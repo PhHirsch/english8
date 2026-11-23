@@ -105,3 +105,13 @@ VOCAB["u2"] = { unit: "Unit 2 · Titel", sections: [
 ### Eigene PIN
 Die Lehrkraft vergibt eine Start-PIN (Spalte B im Blatt „Spieler“). Beim ersten Login muss jede:r eine eigene 4-stellige PIN wählen (zweimal eingeben; zu einfache PINs wie 1234, 1111 oder die eigene Nummer werden abgelehnt). Danach steht in Spalte I „Eigene PIN“ = „ja“, und die neue PIN steht in Spalte B – die Lehrkraft kann sie bei Bedarf nachschauen. Zurücksetzen: neue Start-PIN in Spalte B eintragen und „ja“ in Spalte I löschen. Später lässt sich die PIN über „🔑 Change PIN“ unter dem Avatar ändern. Server: Aktion `setpin`, Feld `mustSetPin` im State.
 Login-Karten (Word, 8 pro A4-Seite, QR-Code + Felder für Nummer, Start-PIN, eigene PIN) lassen sich für jede Klasse mit eigener URL erzeugen.
+
+## 9. Haus-Baukasten, Fehler-Kiste, Offline-Speicher
+
+**Haus (home.html, house.js):** Jede:r baut ein Haus in Schrägansicht (2.5D-SVG). **Sterne** (Summe der besten Sterne pro Spiel, ohne Daily/Fehler-Kiste) bestimmen die Ausbaustufe: Zelt 0 · Hütte 5 · Häuschen 12 · Haus 20 · großes Haus 30 · Villa 45 · Anwesen 65 (`STAGES` in `speicher/house_items.py`). **Münzen** kaufen frei kombinierbare Teile: Untergrund, Wände (Material), Wandfarbe, Dach, Dachfarbe, Fenster, Tür, Dach-Extra, Zaun, Garten (4 Plätze, Platz 1–4 öffnen bei Hütte/Häuschen/großem Haus/Villa). Teile können `lvl`, `stars`, `months` (Saison) und `unit` (erst sichtbar, wenn die Unit in `ACTIVE_UNITS` steht) haben. `build.py` erzeugt `house.js` und den Abschnitt `house` in `shop.json`. Nachbarschaft: alle Häuser nur mit Nummer, nur anschauen (Aktion `houses`, ohne Login). Server: Spalte J „Haus“, Aktion `house`.
+
+**Fehler-Kiste:** `boss.html?id=review`. Falsche Wörter aus Boss-Kämpfen (auch Daily) landen in Spalte K „Fehler-Kiste“ (max. 80), richtig beantwortete fliegen raus. Die Karte „The Mistake Monster“ erscheint im Regal „Today“ nur, wenn die Kiste nicht leer ist. Münzen: 3 × Sterne, 1x pro Tag. Zählt nicht für Sterne/Top 3.
+
+**Offline-Speicher:** Scheitert das Senden eines Ergebnisses wegen fehlender Verbindung, speichert `game.js` es (ohne PIN) im localStorage und sendet es automatisch, sobald dieselbe Nummer wieder eingeloggt und online ist.
+
+Für eine neue Klasse: `house_items.py` übernehmen und Unit-Teile anpassen, `home.html` und `house.js` kopieren (Texte bei Spanisch übersetzen), Nav-Button HOME in index.html.
