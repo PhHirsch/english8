@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>My Home</title>
+<title>My Home · The Hirsch Games</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -100,7 +101,7 @@ function lockReason(it) {
 function page() {
   const s = st();
   const tabs = `<div class="tabsTop"><button class="D ${VIEW === "build" ? "on" : ""}" data-v="build">MY HOME</button><button class="D ${VIEW === "hood" ? "on" : ""}" data-v="hood">TOWN</button></div>`;
-  $("app").innerHTML = `<div class="top"><a class="back" href="./">← Lobby</a><div class="D title">${VIEW === "hood" ? "OUR TOWN" : "MY HOME"}</div>
+  $("app").innerHTML = `<div class="top"><img src="logo.svg" alt="" style="width:44px;height:44px"><a class="back" href="./">← Lobby</a><div class="D title">${VIEW === "hood" ? "OUR TOWN" : "MY HOME"}</div>
     ${s ? `<div class="pills"><span class="pill">⭐ ${stars()}</span><span class="pill">🪙 ${s.coins}</span></div>` : ""}</div>${tabs}<div id="view"></div>`;
   document.querySelectorAll(".tabsTop button").forEach(b => b.onclick = () => { VIEW = b.dataset.v; page(); });
   if (VIEW === "hood") return hood();

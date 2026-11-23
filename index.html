@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>English 8</title>
+<title>The Hirsch Games · English 8</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@700;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;background:#07080d;color:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -27,6 +28,12 @@
   .pills{margin-left:auto;display:flex;gap:10px;align-items:center}
   .pill{background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.18);padding:7px 15px;border-radius:30px;font-size:21px;backdrop-filter:blur(8px)}
   .logo{font-size:26px}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .brand img{width:52px;height:52px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
+  .brand .bn{font-family:Cinzel,Georgia,serif;font-weight:900;font-size:21px;color:#e9bd4a;letter-spacing:.08em;line-height:1.05;text-shadow:0 2px 0 rgba(0,0,0,.5)}
+  .brand .bn small{display:block;font-family:Inter,sans-serif;font-weight:700;font-size:11px;letter-spacing:.22em;color:#b9c3d6;margin-top:4px}
+  .brand.big img{width:72px;height:72px}.brand.big .bn{font-size:30px}
+  @media(max-width:760px){.brand:not(.big) .bn{display:none}.brand img{width:44px;height:44px}}
   .out{background:none;border:1px solid rgba(255,255,255,.25);color:#cfd6e4;border-radius:20px;padding:7px 12px;font-size:13px;font-weight:700;cursor:pointer}
   /* Lobby */
   .lobby{display:grid;grid-template-columns:380px 1fr;gap:30px;margin-top:18px;align-items:start}
@@ -207,9 +214,10 @@ function setBg(g){
 /* ===== Kopfzeile ===== */
 function topBar(){
   const s = state();
-  if (!s) { $("top").innerHTML = `<div class="D logo">${SITE.title}</div><div class="pills"><button class="howto" onclick="tour()">❓ HOW IT WORKS</button></div>`; return; }
+  const brand = big => `<div class="brand ${big?"big":""}"><img src="logo.svg" alt=""><div class="bn">THE HIRSCH<br>GAMES<small>${SITE.sub}</small></div></div>`;
+  if (!s) { $("top").innerHTML = `${brand(true)}<div class="pills"><button class="howto" onclick="tour()">❓ HOW IT WORKS</button></div>`; return; }
   const L = E8.levelInfo(s.xp||0), stars = Object.values(s.stars||{}).reduce((a,b)=>a+b,0);
-  $("top").innerHTML = `<div class="hex D">${L.level}</div><div class="tier"><div class="D">LEVEL ${L.level} · ${L.name.toUpperCase()}</div><div class="bar"><i style="width:${L.pct}%"></i></div><div class="xpt">${L.next?`${s.xp||0} / ${L.next} XP`:"max level"}</div></div>
+  $("top").innerHTML = `${brand(false)}<div class="hex D">${L.level}</div><div class="tier"><div class="D">LEVEL ${L.level} · ${L.name.toUpperCase()}</div><div class="bar"><i style="width:${L.pct}%"></i></div><div class="xpt">${L.next?`${s.xp||0} / ${L.next} XP`:"max level"}</div></div>
     <div class="pills"><span class="pill D">🪙 ${s.coins}</span><span class="pill D">⭐ ${stars}</span><button class="help" onclick="tour()" title="How does it work?">?</button><button class="out" id="out">Log out</button></div>`;
   $("out").onclick = () => { E8.logout(); render(); };
 }
@@ -390,7 +398,7 @@ function pinDialog(first){
 
 /* ===== Tutorial ===== */
 const TOUR = [
-  {sel:null, t:"WELCOME!", p:"This is your English practice zone. Play games, collect coins, level up and dress your avatar. Let's have a quick look!", de:"Hier übst du Englisch mit Spielen, sammelst Münzen und gestaltest deinen Avatar. Kurze Tour!"},
+  {sel:null, t:"WELCOME TO THE HIRSCH GAMES!", p:"This is your English practice zone. Play games, collect coins, level up and dress your avatar. Let's have a quick look!", de:"Hier übst du Englisch mit Spielen, sammelst Münzen und gestaltest deinen Avatar. Kurze Tour!"},
   {sel:"#hero", t:"YOU", p:"This is your avatar. Log in with your <b>number</b> and the <b>4-digit PIN</b> from your teacher. The first time, you choose your <b>own PIN</b>. Without a login you can play, but you get no coins.", de:"Beim ersten Login wählst du deine eigene PIN. Ohne Login kannst du spielen, bekommst aber keine Münzen."},
   {sel:".lobby .feat", t:"YOUR GAME", p:"Here you see the selected game. Press <b>PLAY</b> to start. You can only go on when your answer is right – mistakes come back later.", de:"Mit PLAY startest du. Du kommst nur weiter, wenn alles richtig ist."},
   {sel:"#shelves .shelf:nth-child(2)", t:"ALL GAMES", p:"All games are sorted by unit: vocabulary bosses and grammar missions. Tap a game <b>once</b> to see it, tap it <b>again</b> to play.", de:"Einmal tippen = ansehen, nochmal tippen = spielen. Wische die Reihen zur Seite."},

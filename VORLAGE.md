@@ -115,3 +115,6 @@ Login-Karten (Word, 8 pro A4-Seite, QR-Code + Felder für Nummer, Start-PIN, eig
 **Offline-Speicher:** Scheitert das Senden eines Ergebnisses wegen fehlender Verbindung, speichert `game.js` es (ohne PIN) im localStorage und sendet es automatisch, sobald dieselbe Nummer wieder eingeloggt und online ist.
 
 Für eine neue Klasse: `house_items.py` übernehmen und Unit-Teile anpassen, `home.html` und `house.js` kopieren (Texte bei Spanisch übersetzen), Nav-Button HOME in index.html.
+
+## 10. Name und Logo: THE HIRSCH GAMES
+Alle Kurs-Seiten heißen „The Hirsch Games“. Dateien: `logo.svg` (goldene Nadel mit Hirsch und Bleistift), `apple-touch-icon.png`. In `index.html`: Schrift Cinzel, `.brand`-Block in `topBar()` (groß für Gäste, klein für Eingeloggte, Text auf dem Handy ausgeblendet), Untertitel aus `SITE.sub`, Tab-Titel „The Hirsch Games · <Kurs>“, Favicon-Links in allen HTML-Dateien, erster Tour-Schritt „WELCOME TO THE HIRSCH GAMES!“ (auf Spanisch „¡BIENVENIDOS A THE HIRSCH GAMES!“). Login-Karten mit Logo.
