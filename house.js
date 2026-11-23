@@ -377,9 +377,31 @@
         (opts.avatar ? `<circle cx="0" cy="-44" r="19" fill="#fff"/><svg x="-17" y="-61" width="34" height="34" viewBox="0 0 200 200"><clipPath id="nc${opts.uid || 0}"><circle cx="100" cy="100" r="100"/></clipPath><g clip-path="url(#nc${opts.uid || 0})">${opts.avatar.replace(/^<svg[^>]*>/, "").replace(/<\/svg>$/, "")}</g></svg>` : "") +
         (opts.nr ? `<rect x="-17" y="-28" width="34" height="13" rx="3" fill="#2a1a10"/><text x="0" y="-18" font-size="10" font-weight="800" font-family="Arial" fill="#ffd23a" text-anchor="middle">#${opts.nr}</text>` : "") + `</g>`;
     }
+    if (opts.inner) return s;
     return `<svg viewBox="-180 -170 360 390" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto">${s}</svg>`;
   }
 
+  /* ---------- Stadt: alle Häuser auf einer Karte ---------- */
+  function townSVG(list) {
+    const n = list.length, C = Math.max(2, Math.ceil(Math.sqrt(n))), R = Math.max(1, Math.ceil(n / C)), G = 12.5;
+    const W = C * G + 1.5, D = R * G + 1.5;
+    const T = (x, y, z) => P(x, y, z || 0);
+    let s = "";
+    // Grundfläche mit Straßen und Weser
+    const pp = a => a.map(q => { const p = T(q[0], q[1], q[2]); return f1(p[0]) + "," + f1(p[1]); }).join(" ");
+    s += `<polygon points="${pp([[-1.5, -1.5, 0], [W, -1.5, 0], [W, D, 0], [-1.5, D, 0]])}" fill="#5c6670"/>`;
+    s += `<polygon points="${pp([[-1.5, D, 0], [W, D, 0], [W, D, -1], [-1.5, D, -1]])}" fill="#4a3a2a"/><polygon points="${pp([[W, -1.5, 0], [W, D, 0], [W, D, -1], [W, -1.5, -1]])}" fill="#3a2e22"/>`;
+    s += `<polygon points="${pp([[W, -1.5, 0], [W + 5, -1.5, 0], [W + 5, D, 0], [W, D, 0]])}" fill="#4a8ec4"/><polygon points="${pp([[W + 5, -1.5, 0], [W + 5, D, 0], [W + 5, D, -1], [W + 5, -1.5, -1]])}" fill="#356a96"/><polygon points="${pp([[W, D, 0], [W + 5, D, 0], [W + 5, D, -1], [W, D, -1]])}" fill="#3f7aaa"/>`;
+    for (let i = 0; i < 8; i++) { const y = i * D / 8 + 1; s += ln([W + 1, y, .02], [W + 4, y + .8, .02], "#ffffff", 2, 'opacity=".45"'); }
+    const tw = T(W + 2.5, D / 2, 0); s += `<text x="${f1(tw[0])}" y="${f1(tw[1])}" font-size="40" font-weight="800" fill="#ffffff" opacity=".6" text-anchor="middle" font-family="Arial" transform="rotate(30 ${f1(tw[0])} ${f1(tw[1])})">WESER</text>`;
+    for (let i = 0; i <= C; i++) { const x = i * G - 1.25; s += ln([x, -1.5, .01], [x, D, .01], "#e9e2c8", 1.5, 'stroke-dasharray="12 10" opacity=".7"'); }
+    for (let j = 0; j <= R; j++) { const y = j * G - 1.25; s += ln([-1.5, y, .01], [W, y, .01], "#e9e2c8", 1.5, 'stroke-dasharray="12 10" opacity=".7"'); }
+    const cells = list.map((h, k) => ({ h: h, i: k % C, j: Math.floor(k / C), k: k })).sort((a, b) => (a.i + a.j) - (b.i + b.j) || a.i - b.i);
+    cells.forEach(c => { const o = T(c.i * G, c.j * G, 0); s += `<g class="lot" data-k="${c.k}" style="cursor:pointer" transform="translate(${f1(o[0])} ${f1(o[1])})">${houseSVG(c.h.h, c.h.st, { nr: c.h.nr, inner: true })}</g>`; });
+    const xs = [T(-1.5, D, 0)[0] - 20, T(W + 5, -1.5, 0)[0] + 20], ys = [T(-1.5, -1.5, 0)[1] - 230, T(W + 5, D, -1)[1] + 20];
+    return `<svg viewBox="${f1(xs[0])} ${f1(ys[0])} ${f1(xs[1] - xs[0])} ${f1(ys[1] - ys[0])}" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto">${s}</svg>`;
+  }
+
   window.HOUSE = { CATALOG: HCAT, SLOTS: HSLOTS, DEFAULT: HDEFAULT, STAGES: STAGES, YARD_STAGE: YARD_STAGE, STAGE_NAMES: STAGE_NAMES, TABS: HTABS, SLOTNAME: HSLOTNAME,
-    item: id => byId[id], clean: hclean, stageOf: stageOf, yardOpen: yardOpen, svg: houseSVG, fam: fam };
+    item: id => byId[id], clean: hclean, stageOf: stageOf, yardOpen: yardOpen, svg: houseSVG, town: townSVG, fam: fam };
 })();

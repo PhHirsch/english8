@@ -72,7 +72,7 @@
 <div class="wrap" id="app"></div>
 <div class="ov" id="ov"><div class="box" id="ovbox"></div></div>
 <script src="game.js?v=10"></script>
-<script src="house.js?v=10"></script>
+<script src="house.js?v=11"></script>
 <script>
 const $ = id => document.getElementById(id);
 const H = window.HOUSE;
@@ -83,7 +83,7 @@ const ICON = { tree:"🌳", pine:"🌲", apple:"🍎", flowers:"🌷", veg:"🥕
   chimney:"💨", solar:"☀️", dish:"📡", flag:"🚩", rooster:"🐓", turbine:"🌬️", lights:"✨", telescope:"🔭", heli:"🚁",
   picket:"🪵", hedge:"🌿", castle:"🏰", space:"🚀", door:"🚪" };
 const MON = ["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-let VIEW = "build", TAB = 0, SPOT = "yard1", trying = null, busy = false, HOUSES = null;
+let HMODE = "town", ZOOM = 100, VIEW = "build", TAB = 0, SPOT = "yard1", trying = null, busy = false, HOUSES = null;
 
 const st = () => { const s = E8.getSession(); return s && s.state; };
 const stars = () => (st() && st().starsTotal) || 0;
@@ -99,8 +99,8 @@ function lockReason(it) {
 
 function page() {
   const s = st();
-  const tabs = `<div class="tabsTop"><button class="D ${VIEW === "build" ? "on" : ""}" data-v="build">MY HOME</button><button class="D ${VIEW === "hood" ? "on" : ""}" data-v="hood">NEIGHBOURS</button></div>`;
-  $("app").innerHTML = `<div class="top"><a class="back" href="./">← Lobby</a><div class="D title">${VIEW === "hood" ? "THE NEIGHBOURHOOD" : "MY HOME"}</div>
+  const tabs = `<div class="tabsTop"><button class="D ${VIEW === "build" ? "on" : ""}" data-v="build">MY HOME</button><button class="D ${VIEW === "hood" ? "on" : ""}" data-v="hood">TOWN</button></div>`;
+  $("app").innerHTML = `<div class="top"><a class="back" href="./">← Lobby</a><div class="D title">${VIEW === "hood" ? "OUR TOWN" : "MY HOME"}</div>
     ${s ? `<div class="pills"><span class="pill">⭐ ${stars()}</span><span class="pill">🪙 ${s.coins}</span></div>` : ""}</div>${tabs}<div id="view"></div>`;
   document.querySelectorAll(".tabsTop button").forEach(b => b.onclick = () => { VIEW = b.dataset.v; page(); });
   if (VIEW === "hood") return hood();
@@ -176,17 +176,25 @@ async function buy(id) {
 }
 
 async function hood() {
-  $("view").innerHTML = `<p class="de">Visit the houses of your classmates. – Besuche die Häuser der anderen.</p><div class="hood" id="hood">Loading … 🏘️</div>`;
+  $("view").innerHTML = `<div class="bar2" style="margin:0 0 10px"><div class="tabs" style="margin:0"><button class="${HMODE === "town" ? "on" : ""}" data-m="town">🗺️ Town</button><button class="${HMODE === "list" ? "on" : ""}" data-m="list">▦ List</button></div>${HMODE === "town" ? `<button class="btn" id="zo">－</button><button class="btn" id="zi">＋</button>` : ""}<span class="de">Tap a house to visit it. – Tippe auf ein Haus, um es zu besuchen.</span></div><div id="hood">Loading … 🏘️</div>`;
+  document.querySelectorAll("[data-m]").forEach(b => b.onclick = () => { HMODE = b.dataset.m; hood(); });
   if (!HOUSES) { const r = await E8.api("houses", {}); HOUSES = r.ok ? r.houses : []; if (!r.ok) { $("hood").textContent = E8.errText(r.error); return; } }
   const me = E8.getSession() ? E8.getSession().nr : null;
   const list = HOUSES.slice().sort((a, b) => (a.nr === me ? -1 : b.nr === me ? 1 : Number(a.nr) - Number(b.nr)));
   if (!list.length) { $("hood").textContent = "No houses yet. – Noch keine Häuser."; return; }
-  $("hood").innerHTML = list.map((x, i) => { const sg = H.stageOf(x.st); return `<div class="hcard ${x.nr === me ? "me" : ""}" data-i="${i}">${H.svg(x.h, x.st, { nr: x.nr, uid: "t" + i })}<div class="cap">#${x.nr}${x.nr === me ? " (you)" : ""}<small>${H.STAGE_NAMES[sg]} · ⭐ ${x.st}</small></div></div>`; }).join("");
-  document.querySelectorAll(".hcard").forEach(c => c.onclick = () => {
-    const x = list[+c.dataset.i], sg = H.stageOf(x.st);
+  const visit = x => { const sg = H.stageOf(x.st);
     $("ovbox").innerHTML = `<div class="D" style="font-size:30px">HOUSE #${x.nr}</div><div style="color:#b9c3d6;margin-bottom:6px">${H.STAGE_NAMES[sg]} · ⭐ ${x.st}</div>${H.svg(x.h, x.st, { avatar: E8.avatarSVG(x.eq), nr: x.nr, uid: "big" })}<button class="btn primary" onclick="document.getElementById('ov').classList.remove('show')">✕ Close</button>`;
-    $("ov").classList.add("show");
-  });
+    $("ov").classList.add("show"); };
+  if (HMODE === "town") {
+    $("hood").innerHTML = `<div id="tw" style="overflow:auto;border-radius:18px;background:radial-gradient(ellipse at 50% 30%,rgba(255,255,255,.12),transparent 70%)"><div id="twin" style="width:${ZOOM}%">${H.town(list)}</div></div>`;
+    document.querySelectorAll(".lot").forEach(g => g.onclick = () => visit(list[+g.dataset.k]));
+    $("zi").onclick = () => { ZOOM = Math.min(400, ZOOM + 60); $("twin").style.width = ZOOM + "%"; };
+    $("zo").onclick = () => { ZOOM = Math.max(100, ZOOM - 60); $("twin").style.width = ZOOM + "%"; };
+    return;
+  }
+  $("hood").className = "hood";
+  $("hood").innerHTML = list.map((x, i) => { const sg = H.stageOf(x.st); return `<div class="hcard ${x.nr === me ? "me" : ""}" data-i="${i}">${H.svg(x.h, x.st, { nr: x.nr, uid: "t" + i })}<div class="cap">#${x.nr}${x.nr === me ? " (you)" : ""}<small>${H.STAGE_NAMES[sg]} · ⭐ ${x.st}</small></div></div>`; }).join("");
+  document.querySelectorAll(".hcard").forEach(c => c.onclick = () => visit(list[+c.dataset.i]));
 }
 $("ov").onclick = e => { if (e.target.id === "ov") $("ov").classList.remove("show"); };
 
