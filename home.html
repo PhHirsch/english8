@@ -156,7 +156,7 @@ function build(msg, ok) {
     build(lr ? lr + " – you can try it on, but not buy it yet. – Anprobieren geht, kaufen noch nicht." : "");
   });
   if ($("undo")) $("undo").onclick = () => { trying = H.clean(st().house); build(); };
-  if ($("save")) $("save").onclick = save;
+  if ($("save")) $("save").onclick = () => save();
   if ($("buy")) $("buy").onclick = () => buy(notMine[0]);
 }
 
