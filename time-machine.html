@@ -72,7 +72,7 @@
 <body>
 <main id="app"></main>
 <div class="ov" id="ov" onclick="if(event.target===this)this.classList.remove('show')"><div class="panel" id="ovc"></div></div>
-<script src="game.js?v=10"></script>
+<script src="game.js?v=12"></script>
 <script>
 const GAME = "modals-time", KEY = "timemachine";
 const PARTS = ["🔋", "💎", "⚙️", "🔌", "🗝️"];
@@ -155,7 +155,7 @@ function intro() {
     <p class="de">Finde die 5 Bauteile. In der Vergangenheit brauchst du Vergangenheitsformen, heute die Gegenwartsformen. Du kommst erst weiter, wenn alles richtig ist.</p>
     <div class="row"><button class="btn primary" id="go">⚡ Start the machine</button><button class="btn" onclick="rules()">📘 Read the manual</button></div>
   </div>`;
-  $("go").onclick = () => { S = { nr: me(), st: 0, mistakes: 0, total: TOTAL, start: Date.now(), end: 0, done: false }; item = 0; save(); rules(); warp(render); };
+  $("go").onclick = () => { setSwap(false); S = { nr: me(), st: 0, mistakes: 0, total: TOTAL, start: Date.now(), end: 0, done: false }; item = 0; save(); rules(); warp(render); };
 }
 function warp(cb, text) { const w = document.createElement("div"); w.className = "warp"; w.textContent = text || ""; document.body.appendChild(w); setTimeout(cb, 500); setTimeout(() => w.remove(), 1400); }
 function resume() {
@@ -186,7 +186,21 @@ function partFound() {
     <div style="font-size:70px">${PARTS[i]}</div><h2>You found the ${PARTNAME[i]}!</h2>
     <p>${S.done ? "All parts are in place. Time to go home!" : `${PARTS.length - S.st} parts to go. Hold on tight …`}</p>
     <button class="btn primary" id="go">${S.done ? "🏠 Fly home" : "⚡ Time jump!"}</button></div>`;
-  $("go").onclick = () => { item = 0; warp(render, S.done ? "" : (ST[S.st].era === "then" ? "1870" : ST[S.st].era === "now" ? "TODAY" : "")); };
+  $("go").onclick = () => { item = 0; if (S.st === 1 && S.swap === undefined && !S.done) return choose(); warp(render, S.done ? "" : (ST[S.st].era === "then" ? "1870" : ST[S.st].era === "now" ? "TODAY" : "")); };
+}
+/* Entscheidung: zuerst 1870 oder heute? (nur Reihenfolge, gleicher Stoff) */
+let SWAPPED = false;
+function setSwap(v) { if (!!v !== SWAPPED) { applySwap(); SWAPPED = !!v; } }
+function applySwap() {
+  [ST, PARTS, PARTNAME].forEach(a => { const x = a[1]; a[1] = a[2]; a[2] = x; });
+  ST.forEach((s, i) => s.title = s.title.replace(/^Station \d+/, "Station " + (i + 1)));
+}
+function choose() {
+  $("app").innerHTML = `${header()}<div class="panel center"><h2>🤔 Where do you want to go first?</h2>
+    <p>The machine is ready. You can choose the order! <span class="de">– Du entscheidest. Es gibt kein Richtig oder Falsch.</span></p>
+    <div class="row" style="justify-content:center"><button class="btn" id="p1">📜 Kansas, 1870 – the prairie school</button><button class="btn" id="p2">📱 Kansas, today – Westwood High</button></div></div>`;
+  $("p1").onclick = () => { S.swap = false; setSwap(false); save(); warp(render, "1870"); };
+  $("p2").onclick = () => { S.swap = true; setSwap(true); save(); warp(render, "TODAY"); };
 }
 
 /* ----- Typ: Sortieren ----- */
@@ -282,8 +296,10 @@ function finish() {
 }
 
 load();
+if (S && S.swap) setSwap(true);
 if (S && me() && S.nr !== me()) { S = null; try { sessionStorage.removeItem(KEY); } catch (e) { } }
 if (S && S.done) finish(); else if (S && (S.st > 0 || S.mistakes > 0)) resume(); else intro();
 </script>
+<script src="fx.js?v=2"></script>
 </body>
 </html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Advent Calendar · The Hirsch Games</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  :root{--bg:radial-gradient(ellipse at 50% 0%,#0f3a2a 0%,#04140e 70%);--panel:#0b2219;--txt:#f3fff8;--muted:#a8d4bf;--line:#1d4a36;--btn:#0f2e22;--accent:#e63946;--accentTxt:#fff;--accent2:#ffb3b8;--bubble:#123527;--input:#06160f;--ok:#6fe59a;--bad:#ffb03a}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:17px}
+  .snow{position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(2px 2px at 20px 30px,#fff,transparent),radial-gradient(2px 2px at 120px 80px,#fff,transparent),radial-gradient(1.5px 1.5px at 220px 140px,#fff,transparent),radial-gradient(2px 2px at 320px 40px,#fff,transparent),radial-gradient(1.5px 1.5px at 60px 180px,#fff,transparent);background-size:360px 220px;animation:sn 14s linear infinite;opacity:.55;z-index:0}
+  @keyframes sn{to{background-position:40px 220px}}
+  .wrapA{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:14px}
+  .de{color:var(--muted);font-size:14px}
+  h1{font-family:Georgia,serif;font-style:italic;font-size:40px;margin:6px 0 0;text-align:center;color:#fff;text-shadow:0 0 18px #e6394688}
+  .sub{text-align:center;margin-bottom:10px}
+  .grid{display:grid;grid-template-columns:repeat(6,1fr);gap:9px;margin:14px 0}
+  @media(max-width:620px){.grid{grid-template-columns:repeat(4,1fr)}}
+  .door{position:relative;aspect-ratio:1/1.1;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-decoration:none;color:#fff;font-family:Georgia,serif;font-size:30px;font-weight:700;box-shadow:inset 0 0 0 3px #ffffff22,0 4px 10px #0007;transition:transform .15s}
+  .door:hover{transform:translateY(-3px)}
+  .door small{font-family:system-ui;font-size:11px;font-weight:600;opacity:.85;margin-top:2px}
+  .door.lock{filter:grayscale(.5) brightness(.75);pointer-events:none}
+  .door.lock:after{content:"🔒";position:absolute;bottom:6px;right:7px;font-size:14px}
+  .door.today{box-shadow:0 0 0 3px #ffd23a,0 0 22px #ffd23a;animation:gl 1.6s ease-in-out infinite}
+  @keyframes gl{50%{box-shadow:0 0 0 3px #ffd23a,0 0 6px #ffd23a}}
+  .door.done{background-image:none!important;background:#f3ead0!important;color:#2a4a2a}
+  .door.done:after{content:"⭐";position:absolute;top:4px;right:6px;font-size:14px}
+  .door .em{font-size:30px}
+  .rw{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:8px 0 4px}
+  .rw div{background:#0f2e22;border:1px solid #1d4a36;border-radius:12px;padding:8px 12px;font-size:15px;text-align:center;min-width:170px}
+  .rw div.ok{border-color:#ffd23a;background:#2a3a12}
+  .bar{height:12px;border-radius:7px;background:#06160f;overflow:hidden;margin:6px 0}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,#e63946,#ffd23a)}
+  a.back{color:#ffb3b8}
+  .xm{position:relative;height:150px;border-radius:14px 14px 0 0;overflow:hidden;background:linear-gradient(#0c2a4a,#1a4a6a 70%,#e8f2ff 71%)}
+  .xm .tree{position:absolute;left:12%;bottom:22px;font-size:76px}
+  .xm .num{position:absolute;right:18px;top:12px;font-family:Georgia,serif;font-size:58px;font-style:italic;color:#ffd23a;text-shadow:0 0 18px #ffd23a88}
+  .xm .me{position:absolute;left:42%;bottom:18px;width:66px;height:66px;border-radius:50%;overflow:hidden;background:#fff;border:3px solid #e63946}
+  .xm .me svg{width:100%;height:100%}
+  .xm .gift{position:absolute;bottom:22px;font-size:34px}
+  .story p{margin:.4em 0;line-height:1.55}
+</style>
+</head>
+<body>
+<div class="snow"></div>
+<main id="app"></main>
+<script src="game.js?v=12"></script>
+<script src="engine.js?v=2"></script>
+<script>
+const YEAR = 2026;
+const g = (w, de) => `<b>${w}</b> <span class="de">(${de})</span>`;
+const TF = (q, a, why) => ({ t: "choice", q: q, task: "True or false?", taskDe: "Richtig oder falsch?", keep: true, opts: ["true ✔", "false ✘"], a: a ? "true ✔" : "false ✘", hint: why });
+const COL = ["#c8312b", "#1f7a3a", "#2a5aa0", "#b8862a", "#8a2a6a", "#2a8a8a"];
+const D = [
+ { e: "🗓️", t: "The countdown starts", txt: `<p>Today is the first of December! In the UK and the USA a lot of children have an ${g("Advent calendar", "Adventskalender")}, too. Behind every door there is a picture or a small chocolate. Some families have a calendar with ${g("socks", "Socken")} or small toys.</p>`,
+   q: [{ t: "choice", q: "What is behind the doors?", opts: ["a picture or a small chocolate", "a big present", "a letter from Santa"], a: "a picture or a small chocolate", hint: "„Behind every door there is a picture or a small chocolate.“" },
+       { t: "choice", q: "This calendar has chocolates. Which ___ do you like?", opts: ["one", "ones"], a: "one", hint: "Ein Kalender (Einzahl) → one." },
+       TF("Advent calendars only exist in Germany.", false, "„… have an Advent calendar, too.“")] },
+ { e: "🛍️", t: "After Thanksgiving", txt: `<p>In the USA the Christmas season starts after ${g("Thanksgiving", "Erntedankfest, 4. Donnerstag im November")}. The day after Thanksgiving is called <b>Black Friday</b>. Shops have big ${g("sales", "Rabatte")} and lots of people go shopping very early in the morning.</p>`,
+   q: [{ t: "choice", q: "When does the Christmas season start in the USA?", opts: ["after Thanksgiving", "in October", "on 24 December"], a: "after Thanksgiving", hint: "„… starts after Thanksgiving.“" },
+       { t: "choice", q: "What is Black Friday?", opts: ["the day after Thanksgiving", "a dark day in winter", "a school holiday in June"], a: "the day after Thanksgiving", hint: "„The day after Thanksgiving is called Black Friday.“" },
+       { t: "type", q: "Last year my dad ___ (go) shopping at 5 a.m.!", a: "went", show: "go → went (simple past)" }] },
+ { e: "🎄", t: "The tree in New York", txt: `<p>Every year there is a huge Christmas tree at ${g("Rockefeller Center", "ein Gebäudekomplex")} in New York. It is about 25 metres tall and has more than 50,000 lights. On top there is a big ${g("star", "Stern")} with three million crystals!</p>`,
+   q: [{ t: "choice", q: "Where is the tree?", opts: ["in New York", "in London", "in Chicago"], a: "in New York", hint: "„… at Rockefeller Center in New York.“" },
+       { t: "choice", q: "What is on top of the tree?", opts: ["a big star", "an angel", "a robot"], a: "a big star", hint: "„On top there is a big star …“" },
+       { t: "choice", q: "The tree in New York is ___ than our tree at school.", opts: ["taller", "more tall", "tallest"], a: "taller", hint: "tall → taller (kurzes Adjektiv mit -er)." }] },
+ { e: "⛸️", t: "Ice skating", txt: `<p>Under the big tree in New York there is an ${g("ice rink", "Eisbahn")}. You can go ice skating there in winter. There are more ice rinks in ${g("Central Park", "großer Park in New York")}. In London people go skating in front of old ${g("palaces", "Paläste")}.</p>`,
+   q: [{ t: "choice", q: "What can you do under the tree?", opts: ["go ice skating", "go swimming", "play football"], a: "go ice skating", hint: "„You can go ice skating there.“" },
+       { t: "choice", q: "I ___ skate when I was five. Now I can skate very well.", opts: ["couldn't", "can't", "mustn't"], a: "couldn't", hint: "Vergangenheit von can't → couldn't." },
+       TF("There are no ice rinks in Central Park.", false, "„There are more ice rinks in Central Park.“")] },
+ { e: "🧦", t: "Stockings", txt: `<p>In the UK and the USA children hang ${g("stockings", "große Strümpfe")} by the ${g("fireplace", "Kamin")} on Christmas Eve. At night Santa comes down the ${g("chimney", "Schornstein")} and fills them with small presents and sweets.</p>`,
+   q: [{ t: "choice", q: "Where do children hang their stockings?", opts: ["by the fireplace", "on the door", "in the garden"], a: "by the fireplace", hint: "„… hang stockings by the fireplace …“" },
+       { t: "choice", q: "How does Santa come into the house?", opts: ["down the chimney", "through the window", "by bus"], a: "down the chimney", hint: "„Santa comes down the chimney …“" },
+       { t: "choice", q: "My stocking is red. My brother's ___ are green and blue.", opts: ["ones", "one"], a: "ones", hint: "Mehrere Strümpfe (Mehrzahl) → ones." }] },
+ { e: "🎅", t: "Santa or Father Christmas?", txt: `<p>In the USA he is called <b>Santa Claus</b> or just Santa. In the UK people often say <b>Father Christmas</b>. He lives at the ${g("North Pole", "Nordpol")} with his ${g("elves", "Elfen")}. They make toys for all the children in the world.</p>`,
+   q: [{ t: "choice", q: "What do British people often say?", opts: ["Father Christmas", "Mister Christmas", "Saint Nick only"], a: "Father Christmas", hint: "„In the UK people often say Father Christmas.“" },
+       { t: "choice", q: "Where does he live?", opts: ["at the North Pole", "in London", "in Kansas"], a: "at the North Pole", hint: "„He lives at the North Pole …“" },
+       { t: "type", q: "one elf – two ___", a: "elves", show: "elf → elves (wie half → halves)" }] },
+ { e: "🍪", t: "A snack for Santa", txt: `<p>On Christmas Eve American children put out ${g("milk", "Milch")} and ${g("cookies", "Kekse")} for Santa. In the UK they often leave a ${g("mince pie", "kleine Weihnachtspastete")} for Father Christmas – and a ${g("carrot", "Karotte")} for the reindeer!</p>`,
+   q: [{ t: "choice", q: "What do American children put out?", opts: ["milk and cookies", "tea and cake", "pizza"], a: "milk and cookies", hint: "„… put out milk and cookies for Santa.“" },
+       { t: "choice", q: "The carrot is for …", opts: ["the reindeer", "Santa", "the dog"], a: "the reindeer", hint: "„… a carrot for the reindeer!“" },
+       { t: "order", task: "Put the words in order:", taskDe: "Wenn Santa kommt, wird er die Kekse essen.", words: ["If", "Santa", "comes,", "he", "will", "eat", "the", "cookies."], a: "If Santa comes, he will eat the cookies." }] },
+ { e: "🦌", t: "Rudolph", txt: `<p>Santa's ${g("sleigh", "Schlitten")} is pulled by reindeer. The most famous one is <b>Rudolph</b>. He has a red nose that shines like a light. One foggy Christmas Eve Santa couldn't see the way – so Rudolph had to help him!</p>`,
+   q: [{ t: "choice", q: "What is special about Rudolph?", opts: ["his red nose", "his long ears", "his blue fur"], a: "his red nose", hint: "„He has a red nose that shines like a light.“" },
+       { t: "choice", q: "Santa ___ see the way.", opts: ["couldn't", "can't", "isn't allowed to"], a: "couldn't", hint: "Es war in der Vergangenheit → couldn't." },
+       { t: "choice", q: "Rudolph ___ help him.", opts: ["had to", "must", "has to"], a: "had to", hint: "must in der Vergangenheit → had to." }] },
+ { e: "✉️", t: "Letters to Santa", txt: `<p>Lots of children write a ${g("letter", "Brief")} to Santa. They tell him what they ${g("wish for", "sich wünschen")}. In the UK and the USA the post office has a special address for these letters. And often Santa ${g("writes back", "antwortet")}!</p>`,
+   q: [{ t: "choice", q: "What do children tell Santa?", opts: ["what they wish for", "their PIN", "their marks"], a: "what they wish for", hint: "„They tell him what they wish for.“" },
+       TF("Santa never writes back.", false, "„And often Santa writes back!“"),
+       { t: "order", task: "Write a sentence for your letter:", taskDe: "Liebster Santa, ich wünsche mir ein neues Fahrrad.", words: ["Dear", "Santa,", "I", "wish", "for", "a", "new", "bike."], a: "Dear Santa, I wish for a new bike." }] },
+ { e: "🧥", t: "Ugly sweaters", txt: `<p>In December many people wear a funny <b>Christmas sweater</b> (in the UK: a Christmas ${g("jumper", "Pullover")}). The uglier, the better! On ${g("Christmas Jumper Day", "Weihnachtspullover-Tag")} pupils in the UK wear them to school and give money to help children in need.</p>`,
+   q: [{ t: "choice", q: "What is a „jumper“ in American English?", opts: ["a sweater", "a jacket", "a T-shirt"], a: "a sweater", hint: "UK jumper = US sweater." },
+       { t: "choice", q: "Why do pupils give money?", opts: ["to help children in need", "to buy pizza", "to get better marks"], a: "to help children in need", hint: "„… give money to help children in need.“" },
+       { t: "choice", q: "I've got two Christmas sweaters. I like the green ___ best.", opts: ["one", "ones"], a: "one", hint: "Einen Pullover → one." }] },
+ { e: "💡", t: "Lights everywhere", txt: `<p>In <b>Dyker Heights</b>, a part of Brooklyn in New York, people ${g("decorate", "schmücken")} their houses with thousands of lights, giant Santas and dancing reindeer. Every year thousands of ${g("visitors", "Besucher")} come by bus just to look at the houses!</p>`,
+   q: [{ t: "choice", q: "Where is Dyker Heights?", opts: ["in Brooklyn, New York", "in London", "in California"], a: "in Brooklyn, New York", hint: "„Dyker Heights, a part of Brooklyn in New York …“" },
+       { t: "choice", q: "Why do visitors come?", opts: ["to look at the houses", "to go shopping", "to go to school"], a: "to look at the houses", hint: "„… just to look at the houses!“" },
+       { t: "type", q: "If our house ___ (have) so many lights, our electricity bill will be huge!", a: ["has"], show: "If-Satz Typ I: If + simple present → has" }] },
+ { e: "🎶", t: "Carol singers", txt: `<p>${g("Carols", "Weihnachtslieder")} are Christmas songs. In the UK groups of ${g("carol singers", "Sternsinger-ähnliche Sänger")} go from door to door and sing. People often give them money for ${g("charity", "einen guten Zweck")}. A famous carol is „Jingle Bells“.</p>`,
+   q: [{ t: "choice", q: "What are carols?", opts: ["Christmas songs", "Christmas cakes", "Christmas trees"], a: "Christmas songs", hint: "„Carols are Christmas songs.“" },
+       { t: "choice", q: "Where do carol singers go?", opts: ["from door to door", "to the beach", "to the zoo"], a: "from door to door", hint: "„… go from door to door and sing.“" },
+       TF("The money is often for charity.", true, "„People often give them money for charity.“")] },
+ { e: "🎭", t: "Panto time!", txt: `<p>A typical British Christmas show is the ${g("pantomime", "lustiges Weihnachtstheater")} or <b>panto</b>. The stories are old fairy tales like Cinderella. The audience shouts things like „He's behind you!“ – and a man always plays a funny old woman, the ${g("dame", "Dame, Rolle im Panto")}.</p>`,
+   q: [{ t: "choice", q: "What are panto stories?", opts: ["old fairy tales", "news", "football games"], a: "old fairy tales", hint: "„The stories are old fairy tales …“" },
+       { t: "choice", q: "What does the audience shout?", opts: ["He's behind you!", "Be quiet!", "Happy birthday!"], a: "He's behind you!", hint: "„The audience shouts … ‚He's behind you!‘“" },
+       { t: "choice", q: "In a panto you ___ be quiet – you can shout!", opts: ["don't have to", "mustn't", "can't"], a: "don't have to", hint: "Du musst nicht leise sein → don't have to." }] },
+ { e: "🌿", t: "Mistletoe", txt: `<p>${g("Mistletoe", "Mistelzweig")} is a green plant with white ${g("berries", "Beeren")}. In the UK and the USA people hang it above a door at Christmas. It is a tradition: if two people meet under the mistletoe, they kiss. 😘 Careful where you stand!</p>`,
+   q: [{ t: "choice", q: "What colour are the berries?", opts: ["white", "red", "blue"], a: "white", hint: "„… with white berries.“" },
+       { t: "choice", q: "Where do people hang it?", opts: ["above a door", "in the fridge", "on the car"], a: "above a door", hint: "„… hang it above a door …“" },
+       { t: "type", q: "If two people ___ (meet) under the mistletoe, they kiss.", a: "meet", show: "If + simple present → meet" }] },
+ { e: "🎉", t: "Christmas crackers", txt: `<p>On the British Christmas table there is a ${g("cracker", "Knallbonbon")} for everyone. Two people pull it – BANG! Inside there is a small toy, a paper ${g("crown", "Krone")} and a really bad joke. Everyone wears the paper crown during dinner. 👑</p>`,
+   q: [{ t: "choice", q: "What is inside a cracker?", opts: ["a toy, a paper crown and a joke", "a mince pie", "money"], a: "a toy, a paper crown and a joke", hint: "„Inside there is a small toy, a paper crown and a really bad joke.“" },
+       { t: "choice", q: "How many people pull a cracker?", opts: ["two", "one", "five"], a: "two", hint: "„Two people pull it …“" },
+       { t: "choice", q: "These crowns are all pink. Have you got any blue ___?", opts: ["ones", "one"], a: "ones", hint: "any + Mehrzahl → ones." }] },
+ { e: "🥧", t: "Pies and pudding", txt: `<p>${g("Mince pies", "kleine Pasteten")} are small pies with dried fruit inside. After Christmas dinner the British often eat <b>Christmas pudding</b>. It is dark and heavy. Sometimes people pour ${g("brandy", "Weinbrand")} over it and set it on fire – it burns with a blue flame! 🔥</p>`,
+   q: [{ t: "choice", q: "What is inside mince pies?", opts: ["dried fruit", "meat", "chocolate"], a: "dried fruit", hint: "„… small pies with dried fruit inside.“" },
+       { t: "choice", q: "What colour is the flame?", opts: ["blue", "green", "pink"], a: "blue", hint: "„… it burns with a blue flame!“" },
+       TF("Christmas pudding is light and fluffy.", false, "„It is dark and heavy.“")] },
+ { e: "🍗", t: "Christmas dinner", txt: `<p>The big Christmas meal in the UK is on <b>25 December</b>. The family eats ${g("roast turkey", "Truthahnbraten")} with potatoes, carrots and ${g("Brussels sprouts", "Rosenkohl")}. Lots of children hate the sprouts! In the USA many families have ham or turkey.</p>`,
+   q: [{ t: "choice", q: "When is the big Christmas meal in the UK?", opts: ["on 25 December", "on 24 December", "on 6 December"], a: "on 25 December", hint: "„… is on 25 December.“" },
+       { t: "choice", q: "What do lots of children hate?", opts: ["the sprouts", "the potatoes", "the presents"], a: "the sprouts", hint: "„Lots of children hate the sprouts!“" },
+       { t: "type", q: "Last Christmas we ___ (eat) turkey.", a: "ate", show: "eat → ate" }] },
+ { e: "🎁", t: "Christmas morning", txt: `<p>In Germany children get their presents on the ${g("evening", "Abend")} of 24 December. In the UK and the USA they have to wait! They open their presents on the ${g("morning", "Morgen")} of 25 December. Many kids wake up at 5 o'clock because they are so excited.</p>`,
+   q: [{ t: "choice", q: "When do British children open their presents?", opts: ["on the morning of 25 December", "on the evening of 24 December", "on 6 January"], a: "on the morning of 25 December", hint: "„They open their presents on the morning of 25 December.“" },
+       { t: "choice", q: "British children ___ wait until the morning.", opts: ["have to", "can", "are allowed to"], a: "have to", hint: "„… they have to wait!“" },
+       { t: "choice", q: "Why do kids wake up at 5?", opts: ["because they are excited", "because they have school", "because it's light"], a: "because they are excited", hint: "„… because they are so excited.“" }] },
+ { e: "📺", t: "The King's speech", txt: `<p>At 3 p.m. on Christmas Day many British families watch TV together. The King gives a short ${g("speech", "Rede")} to the people of the UK and the ${g("Commonwealth", "Staatenbund")}. He talks about the year and wishes everyone a Merry Christmas.</p>`,
+   q: [{ t: "choice", q: "When is the King's speech?", opts: ["at 3 p.m. on Christmas Day", "at midnight", "on Boxing Day"], a: "at 3 p.m. on Christmas Day", hint: "„At 3 p.m. on Christmas Day …“" },
+       { t: "choice", q: "What does the King talk about?", opts: ["the year", "football", "the weather only"], a: "the year", hint: "„He talks about the year …“" },
+       TF("Families watch the speech on TV.", true, "„… many British families watch TV together.“")] },
+ { e: "📦", t: "Boxing Day", txt: `<p>26 December is called <b>Boxing Day</b> in the UK. It has nothing to do with ${g("boxing", "Boxen")}! Long ago, rich people gave ${g("boxes", "Kisten")} with presents to their workers on this day. Today people go to football matches, go for a walk or go shopping in the sales.</p>`,
+   q: [{ t: "choice", q: "When is Boxing Day?", opts: ["on 26 December", "on 24 December", "on 31 December"], a: "on 26 December", hint: "„26 December is called Boxing Day.“" },
+       TF("Boxing Day is about the sport boxing.", false, "„It has nothing to do with boxing!“"),
+       { t: "type", q: "Long ago, rich people ___ (give) boxes to their workers.", a: "gave", show: "give → gave" }] },
+ { e: "☃️", t: "A white Christmas?", txt: `<p>Everybody dreams of a ${g("white Christmas", "Weihnachten mit Schnee")}. But in London it ${g("hardly ever", "fast nie")} snows on 25 December. In New York the chances are a bit better. In Florida it's often 25 degrees – people go to the beach on Christmas Day!</p>`,
+   q: [{ t: "choice", q: "Where can people go to the beach on Christmas Day?", opts: ["in Florida", "in London", "in New York"], a: "in Florida", hint: "„In Florida it's often 25 degrees …“" },
+       { t: "choice", q: "In London it ___ snows at Christmas.", opts: ["hardly ever", "always", "every day"], a: "hardly ever", hint: "„… it hardly ever snows on 25 December.“" },
+       { t: "order", task: "Put the words in order:", taskDe: "Wenn es schneit, werden wir einen Schneemann bauen.", words: ["If", "it", "snows,", "we", "will", "build", "a", "snowman."], a: "If it snows, we will build a snowman." }] },
+ { e: "🕯️", t: "Happy holidays!", txt: `<p>In the USA people of many ${g("religions", "Religionen")} and cultures live together. In December some families celebrate <b>Hanukkah</b>, the Jewish festival of lights. Others celebrate <b>Kwanzaa</b>, an African-American festival. That's why many Americans say „<b>Happy holidays!</b>“.</p>`,
+   q: [{ t: "choice", q: "What is Hanukkah?", opts: ["the Jewish festival of lights", "a Christmas cake", "a winter sport"], a: "the Jewish festival of lights", hint: "„Hanukkah, the Jewish festival of lights.“" },
+       { t: "choice", q: "Why do many Americans say „Happy holidays“?", opts: ["because people celebrate different festivals", "because they don't like Christmas", "because it's shorter"], a: "because people celebrate different festivals", hint: "„… people of many religions and cultures live together.“" },
+       TF("Kwanzaa is an African-American festival.", true, "„Kwanzaa, an African-American festival.“")] },
+ { e: "🎆", t: "New Year's Eve", txt: `<p>On 31 December about one million people meet at <b>Times Square</b> in New York. At one minute to midnight a huge glittering ${g("ball", "Kugel")} slowly comes down. Everybody counts: „Ten, nine, eight …“ – at midnight there are fireworks and everyone shouts „Happy New Year!“</p>`,
+   q: [{ t: "choice", q: "Where do the people meet?", opts: ["at Times Square", "in Central Park", "at the Golden Gate Bridge"], a: "at Times Square", hint: "„… meet at Times Square in New York.“" },
+       { t: "choice", q: "What comes down at midnight?", opts: ["a huge ball", "Santa", "snow"], a: "a huge ball", hint: "„… a huge glittering ball slowly comes down.“" },
+       { t: "choice", q: "If you go to Times Square on 31 December, you ___ see the ball drop.", opts: ["will", "would", "did"], a: "will", hint: "If-Satz Typ I: If + present, will + Infinitiv." }] },
+ { e: "🎄", t: "Merry Christmas!", txt: `<p>The last door! 🎉 Now you know a lot about Christmas in the UK and the USA: stockings, Santa, crackers, carols, Boxing Day and the ball at Times Square. <b>Merry Christmas and a Happy New Year</b> from your teacher and The Hirsch Games! 🦌</p>`,
+   q: [{ t: "choice", q: "What do British people pull at dinner?", opts: ["crackers", "carrots", "stockings"], a: "crackers", hint: "Door 15: Christmas crackers." },
+       { t: "choice", q: "When is Boxing Day?", opts: ["on 26 December", "on 1 January", "on 23 December"], a: "on 26 December", hint: "Door 20: Boxing Day." },
+       { t: "order", task: "Write:", taskDe: "Frohe Weihnachten an alle!", words: ["Merry", "Christmas", "to", "everyone!"], a: "Merry Christmas to everyone!" }] }
+];
+const qs = new URLSearchParams(location.search);
+const local = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+const TODAY = (local && qs.get("today")) ? new Date(qs.get("today") + "T12:00:00") : new Date();
+const END = new Date(YEAR + 1, 0, 10, 23, 59);
+const isOpen = n => TODAY >= new Date(YEAR, 11, n) && TODAY <= END;
+const isToday = n => TODAY.getFullYear() === YEAR && TODAY.getMonth() === 11 && TODAY.getDate() === n;
+const N = +qs.get("d");
+const se = E8.getSession(), ST = se && se.state ? se.state : null, done = n => !!(ST && ST.stars && ST.stars["adv-" + n]);
+if (N >= 1 && N <= 24 && isOpen(N)) {
+  const dd = D[N - 1];
+  JUEGO.start({
+    noHard: true, id: "adv-" + N, key: "e8-adv-" + N, icon: dd.e, topic: "Advent calendar · Door " + N, title: dd.t,
+    intro: `<div class="story">${dd.txt}</div><p class="de">Read the text – it stays on the screen while you answer. – Der Text bleibt bei den Fragen sichtbar.</p>`,
+    goLabel: "🎁 Open it!", time: "3–5 minutes",
+    stages: [{ label: "Door " + N, title: dd.t, memo: `<div class="story">${dd.txt}</div>`, pista: "The answer is in the text above. – Die Antwort steht im Text oben.", tasks: dd.q }],
+    scene: (S) => `<div class="xm"><div class="tree">🎄</div><div class="gift" style="left:28%">🎁</div><div class="gift" style="left:62%">${dd.e}</div><div class="me">${E8.myAvatar()}</div><div class="num">${N}</div></div>`,
+    outro: `<div style="font-size:56px">${dd.e}🎄</div><h1>Door ${N} is open!</h1><p>Come back tomorrow for door ${Math.min(24, N + 1)}. 🎁</p><p class="de">Morgen öffnet sich das nächste Türchen.</p><p><a class="btn" href="advent.html">🗓️ Back to the calendar</a></p>`
+  });
+} else {
+  const nDone = ST && "adv" in ST ? ST.adv : D.reduce((a, _, i) => a + (done(i + 1) ? 1 : 0), 0);
+  const order = [7, 14, 2, 21, 10, 18, 5, 24, 12, 1, 16, 9, 20, 3, 13, 23, 6, 11, 19, 15, 4, 22, 8, 17];
+  const before = TODAY < new Date(YEAR, 11, 1), days = Math.ceil((new Date(YEAR, 11, 1) - TODAY) / 864e5);
+  const RW = [[10, "🧝 Elf hat & ears", "Shop · avatar"], [20, "🎖️ Nutcracker uniform", "Shop · avatar"], [24, "🍪 Life-size gingerbread house", "My home · garden"]];
+  document.getElementById("app").innerHTML = `<div class="wrapA"><a class="back" href="index.html">← Lobby</a>
+    <h1>Advent Calendar</h1>
+    <div class="sub">One door every day: Christmas in the UK and the USA. 🎄<div class="de">Jeden Tag ein Türchen (3–5 Minuten). Verpasste Türchen kannst du nachholen – bis zum 10. Januar.</div></div>
+    ${before ? `<div class="sub" style="font-size:22px">⏳ Only ${days} more day${days > 1 ? "s" : ""}! The first door opens on <b>1 December</b>.</div>` : ""}
+    <div class="bar"><i style="width:${Math.round(nDone / 24 * 100)}%"></i></div><div class="de" style="text-align:center">${nDone} / 24 doors open</div>
+    <div class="rw">${RW.map(([n, t, w]) => `<div class="${nDone >= n ? "ok" : ""}"><b>${n} doors</b><br>${t}<br><span class="de">${nDone >= n ? "✔ You can buy it now! – " + w : w}</span></div>`).join("")}</div>
+    <div class="grid">${order.map((n, i) => { const o = isOpen(n), dn = done(n);
+      return `<a class="door ${o ? "" : "lock"} ${isToday(n) && !dn ? "today" : ""} ${dn ? "done" : ""}" href="?d=${n}${local && qs.get("today") ? "&today=" + qs.get("today") : ""}" style="background:linear-gradient(135deg,${COL[i % 6]},${COL[(i + 2) % 6]})">${dn ? `<span class="em">${D[n - 1].e}</span><small>${n}</small>` : n}</a>`; }).join("")}</div></div>`;
+}
+</script>
+</body>
+</html>

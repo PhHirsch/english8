@@ -34,6 +34,12 @@
   .brand .bn small{display:block;font-family:Inter,sans-serif;font-weight:700;font-size:11px;letter-spacing:.22em;color:#b9c3d6;margin-top:4px}
   .brand.big img{width:72px;height:72px}.brand.big .bn{font-size:30px}
   @media(max-width:760px){.brand:not(.big) .bn{display:none}.brand img{width:44px;height:44px}}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .brand img{width:52px;height:52px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
+  .brand .bn{font-family:Cinzel,Georgia,serif;font-weight:900;font-size:21px;color:#e9bd4a;letter-spacing:.08em;line-height:1.05;text-shadow:0 2px 0 rgba(0,0,0,.5)}
+  .brand .bn small{display:block;font-family:Inter,sans-serif;font-weight:700;font-size:11px;letter-spacing:.22em;color:#b9c3d6;margin-top:4px}
+  .brand.big img{width:72px;height:72px}.brand.big .bn{font-size:30px}
+  @media(max-width:760px){.brand:not(.big) .bn{display:none}.brand img{width:44px;height:44px}}
   .out{background:none;border:1px solid rgba(255,255,255,.25);color:#cfd6e4;border-radius:20px;padding:7px 12px;font-size:13px;font-weight:700;cursor:pointer}
   /* Lobby */
   .lobby{display:grid;grid-template-columns:380px 1fr;gap:30px;margin-top:18px;align-items:start}
@@ -84,6 +90,7 @@
   .nav{position:fixed;left:0;right:0;bottom:0;z-index:5;height:64px;background:rgba(5,6,12,.75);backdrop-filter:blur(12px);border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:center;gap:clamp(18px,6vw,60px);align-items:center}
   .nav button{background:none;border:none;color:#cfd6e4;font-size:20px;cursor:pointer;padding:6px 4px;border-bottom:3px solid transparent}
   @media(max-width:480px){.nav button{font-size:16px;padding:6px 2px}.nav{gap:14px!important}}
+  @media(max-width:480px){.nav button{font-size:16px;padding:6px 2px}.nav{gap:14px!important}}
   .nav button.on{color:#ffd23a;border-bottom-color:#ffd23a}
   /* Overlays */
   .ov{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;z-index:10;overflow:auto;padding:16px 16px 90px}
@@ -130,6 +137,31 @@
   .tour .tip .de{display:block;margin-bottom:10px}
   .tour .steps{font-size:12px;color:#b9c3d6;font-weight:700;letter-spacing:.1em}
   .help{background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:50%;width:38px;height:38px;font-size:18px;font-weight:800;cursor:pointer}
+  .pill.fire{color:#ffb03a}.pill.fire.cold{color:#9aa;filter:grayscale(.6)}
+  .pill.fire small{font-size:12px;margin-left:4px;font-family:system-ui;color:#ffd0a0}
+  .crowns{display:inline-block;margin-top:6px;background:linear-gradient(135deg,#ffd23a,#ff9a2a);color:#3a2000;font-weight:800;font-size:14px;padding:3px 12px;border-radius:20px}
+  .ava.maestro{box-shadow:0 0 0 4px #ffd23a,0 0 30px #ffd23a88;border-radius:50%}
+  .card .crown{position:absolute;top:6px;right:8px;font-size:24px;filter:drop-shadow(0 2px 3px #0008)}
+  .mc{margin:6px 0 18px;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,#1b2a4a,#3a2160);border:1px solid rgba(255,255,255,.15);display:flex;flex-wrap:wrap;align-items:stretch}
+  .mc .pz{flex:1 1 380px;min-height:150px;background:#7ec8ff}
+  .mc .pz svg{display:block;width:100%;height:100%}
+  .mc .tx{flex:1 1 300px;padding:14px 18px}
+  .mc h3{margin:0 0 4px;font-size:24px}
+  .mc .mb{height:16px;border-radius:9px;background:rgba(0,0,0,.35);overflow:hidden;margin:8px 0}
+  .mc .mb i{display:block;height:100%;background:linear-gradient(90deg,#ffd23a,#ff6a2a)}
+  .mc .ms{display:flex;flex-wrap:wrap;gap:5px;font-size:12px}
+  .mc .ms span{background:rgba(255,255,255,.12);padding:2px 8px;border-radius:10px}
+  .mc .ms span.ok{background:#3fd27a;color:#032}
+  .vt{display:flex;gap:8px;justify-content:center;margin:0 0 12px}
+  .vt button{font-size:16px;padding:8px 18px;border-radius:24px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.35);color:#fff;cursor:pointer;font-weight:700}
+  .vt button.on{background:#fff;color:#111}
+  .map{border-radius:18px;overflow:hidden;background:#1a3a5a;border:1px solid rgba(255,255,255,.15);margin-bottom:24px}
+  .map svg{display:block;width:100%;height:auto}
+  .map .nd{cursor:pointer}
+  .map .nd:hover circle.o{stroke:#fff}
+  .card .hard{position:absolute;top:6px;right:34px;font-size:20px;filter:drop-shadow(0 2px 3px #0008)}
+  .albumlink{display:inline-block;margin-top:6px;margin-left:6px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.25);color:#fff;font-weight:700;font-size:14px;padding:3px 12px;border-radius:20px;text-decoration:none}
+  .hardbtn{display:inline-block;margin-left:10px;padding:10px 16px;border-radius:12px;background:#ff3a2a;color:#fff;font-weight:800;text-decoration:none;font-size:16px;vertical-align:middle}
 </style>
 </head>
 <body>
@@ -142,6 +174,8 @@
     <div class="hero" id="hero"></div>
     <div class="feat" id="feat"></div>
   </div>
+  <div id="meta"></div>
+  <div class="vt" id="vt"></div>
   <div id="shelves"></div>
 </div>
 <nav class="nav"><button class="D on" data-n="play">PLAY</button><button class="D" data-n="locker">LOCKER</button><button class="D" data-n="shop">SHOP</button><button class="D" data-n="home">HOME</button><button class="D" data-n="trophies">TROPHIES</button></nav>
@@ -149,37 +183,53 @@
 <div class="ov" id="pinov" style="z-index:40"><div class="sheet pinbox" id="pinbox"></div></div>
 <div class="tour" id="tour"><div class="hole" id="hole"></div><div class="tip" id="tip"></div></div>
 
-<script src="game.js?v=10"></script>
-<script src="bosses.js?v=7"></script>
-<script src="covers.js?v=10"></script>
-<script src="vocab-u2.js?v=7"></script>
+<script src="game.js?v=12"></script>
+<script src="bosses.js?v=9"></script>
+<script src="covers.js?v=12"></script>
+<script src="vocab-u2.js?v=10"></script>
+<script src="cards.js?v=1"></script>
 <script>
 /* ===== Seiten-Einstellungen (für jede Klasse anpassen) ===== */
 const SITE = { title: "ENGLISH 8", sub: "ENGLISH 8 · E-KURS" };
+window.VOCAB = window.VOCAB || {}; window.COVERS = window.COVERS || {};
 
-/* ===== Spiele (neueste oben in jeder Liste). Vokabel-Bosse kommen automatisch aus vocab-*.js ===== */
+/* ===== Spiele (neueste oben). icon = Emoji für Karte/Abenteuerkarte. Vokabel-Bosse kommen automatisch aus vocab-*.js ===== */
 const GRAMMAR = [
-  {id:"modals-time", unit:"u2", file:"time-machine.html", topic:"Modal auxiliaries", name:"The Time Machine", info:"Jump between 1870 and today. Find five missing parts – and use the right forms to get home.", accent:"#a07a2a", color:"linear-gradient(135deg,#4a3418,#8a6a2a)", isNew:true},
-  {id:"modals-storm", unit:"u2", file:"storm-chasers.html", topic:"Modal auxiliaries", name:"Storm Chasers", info:"A huge tornado is coming! Race Team Twister through Kansas and film it first.", accent:"#6a7a8c", color:"linear-gradient(135deg,#2a3440,#5a6a7c)", isNew:true},
-  {id:"if-clauses", unit:"u2", file:"if-clauses.html", topic:"If clauses (type I)", name:"Mission Orion", info:"A meteorite has hit the space station. Repair all systems before the oxygen runs out.", accent:"#2b4a8f", color:"linear-gradient(135deg,#16224a,#2b4a8f)"},
-  {id:"one-ones", unit:"u2", file:"one-ones.html", topic:"one / ones", name:"The Camden Market Case", info:"Somebody has stolen a camera. Talk to the witnesses and find the thief.", accent:"#8a6a36", color:"linear-gradient(135deg,#4a3a22,#8a6a36)"}
+  {id:"modals-time", unit:"u2", icon:"⏳", file:"time-machine.html", topic:"Modal auxiliaries", name:"The Time Machine", info:"Jump between 1870 and today. Find five missing parts – and use the right forms to get home.", accent:"#a07a2a", color:"linear-gradient(135deg,#4a3418,#8a6a2a)", isNew:true},
+  {id:"modals-storm", unit:"u2", icon:"🌪️", file:"storm-chasers.html", topic:"Modal auxiliaries", name:"Storm Chasers", info:"A huge tornado is coming! Race Team Twister through Kansas and film it first.", accent:"#6a7a8c", color:"linear-gradient(135deg,#2a3440,#5a6a7c)", isNew:true},
+  {id:"if-clauses", unit:"u2", icon:"🚀", file:"if-clauses.html", topic:"If clauses (type I)", name:"Mission Orion", info:"A meteorite has hit the space station. Repair all systems before the oxygen runs out.", accent:"#2b4a8f", color:"linear-gradient(135deg,#16224a,#2b4a8f)"},
+  {id:"one-ones", unit:"u2", icon:"🕵️", file:"one-ones.html", topic:"one / ones", name:"The Camden Market Case", info:"Somebody has stolen a camera. Talk to the witnesses and find the thief.", accent:"#8a6a36", color:"linear-gradient(135deg,#4a3a22,#8a6a36)"}
 ];
+/* Überschriften der Units ohne Vokabeldatei (Schlüssel wie GRAMMAR.unit) */
+const UNITS = {};
 const BOSSCOL = {tornado:["#3a4256","#6a7a96"],robot:["#2a3a4a","#4a6a8a"],ghost:["#2a2a5a","#5a5aa0"],bossy:["#5a1e1a","#a0402a"],slime:["#1e4a24","#3f8a2a"],manager:["#2e1d5a","#6a3cb0"],locker:["#12305a","#2a68b8"]};
 const $ = id => document.getElementById(id);
 let SCORES = {}, SEL = null;
 
 /* Alle Spiele als Liste */
-const ALL = [];
-ALL.push({id:"daily", href:"boss.html?id=daily", topic:"Daily Challenge", name:"Boss of the Day", info:"10 random words from all units – a new boss every day. Up to 15 coins, once a day!", art:COVERS.daily, accent:"#e0533a", color:"linear-gradient(135deg,#7a2a8a,#e0533a)", shelf:"daily"});
-ALL.push({id:"review", href:"boss.html?id=review", topic:"Mistake box", name:"The Mistake Monster", info:"A boss made of the words you got wrong. Get them right and they leave your box! Coins once a day.", art:COVERS.review||"", accent:"#3fae5a", color:"linear-gradient(135deg,#1e4a24,#3fae5a)", shelf:"daily", only:() => { const s = state(); return !!(s && s.review && s.review.length); }});
-const SHELVES = [{key:"daily", title:"Today"}];
-Object.entries(VOCAB).forEach(([key,u]) => {
-  const gr = GRAMMAR.filter(g => g.unit === key);
-  if (gr.length) { SHELVES.push({key:key+"-g", title:u.unit, sub:"Grammar missions"}); gr.forEach(g => ALL.push({id:g.id, href:g.file, topic:g.topic, name:g.name, info:g.info, art:COVERS[g.id]||"", accent:g.accent, color:g.color, shelf:key+"-g", isNew:g.isNew})); }
-  SHELVES.push({key:key+"-v", title:u.unit, sub:"Vocabulary bosses"});
-  u.sections.forEach(s => { const c = BOSSCOL[s.boss]||["#333","#555"]; ALL.push({id:s.id, href:"boss.html?id="+s.id, topic:"Vocabulary boss · "+s.part, name:s.title, info:`Fight ${s.bossName}! ${s.words.length} words · Vocabulary ${s.pages}`, art:BOSSART[s.boss], accent:c[1], color:`linear-gradient(135deg,${c[0]},${c[1]})`, shelf:key+"-v"}); });
+const ACC = g => g.accent || ((String(g.color).match(/#[0-9a-fA-F]{6}/g)||["#5a3cb0"]).pop());
+const COVER = g => COVERS[g.id] || `<svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="cg_${g.id}"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><circle cx="110" cy="66" r="62" fill="url(#cg_${g.id})"/><text x="110" y="96" font-size="80" text-anchor="middle">${g.icon||"🎮"}</text></svg>`;
+const ALL = [], SHELVES = [], BOSSCARDS = [];
+if (Object.values(VOCAB).some(u => u.sections && u.sections.length)) {
+  ALL.push({id:"daily", href:"boss.html?id=daily", topic:"Daily Challenge", name:"Boss of the Day", info:"10 random words from all units – a new boss every day. Up to 15 coins, once a day!", art:COVERS.daily, accent:"#e0533a", color:"linear-gradient(135deg,#7a1e3a,#e0533a)", shelf:"daily"});
+  ALL.push({id:"review", href:"boss.html?id=review", topic:"Mistake box", name:"The Mistake Monster", info:"A boss made of the words you got wrong. Get them right and they leave your box! Coins once a day.", art:COVERS.review||"", accent:"#3fae5a", color:"linear-gradient(135deg,#1e4a24,#3fae5a)", shelf:"daily", only:() => { const s = state(); return !!(s && s.review && s.review.length); }});
+  if (new Date() <= new Date(2027,0,10,23,59)) ALL.push({id:"advent", href:"advent.html", topic:"Christmas · 1–24 Dec", name:"Advent Calendar", info: new Date() < new Date(2026,11,1) ? "Coming soon! From 1 December: one door every day with Christmas traditions from the UK and the USA. Special prizes for 10, 20 and 24 doors!" : "A new door every day: Christmas traditions from the UK and the USA. Special prizes for 10, 20 and 24 doors!", art:COVERS.advent||"", accent:"#e63946", color:"linear-gradient(135deg,#0f3a2a,#c8312b)", shelf:"daily", isNew:true});
+  ALL.push({id:"verbs", href:"verbs.html", topic:"Arcade · irregular verbs", name:"Verb Blaster", info:"go – went – gone! Type the forms as fast as you can. Faster and faster – how many points can you get with 3 lives?", art:COVERS.verbs||"", accent:"#ff3bd4", color:"linear-gradient(135deg,#1a0838,#ff3bd4)", shelf:"daily"});
+  ALL.push({id:"series", href:"series.html", topic:"Series · reading", name:"Exchange Year", info:"Lena from Höxter spends a year in Ohio. Read the episodes and find out the secret. A new episode comes out when your teacher releases it!", art:COVERS.series||"", accent:"#ffb02e", color:"linear-gradient(135deg,#0a2240,#2a6ab0)", shelf:"daily"});
+  SHELVES.push({key:"daily", title:"Today"});
+}
+[...new Set(Object.keys(VOCAB).concat(GRAMMAR.map(g => g.unit)))].sort().reverse().forEach(key => {
+  const u = VOCAB[key], title = (u && u.unit) || UNITS[key] || key, gr = GRAMMAR.filter(g => g.unit === key);
+  if (gr.length) { SHELVES.push({key:key+"-g", title:title, sub:"Grammar missions"});
+    const BU = {u2:["🦬","Big Bad Bison"]}[key];
+    if (BU) BOSSCARDS.push({id:"final-"+key, href:"final.html?u="+key.slice(1), topic:"Final boss · "+title, name:BU[1], info:`The final boss of ${title}! 3 phases, harder and harder – everything from the unit. Perfect before the test. – Endgegner: ideal vor der Klassenarbeit.`, art:`<svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg${key}" cx=".5" cy="1.1" r=".9"><stop offset="0" stop-color="#ff5a2a"/><stop offset="1" stop-color="#1a0404"/></radialGradient></defs><rect width="220" height="140" rx="10" fill="url(#bg${key})"/><text x="110" y="98" font-size="74" text-anchor="middle">${BU[0]}</text><rect x="40" y="14" width="140" height="10" rx="5" fill="#0008" stroke="#ff5a2a"/><rect x="42" y="16" width="96" height="6" rx="3" fill="#ff3a2a"/><text x="110" y="128" font-family="Arial Black,Impact" font-size="13" fill="#ffd23a" text-anchor="middle">JEFE FINAL</text></svg>`, accent:"#ff3a2a", color:"linear-gradient(135deg,#3a0a0a,#ff3a2a)", shelf:key+"-g", isNew:true, boss:true}); gr.forEach(g => ALL.push({id:g.id, href:g.file, topic:g.topic, name:g.name, info:g.info, art:COVER(g), accent:ACC(g), color:g.color, shelf:key+"-g", isNew:g.isNew})); }
+  if (u && u.sections.length) {
+    SHELVES.push({key:key+"-v", title:title, sub:"Vocabulary bosses"});
+    u.sections.forEach(s => { const c = BOSSCOL[s.boss]||["#333333","#555555"]; ALL.push({id:s.id, href:"boss.html?id="+s.id, topic:"Vocabulary boss · "+s.part, name:s.title, info:`Fight ${s.bossName}! ${s.words.length} words · Vocabulary ${s.pages}`, art:BOSSART[s.boss]||"", accent:c[1], color:`linear-gradient(135deg,${c[0]},${c[1]})`, shelf:key+"-v"}); });
+  }
 });
-GRAMMAR.filter(g => !VOCAB[g.unit]).forEach(g => { if (!SHELVES.find(s=>s.key==="other")) SHELVES.push({key:"other", title:"More games"}); ALL.push({id:g.id, href:g.file, topic:g.topic, name:g.name, info:g.info, art:COVERS[g.id]||"", accent:g.accent, color:g.color, shelf:"other"}); });
+BOSSCARDS.forEach(b => ALL.push(b));
+if (!ALL.length) ALL.push({id:"soon", href:"", topic:"Coming soon", name:"New games are coming", info:"New games will appear here soon. You can already create your avatar.", art:"", accent:"#5a3cb0", color:"linear-gradient(135deg,#1e1650,#5a3cb0)"});
 
 /* ===== Erfolge ===== */
 const BOSS_IDS = Object.values(VOCAB).flatMap(u => u.sections.map(s => s.id));
@@ -195,10 +245,23 @@ const ACH = [
   ["💪","Never give up","Replay a game and get more stars", s => s.stats.improved],
   ["📅","Daily player","Play 5 daily challenges", s => s.stats.daily >= 5],
   ["🏆","Hall of fame","Get into a top 3", s => Object.values(SCORES).some(l => l.some(x => x.nr === s.nr))],
-  ["💎","Pro","Reach level 5", s => s.level >= 5]
+  ["💎","Pro","Reach level 5", s => s.level >= 5],
+  ["🔥","On fire","Play 3 days in a row", s => (s.streakBest||0) >= 3],
+  ["🔥","Week streak","Play 7 days in a row", s => (s.streakBest||0) >= 7],
+  ["☄️","Unbreakable","Play 30 days in a row", s => (s.streakBest||0) >= 30],
+  ["👑","Flawless","Finish a game without a single mistake", s => (s.perfect||[]).length >= 1],
+  ["🤴","Flawless five","5 games without a mistake", s => (s.perfect||[]).length >= 5],
+  ["🎄","Merry Christmas!","Open all 24 doors of the Advent calendar", s => (s.adv||0) >= 24],
+  ["🦬","Final boss slayer","Beat a final boss", s => Object.keys(s.stars).some(g => g.indexOf("final-u") === 0)],
+  ["🌶️","Brave","Finish a game in hard mode", s => Object.keys(s.stars).some(g => /-hard$/.test(g))],
+  ["📒","Collector","Collect 8 trading cards", s => window.CROMOS ? CROMOS.filter(c => cromoState(s, c.id).got).length >= 8 : false],
+  ["🏙️","Team player","Our skyline reaches 10,000 coins", s => (s.meta||0) >= 10000]
 ];
 const state = () => { const se = E8.getSession(); return se ? se.state : null; };
 const starsOf = id => { const s = state(); return s && s.stars ? (s.stars[id]||0) : 0; };
+const NOSTAR = ["daily","review","series","advent"];
+const hardOk = g => (/^boss\.html\?id=boss-/.test(g.href || "") || /^final-/.test(g.id)) && starsOf(g.id) > 0;
+const isMaestro = id => { const s = state(); return !!(s && s.perfect && s.perfect.indexOf(id) >= 0); };
 const stStr = n => "★".repeat(n) + "☆".repeat(3-n);
 
 /* ===== Hintergrund ===== */
@@ -218,15 +281,16 @@ function topBar(){
   if (!s) { $("top").innerHTML = `${brand(true)}<div class="pills"><button class="howto" onclick="tour()">❓ HOW IT WORKS</button></div>`; return; }
   const L = E8.levelInfo(s.xp||0), stars = Object.values(s.stars||{}).reduce((a,b)=>a+b,0);
   $("top").innerHTML = `${brand(false)}<div class="hex D">${L.level}</div><div class="tier"><div class="D">LEVEL ${L.level} · ${L.name.toUpperCase()}</div><div class="bar"><i style="width:${L.pct}%"></i></div><div class="xpt">${L.next?`${s.xp||0} / ${L.next} XP`:"max level"}</div></div>
-    <div class="pills"><span class="pill D">🪙 ${s.coins}</span><span class="pill D">⭐ ${stars}</span><button class="help" onclick="tour()" title="How does it work?">?</button><button class="out" id="out">Log out</button></div>`;
+    <div class="pills">${"streak" in s ? `<span class="pill D fire ${s.streakToday?"":"cold"}" title="Streak: days in a row – Tage in Folge">🔥 ${s.streak}${s.streakToday?"":"<small>play today!</small>"}</span>` : ""}<span class="pill D">🪙 ${s.coins}</span><span class="pill D">⭐ ${stars}</span><button class="help" onclick="tour()" title="How does it work?">?</button><button class="out" id="out">Log out</button></div>`;
   $("out").onclick = () => { E8.logout(); render(); };
 }
 /* ===== Avatar / Login ===== */
 function hero(){
   const s = state();
-  let h = `<div class="ava" id="ava">${E8.avatarSVG(s?s.equipped:null)}</div><div class="podium"></div>`;
+  const nCrown = s && s.perfect ? s.perfect.length : 0;
+  let h = `<div class="ava ${nCrown?"maestro":""}" id="ava">${E8.avatarSVG(s?s.equipped:null)}</div><div class="podium"></div>`;
   if (s) {
-    h += `<div class="pname D">PLAYER #${s.nr}</div><div class="psub">${SITE.sub}</div><div class="badges">${ACH.map(a=>`<span class="${s.stats&&a[3](s)?"":"off"}" title="${a[1]}: ${a[2]}">${a[0]}</span>`).join("")}</div>${"mustSetPin" in s ? `<button class="pinlink" onclick="pinDialog(false)">🔑 Change PIN</button>` : ""}`;
+    h += `<div class="pname D">PLAYER #${s.nr}</div>${nCrown?`<div class="crowns" title="Games without a single mistake – Spiele ohne Fehler">👑 Flawless × ${nCrown}</div>`:""}${s && window.CROMOS?`<a class="albumlink" href="album.html">📒 Cards ${CROMOS.filter(c=>cromoState(s,c.id).got).length}/${CROMOS.length}</a>`:""}<div class="psub">${SITE.sub}</div><div class="badges">${ACH.map(a=>`<span class="${s.stats&&a[3](s)?"":"off"}" title="${a[1]}: ${a[2]}">${a[0]}</span>`).join("")}</div>${"mustSetPin" in s ? `<button class="pinlink" onclick="pinDialog(false)">🔑 Change PIN</button>` : ""}`;
   } else if (E8.online()) {
     h += `<div class="login"><div class="D" style="font-size:22px">LOG IN</div><div class="de" style="margin-bottom:8px">Collect coins and dress your avatar! – Melde dich an.</div>
       <div class="row" style="align-items:flex-end"><div><label>NUMBER</label><input id="nr" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off"></div>
@@ -253,8 +317,8 @@ function feat(){
   const g = SEL, s = state(), n = starsOf(g.id), l = SCORES[g.id]||[];
   const done = g.id==="daily" && s && s.stats && s.stats.dailyToday;
   $("feat").innerHTML = `<div class="kicker">${g.isNew?"NEW · ":""}${g.topic.toUpperCase()}</div><h1 class="D">${g.name.toUpperCase()}</h1><p>${g.info}</p>
-    <div class="meta">${s && g.id!=="daily" && g.id!=="review" ? `<span class="st">${stStr(n)}</span>` : ""}${done?`<span>✔ Done today – you can still practise!</span>`:""}</div>
-    <a class="play D" href="${g.href}"><span>PLAY ▶</span></a>
+    <div class="meta">${s && NOSTAR.indexOf(g.id)<0 ? `<span class="st">${stStr(n)}</span>` : ""}${done?`<span>✔ Done today – you can still practise!</span>`:""}${isMaestro(g.id)?`<span style="color:#ffd23a">👑 FLAWLESS – no mistakes!</span>`:(s&&s.perfect&&NOSTAR.indexOf(g.id)<0&&g.id!=="verbs"?`<span style="opacity:.7">👑 No mistakes = Flawless</span>`:"")}</div>
+    ${g.href?`<a class="play D" href="${g.href}"><span>PLAY ▶</span></a>`:""}${hardOk(g)?`<a class="hardbtn" href="${g.href}${g.href.indexOf("?")>=0?"&":"?"}mode=hard">🔥 HARD MODE${starsOf(g.id+"-hard")?" ✔":""}</a>`:""}
     ${l.length?`<div class="top3">🏆 TOP 3 ${l.map((x,i)=>`<span class="p ${["g","s","b"][i]}"><div>${E8.avatarSVG(x.eq)}</div>#${x.nr}</span>`).join("")}</div>`:""}`;
 }
 /* ===== Reihen ===== */
@@ -263,8 +327,8 @@ function shelves(){
     const games = ALL.filter(g => g.shelf === sh.key && (!g.only || g.only()));
     return `<div class="shelf"><h3 class="D">${sh.title.toUpperCase()}${sh.sub?`<small>${sh.sub}</small>`:""}</h3><div class="strip">${games.map(g => {
       const n = starsOf(g.id);
-      return `<div class="card ${SEL&&SEL.id===g.id?"sel":""}" data-id="${g.id}" style="background:${g.color}">${g.isNew?`<span class="new">NEW</span>`:""}<div class="art">${g.art}</div>
-        <div class="lab"><small>${g.topic.toUpperCase()}</small>${g.name}${state()&&g.id!=="daily"&&g.id!=="review"?` <span style="color:#ffd23a;font-size:12px">${stStr(n)}</span>`:""}</div>${n?`<div class="prog" style="width:${n*33.4}%"></div>`:""}</div>`;
+      return `<div class="card ${SEL&&SEL.id===g.id?"sel":""}" data-id="${g.id}" style="background:${g.color}">${g.isNew?`<span class="new">NEW</span>`:""}${isMaestro(g.id)?`<span class="crown" title="Flawless! – Ohne Fehler">👑</span>`:""}${starsOf(g.id+"-hard")?`<span class="hard" title="Hard mode">🔥</span>`:""}<div class="art">${g.art}</div>
+        <div class="lab"><small>${g.topic.toUpperCase()}</small>${g.name}${state()&&NOSTAR.indexOf(g.id)<0?` <span style="color:#ffd23a;font-size:12px">${stStr(n)}</span>`:""}</div>${n?`<div class="prog" style="width:${n*33.4}%"></div>`:""}</div>`;
     }).join("")}</div></div>`;
   }).join("");
   document.querySelectorAll(".card").forEach(c => c.onclick = () => {
@@ -279,7 +343,75 @@ function select(g){
   document.querySelectorAll(".card").forEach(c => c.classList.toggle("sel", c.dataset.id === g.id));
   if ($("ava")) $("ava").style.setProperty("--glow", g.accent+"cc");
 }
-function render(){ topBar(); hero(); feat(); shelves(); }
+/* ===== Kursziel „Our Skyline“ (gemeinsam, ohne Namen) ===== */
+const METAS = [[2000,"🍔","Diner"],[5000,"🚕","Yellow cabs"],[10000,"🌉","Brooklyn Bridge"],[20000,"🏙️","Skyscrapers"],[35000,"🗽","Statue of Liberty"],[50000,"🎆","Fireworks"]];
+function plaza(m){
+  const on = i => m >= METAS[i][0], night = on(5);
+  const win = (x, y, w, h) => { let r = ""; for (let yy = y + 6; yy < y + h - 6; yy += 9) for (let xx = x + 4; xx < x + w - 5; xx += 8) r += `<rect x="${xx}" y="${yy}" width="4" height="5" fill="${night ? ((xx * 7 + yy * 3) % 5 ? "#ffe27a" : "#2a2a50") : "#cfe6ff"}" opacity=".9"/>`; return r; };
+  return `<svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
+    <rect width="400" height="160" fill="${night?"#14163a":"#8fd0ff"}"/>
+    ${night?[[70,30,"#ff4f8b"],[200,22,"#ffd23a"],[330,34,"#3ab0ff"],[140,48,"#3fd27a"],[265,46,"#ff8a2a"]].map(([x,y,c],k)=>`<g transform="translate(${x} ${y})" stroke="${c}" stroke-width="2.5" stroke-linecap="round">${[0,45,90,135,180,225,270,315].map(a=>`<path d="M0 0 L${(Math.cos(a*Math.PI/180)*16).toFixed(1)} ${(Math.sin(a*Math.PI/180)*16).toFixed(1)}"/>`).join("")}<animate attributeName="opacity" values="1;.2;1" dur="${1.4+k*.3}s" repeatCount="indefinite"/></g>`).join(""):`<circle cx="355" cy="28" r="15" fill="#ffe25a"/>`}
+    <g fill="${night?"#2a2a55":"#b9c8d8"}" opacity=".8"><rect x="10" y="78" width="30" height="40"/><rect x="45" y="70" width="22" height="48"/><rect x="330" y="74" width="26" height="44"/><rect x="360" y="82" width="34" height="36"/></g>
+    ${on(3)?`<g><rect x="120" y="44" width="34" height="74" fill="${night?"#3a3a6a":"#8a9ab0"}"/>${win(120,44,34,74)}<rect x="160" y="22" width="30" height="96" fill="${night?"#45457a":"#9aa8bc"}"/><rect x="170" y="10" width="10" height="12" fill="${night?"#45457a":"#9aa8bc"}"/><path d="M175 0 L175 10" stroke="#ccd" stroke-width="2"/>${win(160,22,30,96)}<rect x="196" y="54" width="36" height="64" fill="${night?"#3a3a6a":"#8090a8"}"/>${win(196,54,36,64)}<rect x="238" y="66" width="26" height="52" fill="${night?"#45457a":"#9aa8bc"}"/>${win(238,66,26,52)}</g>`:""}
+    <rect x="0" y="112" width="400" height="8" fill="#5a6068"/><path d="M0 116 L400 116" stroke="#e8e0a0" stroke-width="1" stroke-dasharray="8 8"/>
+    <rect x="0" y="120" width="400" height="10" fill="#6fae4b"/>
+    <rect x="0" y="130" width="400" height="30" fill="#3f86c4"/><text x="372" y="150" font-family="Arial Black,Arial" font-size="9" fill="#fff" opacity=".6" text-anchor="end">WESER</text>
+    ${[20,90,160,230,300].map((x,k)=>`<path d="M${x} 142 q8 -4 16 0" stroke="#fff" stroke-width="1.4" fill="none" opacity=".5"><animateTransform attributeName="transform" type="translate" values="0 0;6 0;0 0" dur="${3+k%3}s" repeatCount="indefinite"/></path>`).join("")}
+    ${on(0)?`<g><rect x="70" y="92" width="44" height="20" rx="8" fill="#d8dde4" stroke="#9aa"/><rect x="70" y="102" width="44" height="3" fill="#e63946"/>${[76,86,96,106].map(x=>`<rect x="${x}" y="95" width="6" height="6" fill="#bfe4f7"/>`).join("")}<rect x="78" y="84" width="28" height="8" rx="2" fill="#e63946"/><text x="92" y="90.5" font-family="Arial Black,Arial" font-size="6" fill="#fff" text-anchor="middle">DINER</text></g>`:""}
+    ${on(1)?`<g>${[[130,"0s"],[250,"-3s"]].map(([x,d])=>`<g><rect x="${x}" y="106" width="22" height="7" rx="2" fill="#f2c230"/><rect x="${x+5}" y="102" width="11" height="5" rx="1" fill="#f2c230"/><rect x="${x+7}" y="99.5" width="7" height="3" fill="#222"/><circle cx="${x+5}" cy="113" r="2.4" fill="#222"/><circle cx="${x+17}" cy="113" r="2.4" fill="#222"/><animateTransform attributeName="transform" type="translate" values="-140 0;300 0" dur="9s" begin="${d}" repeatCount="indefinite"/></g>`).join("")}</g>`:""}
+    ${on(2)?`<g><rect x="286" y="100" width="114" height="4" fill="#7a5a3a"/>${[300,360].map(x=>`<rect x="${x}" y="64" width="12" height="40" fill="#a8845a"/><path d="M${x+3} 104 L${x+3} 84 Q${x+6} 78 ${x+9} 84 L${x+9} 104Z" fill="#3f86c4"/>`).join("")}<path d="M286 100 Q300 66 306 64 Q336 92 366 64 Q380 70 400 92" stroke="#5a4a3a" stroke-width="1.5" fill="none"/>${[316,326,336,346,356].map(x=>`<path d="M${x} ${x<336?76+(x-316)*0.8:76+(356-x)*0.8} L${x} 100" stroke="#5a4a3a" stroke-width=".8"/>`).join("")}</g>`:""}
+    ${on(4)?`<g><ellipse cx="40" cy="140" rx="22" ry="6" fill="#6fae4b"/><rect x="33" y="118" width="14" height="20" fill="#b8b2a6"/><path d="M36 118 L37 92 Q40 88 43 92 L44 118Z" fill="#6fb8a2"/><circle cx="40" cy="88" r="4" fill="#6fb8a2"/><path d="M36 85 l-2 -5 M38.5 84 l-.5 -6 M41.5 84 l.5 -6 M44 85 l2 -5" stroke="#6fb8a2" stroke-width="1.5"/><path d="M43 96 L48 80" stroke="#6fb8a2" stroke-width="2.5"/><path d="M47.5 80 q2 -5 0 -7 q-2 2 0 7z" fill="#ffb02e"/></g>`:""}
+    ${m<METAS[0][0]?`<text x="200" y="80" text-anchor="middle" font-family="system-ui" font-size="14" font-weight="700" fill="#2a3a5a">🚧 Skyline under construction …</text>`:""}
+  </svg>`;
+}
+function metaBox(){
+  const s = state(), el = $("meta");
+  if (!s || !("meta" in s)) { el.innerHTML = ""; return; }
+  const m = s.meta, nxt = METAS.find(x => m < x[0]), prev = [...METAS].reverse().find(x => m >= x[0]);
+  const from = prev ? prev[0] : 0, pct = nxt ? Math.round((m - from) / (nxt[0] - from) * 100) : 100;
+  el.innerHTML = `<div class="mc"><div class="pz">${plaza(m)}</div><div class="tx"><h3 class="D">OUR SKYLINE · CLASS GOAL</h3>
+    <div class="de" style="font-size:13px;opacity:.85">All coins the class wins build our skyline on the Weser. – Alle Münzen des Kurses bauen gemeinsam an eurer Skyline.</div>
+    <div class="mb"><i style="width:${pct}%"></i></div>
+    <div style="font-size:15px"><b>${m.toLocaleString("en-GB")} 🪙</b> ${nxt?`· next: ${nxt[1]} ${nxt[2]} at ${nxt[0].toLocaleString("en-GB")} 🪙`:"· Skyline complete! 🎉"}</div>
+    <div class="ms" style="margin-top:8px">${METAS.map(x=>`<span class="${m>=x[0]?"ok":""}">${x[1]} ${(x[0]/1000)}k</span>`).join("")}</div></div></div>`;
+}
+/* ===== Weltkarte (zweite Ansicht der Spiele) ===== */
+let VIEW = (()=>{ try { return localStorage.getItem("e8-view") || "shelf"; } catch(e) { return "shelf"; } })();
+function viewToggle(){
+  $("vt").innerHTML = `<button class="${VIEW==="shelf"?"on":""}" data-v="shelf">📚 Shelves</button><button class="${VIEW==="map"?"on":""}" data-v="map">🗺️ Road Trip USA</button>`;
+  $("vt").querySelectorAll("button").forEach(b => b.onclick = () => { VIEW = b.dataset.v; try { localStorage.setItem("e8-view", VIEW); } catch(e) {} viewToggle(); VIEW==="map" ? mapView() : shelves(); });
+}
+const ZONES = {u1:["🗽 New York","#2a4a7a"], u2:["🏫 The Midwest","#2a6a3a"], u3:["🌊 Niagara & Amish Country","#1f6a8a"], u4:["🌉 California","#8a5a1a"], u5:["🎷 The South","#7a2a4a"]};
+function mapView(){
+  const units = [...new Set(GRAMMAR.map(g => g.unit))].sort();
+  const L = [];
+  units.forEach(u => { GRAMMAR.filter(g => g.unit === u).forEach(g => L.push({g: ALL.find(x => x.id === g.id), icon: g.icon, u})); const b = ALL.find(x => x.id === "final-"+u); if (b) L.push({g:b, icon:({u2:"🦬"})[u]||"👾", u, boss:true}); });
+  const PER = 5, W = 1000, rowH = 170; let y = 0, gr = 0; const bands = [];
+  units.forEach(u => { const ns = L.filter(n => n.u === u), rows = Math.ceil(ns.length / PER), y0 = y;
+    ns.forEach((n, i) => { const r = Math.floor(i / PER), c = i % PER, cc = (gr + r) % 2 ? PER - 1 - c : c; n.x = 110 + cc * 195; n.y = y0 + 170 + r * rowH; });
+    gr += rows; y += rows * rowH + 120; bands.push({u, y0, y1: y}); });
+  const H = y;
+  const nextI = L.findIndex(n => !starsOf(n.g.id));
+  const path = L.map((n, i) => (i ? "L" : "M") + n.x + " " + n.y).join(" ");
+  $("shelves").innerHTML = `<div class="map"><svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    <rect width="${W}" height="${H}" fill="#123a5a"/>
+    ${bands.map((b,i) => `<rect x="0" y="${b.y0}" width="${W}" height="${b.y1-b.y0}" fill="${ZONES[b.u]?ZONES[b.u][1]:"#335"}" opacity=".6"/><path d="M0 ${b.y1} L${W} ${b.y1}" stroke="#fff3" stroke-width="2" stroke-dasharray="8 8"/>`).join("")}
+    <path d="${path}" stroke="#f3e6c8" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 22" opacity=".9"/>
+    ${bands.map(b => `<text x="24" y="${b.y0+36}" font-family="Arial Black,Impact,sans-serif" font-size="24" fill="#fff" opacity=".95">${ZONES[b.u]?ZONES[b.u][0]:""} · Unit ${b.u.slice(1)}</text>`).join("")}
+    ${L.map((n, i) => { const st = starsOf(n.g.id), done = st > 0, nx = i === nextI, r = n.boss ? 52 : 42;
+      return `<g class="nd" data-id="${n.g.id}">
+        ${nx ? `<circle cx="${n.x}" cy="${n.y}" r="${r+12}" fill="none" stroke="#ffd23a" stroke-width="5"><animate attributeName="r" values="${r+8};${r+16};${r+8}" dur="1.6s" repeatCount="indefinite"/></circle>` : ""}
+        <circle class="o" cx="${n.x}" cy="${n.y}" r="${r}" fill="${n.boss ? "#5a0a0a" : done ? "#fff8e6" : "#2a3a4a"}" stroke="${n.boss ? "#ff3a2a" : done ? "#ffd23a" : "#8aa"}" stroke-width="5"/>
+        <text x="${n.x}" y="${n.y+ (n.boss?18:14)}" font-size="${n.boss?50:40}" text-anchor="middle" ${done||nx||n.boss?"":'opacity=".55"'}>${n.icon}</text>
+        ${isMaestro(n.g.id) ? `<text x="${n.x+r-6}" y="${n.y-r+12}" font-size="24" text-anchor="middle">👑</text>` : ""}
+        ${starsOf(n.g.id+"-hard") ? `<text x="${n.x-r+6}" y="${n.y-r+12}" font-size="22" text-anchor="middle">🔥</text>` : ""}
+        <text x="${n.x}" y="${n.y+r+24}" font-family="system-ui" font-weight="800" font-size="16" fill="#fff" text-anchor="middle">${n.g.name.length>22?n.g.name.slice(0,21)+"…":n.g.name}</text>
+        <text x="${n.x}" y="${n.y+r+44}" font-size="16" fill="#ffd23a" text-anchor="middle">${"★".repeat(st)}${"☆".repeat(3-st)}</text></g>`; }).join("")}
+    ${nextI >= 0 && state() ? `<g transform="translate(${L[nextI].x+30} ${L[nextI].y-100})"><foreignObject width="60" height="60"><div xmlns="http://www.w3.org/1999/xhtml" style="width:60px;height:60px;border-radius:50%;overflow:hidden;background:#fff;border:3px solid #ffd23a">${E8.avatarSVG(state().equipped)}</div></foreignObject><text x="30" y="-6" font-family="system-ui" font-weight="900" font-size="15" fill="#ffd23a" text-anchor="middle">YOU ARE HERE</text></g>` : ""}
+  </svg></div>`;
+  document.querySelectorAll(".map .nd").forEach(el => el.onclick = () => { const g = ALL.find(x => x.id === el.dataset.id); if (g) { select(g); window.scrollTo({top:0, behavior:"smooth"}); } });
+}
+function render(){ topBar(); hero(); feat(); metaBox(); viewToggle(); VIEW==="map" ? mapView() : shelves(); }
 
 /* ===== Navigation ===== */
 document.querySelectorAll(".nav button").forEach(b => b.onclick = () => {
@@ -297,7 +429,7 @@ function openTrophies(){
   const s = state(); setNav("trophies"); $("ov").classList.add("show");
   $("shop").innerHTML = `<div class="row" style="justify-content:space-between"><div class="D" style="font-size:30px">TROPHIES</div><button class="btn small" onclick="closeShop()">✕ Close</button></div>
     <h3 class="sec">Badges</h3><div class="ach">${ACH.map(a=>`<div class="${s.stats&&a[3](s)?"":"off"}"><b>${a[0]}</b><span><strong>${a[1]}</strong><br><span class="de" style="font-style:normal">${a[2]}</span></span></div>`).join("")}</div>
-    <h3 class="sec">Top 3</h3>${ALL.filter(g=>g.id!=="daily"&&g.id!=="review").map(g=>{const l=SCORES[g.id]||[];return `<div class="trow"><span class="nm">${g.name}</span>${l.length?l.map((x,i)=>`<span class="top3" style="margin:0"><span class="p ${["g","s","b"][i]}"><div>${E8.avatarSVG(x.eq)}</div>#${x.nr}</span></span>`).join(""):`<span class="de">Nobody yet – be the first!</span>`}</div>`}).join("")}`;
+    <h3 class="sec">Top 3</h3>${ALL.filter(g=>g.id!=="daily"&&g.id!=="review").map(g=>{const l=SCORES[g.id]||[];return `<div class="trow"><span class="nm">${g.name}</span>${l.length?l.map((x,i)=>`<span class="top3" style="margin:0"><span class="p ${["g","s","b"][i]}"><div>${E8.avatarSVG(x.eq)}</div>#${x.nr}</span></span>`).join(""):`<span class="de">Nadie todavía – ¡sé el primero o la primera!</span>`}</div>`}).join("")}`;
 }
 
 /* ===== Locker & Shop ===== */
@@ -314,10 +446,10 @@ function drawShop(msg, ok){
   const changed=JSON.stringify(trying)!==JSON.stringify(worn);
   let action="";
   if(notMine.length===1){
-    const it=E8.item(trying[notMine[0]]), can=E8.inSeason(it), lvOk=!it.lvl||lv>=it.lvl;
+    const it=E8.item(trying[notMine[0]]), can=E8.inSeason(it), lvOk=(!it.lvl||lv>=it.lvl)&&(!it.adv||(s.adv||0)>=it.adv);
     action=`<button class="btn primary" id="buy" ${(!can||!lvOk||s.coins<it.price)?"disabled":""}>Buy “${it.name}” for ${it.price} 🪙</button>`;
     if(!can) msg=msg||"Not available right now. – Gerade nicht erhältlich.";
-    else if(!lvOk) msg=msg||`🔒 You need level ${it.lvl}. – Dafür brauchst du Level ${it.lvl}.`;
+    else if(!lvOk) msg=msg||(it.adv?`🎄 Open ${it.adv} doors of the Advent calendar (you have ${s.adv||0}). – Öffne ${it.adv} Türchen im Adventskalender.`:`🔒 You need level ${it.lvl}. – Dafür brauchst du Level ${it.lvl}.`);
     else if(s.coins<it.price) msg=msg||`You need ${it.price-s.coins} more coins. – Dir fehlen noch ${it.price-s.coins} Münzen.`;
   } else if(notMine.length>1){ msg=msg||"You're trying on several things you don't own. Buy them one by one. – Mehrere Teile sind noch nicht gekauft."; }
   else if(changed) action=`<button class="btn primary" id="wear">✔ Save my look</button>`;
@@ -326,9 +458,9 @@ function drawShop(msg, ok){
   const sections=slots.map(slot=>{
     const items=E8.CATALOG.filter(i=>i.slot===slot && (MODE==="locker" ? isMine(i.id) : ((E8.inSeason(i)&&E8.available(i))||isMine(i.id))));
     return (slots.length>1?`<h3 class="sec">${E8.SLOTNAME[slot]}</h3>`:"")+`<div class="items">`+items.map(i=>{
-      const t=Object.assign({},trying,{[slot]:i.id}), r=E8.rarity(i.price), mine=isMine(i.id), locked=i.lvl&&lv<i.lvl&&!mine;
+      const t=Object.assign({},trying,{[slot]:i.id}), r=E8.rarity(i.price), mine=isMine(i.id), locked=((i.lvl&&lv<i.lvl)||(i.adv&&(s.adv||0)<i.adv))&&!mine;
       return `<div class="item ${trying[slot]===i.id?"sel":""} ${worn[slot]===i.id?"wear":""}" data-slot="${slot}" data-id="${i.id}" style="border-top:4px solid ${r.color}">
-        ${locked?`<span class="lock">🔒 Level ${i.lvl}</span>`:""}
+        ${locked?`<span class="lock">${i.adv?"🎄 "+(s.adv||0)+"/"+i.adv:"🔒 Level "+i.lvl}</span>`:""}
         <div class="mini">${E8.avatarSVG(t)}</div><div class="iname">${i.name}</div>
         <div class="rar" style="color:${r.color}">${i.price?r.name:"&nbsp;"}${i.unit?" · Unit "+i.unit:""}${i.months?" · "+seasonText(i):""}</div>
         <div class="price ${mine?"own":""}">${i.price===0?"free":mine?"✔ yours":i.price+" 🪙"}</div></div>`;
@@ -407,6 +539,8 @@ const TOUR = [
   {sel:".nav", t:"LOCKER, SHOP & TROPHIES", p:"<b>Shop</b>: buy clothes, hats, pets and crazy effects. <b>Locker</b>: change your look. <b>Trophies</b>: your badges and the top 3 of every game.", de:"Im Shop kaufst du, im Locker ziehst du dich um, bei Trophies siehst du Abzeichen und Bestenlisten."},
   {sel:".nav button[data-n='home']", t:"YOUR HOME", p:"Build your own house! Your <b>stars</b> make it bigger: tent → hut → house → villa → mansion. With <b>coins</b> you choose walls, roof, windows and garden. You can also visit your classmates' houses.", de:"Sterne lassen dein Haus wachsen, mit Münzen gestaltest du es. Du kannst auch die Häuser der anderen besuchen."},
   {sel:".strip .card[data-id='review']", t:"MISTAKE BOX", p:"After a vocabulary boss, the words you got wrong go into your <b>mistake box</b>. Beat the Mistake Monster and the words disappear!", de:"Wörter, die du falsch hattest, landen in deiner Fehler-Kiste. Wenn du sie richtig hast, verschwinden sie wieder."},
+  {sel:"#vt", t:"ROAD TRIP USA", p:"Switch to the <b>map</b> and travel through the USA – unit by unit. A <b>final boss</b> waits at the end of every unit!", de:"Auf der Karte reist du Unit für Unit durch die USA. Am Ende jeder Unit wartet ein Endgegner."},
+  {sel:"#meta", t:"OUR SKYLINE", p:"Every coin the class wins builds our skyline: diner, yellow cabs, Brooklyn Bridge … Can we finish it together?", de:"Alle Münzen des Kurses bauen gemeinsam an der Skyline."},
   {sel:null, t:"ONE LAST THING!", p:"On a school iPad, always press <b>Log out</b> when you are finished. Now – have fun! 🎮", de:"Auf Schul-iPads am Ende immer abmelden! Viel Spaß!"}
 ];
 let TI = 0;
@@ -442,10 +576,11 @@ function tourStep(){
 /* ===== Start ===== */
 (function(){
   let pre = null; try{ pre = sessionStorage.getItem("e8sel"); }catch(e){}
-  SEL = ALL.find(g => g.id === pre) || ALL.find(g => g.isNew) || ALL[0];
+  const START = "one-ones"; /* Spiel, das beim Öffnen zuerst ausgewählt ist */
+  SEL = ALL.find(g => g.id === pre) || ALL.find(g => g.id === START) || ALL.find(g => g.isNew) || ALL[0];
   render(); setBg(SEL);
   if (E8.online()) E8.api("scores",{}).then(r => { if (r.ok) { SCORES = r.scores; feat(); if (state()) hero(); } });
-  if (state()) E8.call("login").then(() => { topBar(); hero(); feat(); shelves(); const s = state(); if (s && s.mustSetPin) pinDialog(true); });
+  if (state()) E8.call("login").then(() => { topBar(); hero(); feat(); VIEW==="map" ? mapView() : shelves(); const s = state(); if (s && s.mustSetPin) pinDialog(true); });
   if (location.hash === "#tour") setTimeout(tour, 600);
 })();
 </script>

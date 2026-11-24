@@ -149,5 +149,18 @@ for c in C:
     if c["id"] in ("bg-gold",): c["lvl"]=5
     if c["id"] in ("bg-galaxy",): c["lvl"]=8
     if c["id"] in ("hc-rainbow",): c["lvl"]=4
+
+# ---- Erweiterung Nov 2026: Unit-Outfits, Abschluss 2029, Adventskalender
+add("top-varsity","top","Varsity jacket",250,kind="varsity",color="#1d3a6e",unit=2)
+add("hat-amish","hat","Amish straw hat",150,kind="amishhat",unit=3)
+add("face-beard","face","Amish chin beard",120,kind="beard",color="#4a3020",unit=3)
+add("top-rainponcho","top","Niagara rain poncho 💦",200,kind="rainponcho",color="#3a8fd8",unit=3)
+add("gl-hollywood","glasses","Hollywood shades ⭐",200,kind="hollywood",unit=4)
+add("hat-racing","hat","Racing helmet 🏁",350,kind="racinghelmet",color="#d23b3b",unit=5)
+add("top-grad","top","Graduation gown 2029",350,kind="toga",color="#20243a",lvl=4)
+add("hat-grad","hat","Graduation cap 2029",250,kind="birrete",color="#20243a",lvl=4)
+add("hat-elf","hat","Elf hat & ears 🧝",50,kind="elf",color="#2f8a3a",adv=10)
+add("top-nutcracker","top","Nutcracker uniform 🎖️",80,kind="nutcracker",color="#c8283a",adv=20)
+
 json.dump(C,open("catalog.json","w"),ensure_ascii=False,indent=0)
 print(len(C), sum(c["price"] for c in C))

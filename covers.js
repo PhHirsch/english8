@@ -17,6 +17,33 @@ window.COVERS = {
   "review": `<svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg"><g><path d="M60 70 L160 70 L150 128 L70 128Z" fill="#8a5a2a"/><path d="M60 70 L160 70 L150 82 L70 82Z" fill="#6b4226"/>
     <g><path d="M78 74 q-6 -40 32 -46 q38 6 32 46z" fill="#5fd068"/><circle cx="96" cy="52" r="9" fill="#fff"/><circle cx="124" cy="52" r="9" fill="#fff"/><circle cx="98" cy="54" r="4" fill="#222"/><circle cx="122" cy="54" r="4" fill="#222"/><path d="M98 66 q12 8 24 0" stroke="#1e4a24" stroke-width="3" fill="none"/><animateTransform attributeName="transform" type="translate" values="0 4;0 -4;0 4" dur="1.6s" repeatCount="indefinite"/></g>
     <path d="M56 66 L164 66 L160 78 L60 78Z" fill="#a8743a"/><text x="28" y="40" font-size="26" font-weight="800" fill="#ffd23a" font-family="Arial">?</text><text x="176" y="52" font-size="22" font-weight="800" fill="#ff6a6a" font-family="Arial">✘</text><text x="40" y="110" font-size="18" font-weight="800" fill="#fff" font-family="Arial" opacity=".8">abc</text></g></svg>`,
+  "advent": `<svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg">
+    <rect width="220" height="140" rx="10" fill="#0f3a2a"/>
+    <g fill="#fff" opacity=".7"><circle cx="20" cy="16" r="1.6"/><circle cx="70" cy="10" r="1.2"/><circle cx="150" cy="18" r="1.6"/><circle cx="200" cy="40" r="1.2"/><circle cx="12" cy="70" r="1.2"/><circle cx="208" cy="100" r="1.6"/></g>
+    ${[0,1,2,3,4,5].map(c=>[0,1,2].map(r=>{const n=[7,14,2,21,10,18,5,24,12,1,16,9,20,3,13,23,6,11][r*6+c];const col=["#c8312b","#1f7a3a","#2a5aa0","#b8862a","#8a2a6a","#2a8a8a"][(r*6+c)%6];return `<rect x="${22+c*30}" y="${26+r*34}" width="26" height="30" rx="4" fill="${col}" stroke="#ffffff33"/><text x="${35+c*30}" y="${46+r*34}" font-family="Georgia,serif" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">${n}</text>`}).join("")).join("")}
+    <rect x="142" y="94" width="26" height="30" rx="4" fill="#f3ead0"/><text x="155" y="115" font-size="15" text-anchor="middle">🍇</text>
+    <path d="M110 0 L110 10" stroke="#ffd23a" stroke-width="2"/><path d="M110 6 l2.5 5.5 6 .5 -4.6 3.8 1.5 5.8 -5.4 -3.2 -5.4 3.2 1.5 -5.8 -4.6 -3.8 6 -.5Z" fill="#ffd23a"/>
+  </svg>`,
+  "verbs": `<svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="cjg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a0838"/><stop offset="1" stop-color="#3a0e6a"/></linearGradient></defs>
+    <rect width="220" height="140" rx="10" fill="url(#cjg)"/>
+    <g stroke="#ff3bd4" stroke-width="1" opacity=".6"><path d="M0 110 L220 110 M0 122 L220 122 M0 134 L220 134 M110 100 L110 140 M70 100 L40 140 M150 100 L180 140 M30 100 L-20 140 M190 100 L240 140"/></g>
+    <text x="110" y="46" font-family="Arial Black,Impact,sans-serif" font-size="22" fill="#fff" text-anchor="middle" stroke="#ff3bd4" stroke-width=".8">GO →</text>
+    <g font-family="Menlo,monospace" font-size="14" font-weight="bold" text-anchor="middle"><text x="50" y="80" fill="#3affd4">went</text><text x="90" y="72" fill="#ffd23a">gone</text><text x="130" y="80" fill="#3ab0ff">ate</text><text x="174" y="70" fill="#ff6a8a">eaten</text></g>
+    <rect x="30" y="90" width="160" height="7" rx="3.5" fill="#1a0838" stroke="#8a3bff"/><rect x="31" y="91" width="96" height="5" rx="2.5" fill="#ff3bd4"/>
+    <text x="22" y="22" font-size="13">❤️❤️❤️</text><text x="198" y="22" font-family="Menlo,monospace" font-size="13" fill="#3affd4" text-anchor="end">×5</text>
+  </svg>`,
+  "series": `<svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg">
+    <rect width="220" height="140" rx="10" fill="#3a0a1a"/>
+    <rect x="34" y="14" width="152" height="100" rx="12" fill="#1a0a10" stroke="#8a2a4a" stroke-width="4"/>
+    <rect x="42" y="22" width="136" height="84" rx="6" fill="#ff8aa0"/>
+    <circle cx="86" cy="58" r="13" fill="#c9905a"/><path d="M72 56 C72 40 100 40 100 56 L100 76 L72 76Z" fill="#3a1a0a"/><circle cx="86" cy="58" r="10" fill="#c9905a"/><rect x="74" y="72" width="24" height="34" rx="6" fill="#ffd23a"/>
+    <circle cx="134" cy="58" r="11" fill="#f2c9a0"/><path d="M123 54 C123 44 145 44 145 54Z" fill="#6a3a1a"/><rect x="122" y="70" width="24" height="36" rx="6" fill="#3a78d8"/>
+    <path d="M110 44 C104 36 96 42 110 54 C124 42 116 36 110 44Z" fill="#ff2a5a"/>
+    <path d="M90 114 L80 130 M130 114 L140 130" stroke="#8a2a4a" stroke-width="4"/>
+    <text x="110" y="134" font-family="Georgia,serif" font-style="italic" font-size="12" fill="#ffb3c2" text-anchor="middle">to be continued…</text>
+    <rect x="150" y="84" width="24" height="16" rx="2" fill="#fff8e6" transform="rotate(-8 162 92)"/>
+  </svg>`,
   "daily": `<svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg"><g><path d="M110 10 C140 40 160 60 150 100 C145 120 125 132 110 132 C80 132 60 112 62 86 C64 66 80 56 86 40 C96 56 100 64 108 66 C112 50 108 30 110 10 Z" fill="#ff6a2a"/><path d="M110 50 C124 70 134 84 128 104 C124 118 116 124 110 124 C94 124 84 112 86 98 C88 86 96 80 100 70 C104 80 108 84 112 84 C114 74 112 62 110 50 Z" fill="#ffd23a"/><animateTransform attributeName="transform" type="scale" values="1 1;1.03 .97;1 1" dur=".8s" repeatCount="indefinite" additive="sum"/></g>
     <text x="110" y="112" font-family="Anton,Impact,Arial Black" font-size="26" fill="#7a1a00" text-anchor="middle">DAILY</text></svg>`
 };

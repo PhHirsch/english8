@@ -94,7 +94,7 @@
 <main id="app"></main>
 <div class="overlay" id="ov" onclick="if(event.target===this)closeOv()"><div class="panel" id="ovc"></div></div>
 
-<script src="game.js?v=10"></script>
+<script src="game.js?v=12"></script>
 <script>
 /* ---------- DATA ---------- */
 const STATIONS = [
@@ -407,5 +407,6 @@ load();
 if(S.name&&me()&&S.nr!==me()){S={name:"",st:-1,o2:100,mistakes:0,start:0,end:0,done:false};save()}
 if(S.name&&!S.done&&S.st>=0)resumeScreen();else render();
 </script>
+<script src="fx.js?v=2"></script>
 </body>
 </html>

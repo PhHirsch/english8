@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Exchange Year · The Hirsch Games</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  :root{--bg:radial-gradient(ellipse at 50% 0%,#0f2a4a 0%,#040a14 70%);--panel:#0a1a2a;--txt:#f0f6ff;--muted:#a8c4e0;--line:#1a3a5e;--btn:#0e2440;--accent:#ffb02e;--accentTxt:#fff;--accent2:#ffd88f;--bubble:#102a44;--input:#06101c;--ok:#6fe59a;--bad:#ffb03a}
+  .tv{position:relative;border-radius:14px 14px 0 0;overflow:hidden;background:linear-gradient(135deg,#1a3a6a,#081830);padding:14px 16px;display:flex;align-items:center;gap:14px}
+  .tv .logo{font-family:Georgia,serif;font-style:italic;font-size:26px;line-height:1;color:#fff4e0;text-shadow:0 2px 0 #7a4a00,0 0 18px #ffb02e}
+  .tv .logo small{display:block;font-size:13px;font-style:normal;letter-spacing:.2em;color:#ffd88f;margin-top:4px}
+  .tv .cast{margin-left:auto;display:flex;gap:6px;font-size:28px}
+  .tv .cast span{width:44px;height:44px;border-radius:50%;background:#fff1;display:grid;place-items:center;border:2px solid #ffb02e}
+  .tv .cast span.me{overflow:hidden;background:#fff}
+  .tv .cast span.me svg{width:44px;height:44px}
+  .prog{height:6px;background:#081830}.prog i{display:block;height:100%;background:linear-gradient(90deg,#ffb02e,#ffd23a)}
+  .story p{margin:.45em 0;line-height:1.55}
+  .story .d{display:flex;gap:8px;align-items:flex-start;margin:.4em 0}
+  .story .d b{flex:none;min-width:62px;color:#ffd88f}
+  .story .gl{border-bottom:1px dotted #ffd88f;cursor:help}
+  .story .note{background:#fff8e6;color:#3a2a10;border-radius:4px;padding:8px 12px;font-family:"Comic Sans MS","Bradley Hand",cursive;transform:rotate(-1deg);box-shadow:0 2px 6px #0006;margin:.6em 0;display:inline-block}
+  .eps{display:grid;gap:12px;margin:14px 0}
+  .ep{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,#0a2240,#1a3a6a);border:1px solid #2a5a8a;border-radius:14px;padding:14px;color:#fff;text-decoration:none}
+  .ep .n{font-family:Georgia,serif;font-size:34px;font-style:italic;color:#ffd88f;width:44px;text-align:center}
+  .ep b{font-size:19px}
+  .ep.lock{filter:grayscale(.8);opacity:.55;pointer-events:none}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:17px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:18px}
+  .de{color:var(--muted);font-size:14px}
+  .btn{display:inline-block;padding:10px 18px;border-radius:12px;background:var(--accent);color:#fff;text-decoration:none;font-weight:700}
+  .ep .st{margin-left:auto;font-size:18px;color:#ffd23a;white-space:nowrap}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script src="game.js?v=12"></script>
+<script src="engine.js?v=2"></script>
+<script>
+/* ======== Freischalten: Zahl erhöhen, wenn die nächste Folge erscheinen soll ======== */
+const RELEASED = 1;
+
+const g = (w, de) => `<span class="gl" title="${de}">${w}</span> <span class="de">(${de})</span>`;
+const d = (who, t) => `<div class="d"><b>${who}:</b><span>${t}</span></div>`;
+const TF = (q, a, why) => ({ t: "choice", q: q, task: "True or false?", taskDe: "Richtig oder falsch?", keep: true, opts: ["true ✔", "false ✘"], a: a ? "true ✔" : "false ✘", hint: why });
+
+const EPS = [
+ { n: 1, unit: "Unit 2", title: "The new girl", teaser: "Lena from Höxter starts her exchange year in Ohio. New school, new family … and a strange note.",
+   parts: [
+   { title: "Welcome to Ohio",
+     text: `<p>Lena is fifteen and she is from Höxter in Germany. Today she is starting her ${g("exchange year", "Austauschjahr")} in Columbus, Ohio. Her ${g("host family", "Gastfamilie")}, the Millers, are waiting for her at the airport.</p>
+       ${d("Mrs Miller", "Welcome to Ohio, Lena! I'm Karen and this is Josh, our son. He's fifteen, too.")}
+       ${d("Josh", "Hey! Is that your suitcase? The red one?")}
+       ${d("Lena", "No, my suitcase is the black one. The red ones are my mum's old bags. 😄")}
+       <p>On the way home Josh tells Lena about the rules: "At our house you have to take off your shoes. And you mustn't touch Dad's barbecue!"</p>`,
+     tasks: [
+       { t: "choice", q: "Where is Lena from?", opts: ["from Höxter", "from Columbus", "from Berlin"], a: "from Höxter", hint: "„… she is from Höxter in Germany.“" },
+       { t: "choice", q: "Which suitcase is Lena's?", opts: ["the black one", "the red one", "the blue one"], a: "the black one", hint: "„… my suitcase is the black one.“" },
+       { t: "choice", q: "At the Millers' house you ___ take off your shoes.", opts: ["have to", "mustn't", "don't have to"], a: "have to", hint: "„… you have to take off your shoes.“" },
+       TF("Lena is allowed to use Dad's barbecue.", false, "„… you mustn't touch Dad's barbecue!“")
+     ] },
+   { title: "First day at Lincoln High",
+     text: `<p>On Monday Lena goes to <b>Lincoln High School</b> with Josh. The school is huge! There are 2,000 students, a football stadium and a ${g("cafeteria", "Mensa")} with pizza every day.</p>
+       ${d("Josh", "Here's your schedule. You have English, Math, Biology and … Drama!")}
+       ${d("Lena", "Drama? We don't have that in Germany. Can I really choose it?")}
+       ${d("Josh", "Sure! Here you can choose a lot of your subjects. And you don't have to wear a uniform.")}
+       <p>A girl with green hair waves at them. "That's Maya," says Josh. "If you sit with her at lunch, she will tell you everything about this school."</p>`,
+     tasks: [
+       { t: "choice", q: "How many students are there?", opts: ["2,000", "200", "20,000"], a: "2,000", hint: "„There are 2,000 students …“" },
+       { t: "choice", q: "Which subject is new for Lena?", opts: ["Drama", "English", "Biology"], a: "Drama", hint: "„Drama? We don't have that in Germany.“" },
+       { t: "choice", q: "At Lincoln High students ___ wear a uniform.", opts: ["don't have to", "mustn't", "have to"], a: "don't have to", hint: "„… you don't have to wear a uniform.“" },
+       { t: "type", q: "If Lena sits with Maya at lunch, Maya ___ ___ (tell) her everything.", a: "will tell", show: "If + present, will + verb → will tell" }
+     ] },
+   { title: "A note in the locker",
+     text: `<p>After lunch Lena goes to her ${g("locker", "Schließfach")}, number 213. She opens it – and there is a small yellow note inside. It isn't from Josh. It isn't from Maya. Who is it from?</p>
+       <div class="note">Hi Lena! I know you are from Höxter. I was there last summer. 😉 Meet me at the football game on Friday. Come alone! – J.</div>
+       <p>Lena looks around. The hall is full of students. Somebody is watching her … but who?</p>`,
+     tasks: [
+       { t: "choice", q: "What is in Lena's locker?", opts: ["a yellow note", "a red suitcase", "a pizza"], a: "a yellow note", hint: "„… there is a small yellow note inside.“" },
+       { t: "choice", q: "Where does J. want to meet Lena?", opts: ["at the football game", "in the cafeteria", "at the airport"], a: "at the football game", hint: "„Meet me at the football game on Friday.“" },
+       TF("The note is from Josh.", false, "„It isn't from Josh.“"),
+       { t: "order", task: "Put the words in order:", taskDe: "Wer hat die Nachricht geschrieben?", words: ["Who", "wrote", "the", "note?"], a: "Who wrote the note?" }
+     ] }],
+   end: "Who is „J.“? And why must Lena come alone? 🤫 – To be continued …" },
+ { n: 2, unit: "Unit 3", title: "Friday night lights", teaser: "The big football game – and the answer to the secret?", parts: [] },
+ { n: 3, unit: "Unit 4", title: "California dreaming", teaser: "A trip to the West Coast changes everything.", parts: [] },
+ { n: 4, unit: "Unit 5", title: "Down South", teaser: "The last episode …", parts: [] }
+];
+
+const q = new URLSearchParams(location.search), EP = EPS.find(e => e.n === +q.get("ep"));
+if (!EP || EP.n > RELEASED || !EP.parts.length) {
+  const se = E8.getSession(), st = se && se.state ? se.state.stars || {} : {};
+  document.getElementById("app").innerHTML = `<div class="panel" style="max-width:720px;margin:20px auto;padding:18px">
+    <a href="./" style="color:#ffd88f">← Lobby</a>
+    <div class="tv" style="margin-top:10px;border-radius:14px"><div class="logo">Exchange Year<small>A SERIES</small></div><div class="cast"><span>👩🏼</span><span>👦🏻</span><span>🧑🏽‍🎤</span><span>❓</span></div></div>
+    <p>Lena from Höxter spends a year in Ohio. A new school, new friends – and a secret. Read every episode and answer the questions. A new episode comes out when your teacher releases it!</p>
+    <p class="de">Lies jede Folge und beantworte die Fragen. Neue Folgen schaltet deine Lehrkraft frei – bleib dran!</p>
+    <div class="eps">${EPS.map(e => { const lock = e.n > RELEASED || !e.parts.length, s = st["tele-" + e.n] || 0;
+      return `<a class="ep ${lock ? "lock" : ""}" href="?ep=${e.n}"><span class="n">${e.n}</span><span><b>${lock ? "🔒 " : ""}${e.title}</b><br><span class="de">${e.unit} · ${lock ? "Coming soon … – bald" : e.teaser}</span></span><span class="st">${lock ? "" : s ? "★".repeat(s) + "☆".repeat(3 - s) : "NEW"}</span></a>`; }).join("")}</div></div>`;
+} else {
+  JUEGO.start({
+    noHard: true, id: "tele-" + EP.n, key: "e8-tele-" + EP.n, icon: "📺", topic: "Exchange Year · Episode " + EP.n, title: EP.title,
+    intro: `<p><b>Episode ${EP.n}</b> · ${EP.teaser}</p><p class="de">Lies den Text genau – er bleibt bei den Fragen sichtbar. Unbekannte Wörter haben eine Übersetzung in Klammern.</p>`,
+    goLabel: "▶ Start the episode!", time: "about 10 minutes",
+    stages: EP.parts.map((p, i) => ({ label: "Part " + (i + 1), title: p.title, go: "📖 Read!",
+      intro: `<div class="story">${p.text}</div><p class="de">Read the text. Then answer the questions – the text stays on the screen.</p>`,
+      memo: `<div class="story">${p.text}</div>`, pista: "Look for the answer in the text above. – Die Wörter aus der Frage stehen meistens auch im Text.", tasks: p.tasks })),
+    scene: (S) => `<div class="tv"><div class="logo">Exchange Year<small>EPISODE ${EP.n}</small></div><div class="cast"><span>👩🏼</span><span>👦🏻</span><span>🧑🏽‍🎤</span><span class="me">${E8.myAvatar()}</span></div></div>
+      <div class="prog"><i style="width:${S.done ? 100 : Math.round(S.solved / S.total * 100)}%"></i></div>`,
+    outro: `<div style="font-size:56px">📺🎬</div><h1>End of episode ${EP.n}</h1><p style="font-size:20px">${EP.end}</p>
+      <p class="de">${EP.n < RELEASED ? "Die nächste Folge ist schon da!" : "Die nächste Folge schaltet deine Lehrkraft bald frei."}</p><p><a class="btn" href="series.html">📺 All episodes</a></p>`
+  });
+}
+</script>
+</body>
+</html>

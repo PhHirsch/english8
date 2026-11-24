@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Final Boss · The Hirsch Games</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  :root{--bg:radial-gradient(ellipse at 50% 0%,#3a0a0a 0%,#0c0303 70%);--panel:#1a0808;--txt:#fff2ee;--muted:#d8a8a0;--line:#4a1a14;--btn:#2a0c0a;--accent:#ff5a2a;--accentTxt:#fff;--accent2:#ffb38f;--bubble:#2a0f0c;--input:#120404;--ok:#6fe59a;--bad:#ffb03a}
+  .arena{position:relative;height:210px;overflow:hidden;border-radius:14px 14px 0 0;background:radial-gradient(ellipse at 50% 120%,#ff5a2a55,transparent 60%),linear-gradient(#1a0606,#3a0c08)}
+  .arena .boss{position:absolute;right:8%;bottom:20px;font-size:110px;line-height:1;filter:drop-shadow(0 0 20px #ff5a2a88);transition:transform .2s}
+  .arena .boss.hit{animation:hit .4s}
+  @keyframes hit{25%{transform:translateX(14px) rotate(6deg);filter:brightness(2.2)}60%{transform:translateX(-6px)}}
+  .arena .boss.rage{animation:rage 1.2s infinite}
+  @keyframes rage{50%{transform:scale(1.06);filter:drop-shadow(0 0 30px #ff2a2a)}}
+  .arena .hero{position:absolute;left:8%;bottom:20px;width:96px;height:96px;border-radius:50%;overflow:hidden;background:#fff;border:4px solid #3ab0ff;box-shadow:0 0 20px #3ab0ff88}
+  .arena .hero svg{width:100%;height:100%}
+  .hp{position:absolute;right:4%;top:12px;width:46%}
+  .hp .nm{font-weight:900;font-size:15px;letter-spacing:.05em;text-align:right}
+  .hp .b{height:16px;border-radius:9px;background:#000a;border:2px solid #ff5a2a;overflow:hidden;margin-top:3px}
+  .hp .b i{display:block;height:100%;background:linear-gradient(90deg,#ff2a2a,#ffb03a);transition:width .6s}
+  .hearts{position:absolute;left:4%;top:14px;font-size:22px}
+  .ph{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);font-weight:900;font-size:15px;color:#ffd23a;letter-spacing:.1em;text-align:center}
+  .say{position:absolute;right:30%;bottom:120px;max-width:44%;background:#fff;color:#3a0a0a;border-radius:12px;padding:6px 10px;font-size:14px;font-weight:700}
+  .say:after{content:"";position:absolute;right:-8px;bottom:10px;border:8px solid transparent;border-left-color:#fff}
+  .mini{display:grid;gap:10px;margin:14px 0}
+  .mini a{display:flex;gap:14px;align-items:center;padding:14px;border-radius:14px;background:linear-gradient(135deg,#3a0c08,#6a1a10);border:1px solid #8a2a1a;color:#fff;text-decoration:none}
+  .mini a .e{font-size:44px}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script src="game.js?v=12"></script>
+<script src="engine.js?v=2"></script>
+<script>
+const TF = (q, a, why) => ({ t: "choice", q: q, task: "True or false?", keep: true, opts: ["true ✔", "false ✘"], a: a ? "true ✔" : "false ✘", hint: why });
+const BOSSES = {
+ 2: { name: "BIG BAD BISON", e: "🦬", unit: "Unit 2 · Teens in the Midwest", lines: ["STOMP! Nobody leaves Westwood High! 🦬", "If you answer that, I will stomp even harder!", "Grrr … your English is too strong … 💥"],
+   intro: "The school mascot of Westwood High has gone wild! The giant bison stomps through the halls and nobody can go home. He only calms down if you use perfect English: <b>one/ones</b>, <b>if-clauses</b> and <b>modals</b> (can, must, may – and their substitutes). Everything from Unit 2!",
+   stages: [
+    { label: "Phase 1", title: "Stampede in the hall", memo: "📌 one (1 Ding) / ones (mehrere) · If + present, … will + verb · mustn't = nicht dürfen · don't have to = nicht müssen · could = konnte · had to = musste · was allowed to = durfte", tasks: [
+      { t: "choice", q: "I don't like the red T-shirt. I'll take the blue ___.", opts: ["one", "ones"], a: "one", hint: "Ein T-Shirt → one." },
+      { t: "choice", q: "These shoes are too small. Have you got bigger ___?", opts: ["ones", "one"], a: "ones", hint: "shoes = Mehrzahl → ones." },
+      { t: "choice", q: "If it rains tomorrow, we ___ in the gym.", opts: ["will play", "would play", "played"], a: "will play", hint: "If + present → will + verb." },
+      { t: "choice", q: "Students ___ use their phones in class. It's against the rules!", opts: ["mustn't", "don't have to", "needn't"], a: "mustn't", hint: "Verbot → mustn't." },
+      { t: "choice", q: "Tomorrow is Saturday, so we ___ get up early.", opts: ["don't have to", "mustn't", "can't"], a: "don't have to", hint: "Nicht nötig → don't have to." },
+      { t: "choice", q: "In 1870 children ___ go to school by bus. There were no buses!", opts: ["couldn't", "can't", "mustn't"], a: "couldn't", hint: "Vergangenheit von can't → couldn't." }] },
+    { label: "Phase 2", title: "The bison attacks!", memo: "📌 can → was/were able to · will be able to · must → had to · will have to · may → was/were allowed to · If-Satz: present – will · one/ones ersetzt ein Nomen", tasks: [
+      { t: "type", q: "If you ___ (study) hard, you will pass the test.", a: "study", show: "If + simple present → study" },
+      { t: "type", q: "Yesterday we ___ ___ (must) wear a school uniform.", a: "had to", show: "must → had to (Vergangenheit)" },
+      { t: "type", q: "Next year I will be ___ ___ (can) drive a car.", a: "able to", show: "will be able to" },
+      { t: "type", q: "Which cake would you like? – The chocolate ___, please.", a: "one", show: "ein Kuchen → one" },
+      { t: "type", q: "Were you ___ ___ (may) use a dictionary in the test?", a: "allowed to", show: "may → be allowed to" },
+      { t: "type", q: "If Maya ___ ___ (not come), we will start without her.", a: ["doesn't come", "does not come"], show: "If + simple present (verneint) → doesn't come" }] },
+    { label: "Final phase", title: "Calm him down!", memo: "📌 Satzbau: If-Satz, Komma, Hauptsatz mit will · Ersatzformen in der Vergangenheit: had to, was/were allowed to, could / was able to", tasks: [
+      { t: "order", task: "Put the words in order:", taskDe: "Wenn du dich nicht beeilst, wirst du den Bus verpassen.", words: ["If", "you", "don't", "hurry,", "you", "will", "miss", "the", "bus."], a: "If you don't hurry, you will miss the bus." },
+      { t: "order", task: "Put the words in order:", taskDe: "Wir durften das Klassenzimmer nicht verlassen.", words: ["We", "weren't", "allowed", "to", "leave", "the", "classroom."], a: "We weren't allowed to leave the classroom." },
+      { t: "order", task: "Put the words in order:", taskDe: "Ich mag die neuen Turnschuhe mehr als die alten.", words: ["I", "like", "the", "new", "trainers", "more", "than", "the", "old", "ones."], a: "I like the new trainers more than the old ones." },
+      { t: "error", words: ["If", "it", "rained,", "we", "will", "stay", "at", "home."], bad: 2, fix: "rains,", opts: ["rains,", "rain,", "raining,"], hint: "If-Satz Typ I: If + simple present → rains." },
+      { t: "error", words: ["I", "must", "do", "my", "homework", "yesterday."], bad: 1, fix: "had to", opts: ["had to", "must", "can"], hint: "yesterday → Vergangenheit: had to." },
+      { t: "error", words: ["These", "jeans", "are", "old.", "I", "need", "new", "one."], bad: 7, fix: "ones.", opts: ["ones.", "one.", "once."], hint: "jeans = Mehrzahl → ones." }] }] }
+};
+const U = +new URLSearchParams(location.search).get("u"), B = BOSSES[U];
+if (!B) {
+  const se = E8.getSession(), st = se && se.state ? se.state.stars || {} : {};
+  document.getElementById("app").innerHTML = `<div class="panel" style="max-width:720px;margin:20px auto;padding:18px"><a href="index.html" style="color:#ffb38f">← Lobby</a>
+    <h1 style="text-align:center">⚔️ Final bosses</h1><p style="text-align:center">At the end of every unit a boss is waiting for you. Beat it with everything you know! <span class="de">– Am Ende jeder Unit wartet ein Endgegner. Gut zur Vorbereitung auf die Klassenarbeit.</span></p>
+    <div class="mini">${Object.entries(BOSSES).map(([k, b]) => `<a href="?u=${k}"><span class="e">${b.e}</span><span><b>${b.name}</b><br><span class="de">${b.unit}</span></span><span style="margin-left:auto;color:#ffd23a">${st["final-u" + k] ? "★".repeat(st["final-u" + k]) + "☆".repeat(3 - st["final-u" + k]) : "⚔️"}</span></a>`).join("")}</div></div>`;
+} else {
+  const phaseMiss = S => (S.data.pm && S.data.pm[S.stage]) || 0;
+  JUEGO.start({
+    id: "final-u" + U, key: "e8-final-u" + U, icon: B.e, topic: "Final boss · " + B.unit, title: B.name,
+    intro: `<p>${B.intro}</p><p>3 phases, harder and harder. Every right answer hits the boss. Every mistake costs you a heart ❤️ – but you can always keep fighting.</p><p class="de">Endgegner: 3 Phasen, immer schwerer. Jede falsche Antwort kostet ein Herz, du kannst aber immer weiterkämpfen.</p>`,
+    goLabel: "⚔️ Fight!", time: "about 15 minutes",
+    stages: B.stages.map((s, i) => Object.assign({ go: ["⚔️ Attack!", "🔥 Harder!", "💥 Final blow!"][i], intro: `<div class="who"><div class="face">${B.e}</div><div><b class="n">${B.name}</b>${B.lines[i]}</div></div>` }, s)),
+    onMistake: S => { S.data.pm = S.data.pm || {}; S.data.pm[S.stage] = (S.data.pm[S.stage] || 0) + 1; const b = document.querySelector(".arena .boss"); if (b) b.classList.add("rage"); },
+    onSolve: S => { const b = document.querySelector(".arena .boss"); if (b) { b.classList.remove("hit"); void b.offsetWidth; b.classList.add("hit"); } const i = document.querySelector(".hp .b i"); if (i) i.style.width = Math.max(0, Math.round((1 - S.solved / S.total) * 100)) + "%"; },
+    scene: (S) => { const hp = S.done ? 0 : Math.round((1 - S.solved / S.total) * 100), h = Math.max(0, 5 - phaseMiss(S));
+      return `<div class="arena"><div class="hearts">${"❤️".repeat(h)}${"🖤".repeat(5 - h)}</div>
+        <div class="hp"><div class="nm">${B.e} ${B.name}</div><div class="b"><i style="width:${hp}%"></i></div></div>
+        <div class="ph">${S.done ? "💥 VICTORY!" : (["PHASE 1", "PHASE 2", "FINAL PHASE"][S.stage] || "")}${!S.done && h === 0 ? "<br>😵 No hearts left – keep fighting!" : ""}</div>
+        <div class="hero">${E8.myAvatar()}</div><div class="boss" style="${S.done ? "transform:rotate(90deg) translateY(30px);opacity:.5" : ""}">${B.e}</div>
+        ${S.done ? "" : `<div class="say">${B.lines[Math.min(S.stage, 2)]}</div>`}</div>`; },
+    outro: `<div style="font-size:64px">💥${B.e}🏆</div><h1>You beat ${B.name}!</h1><p>You are a master of ${B.unit}. 💪</p><p><a class="btn" href="final.html">⚔️ Other bosses</a></p>`
+  });
+}
+</script>
+</body>
+</html>

@@ -118,3 +118,11 @@ Für eine neue Klasse: `house_items.py` übernehmen und Unit-Teile anpassen, `ho
 
 ## 10. Name und Logo: THE HIRSCH GAMES
 Alle Kurs-Seiten heißen „The Hirsch Games“. Dateien: `logo.svg` (goldene Nadel mit Hirsch und Bleistift), `apple-touch-icon.png`. In `index.html`: Schrift Cinzel, `.brand`-Block in `topBar()` (groß für Gäste, klein für Eingeloggte, Text auf dem Handy ausgeblendet), Untertitel aus `SITE.sub`, Tab-Titel „The Hirsch Games · <Kurs>“, Favicon-Links in allen HTML-Dateien, erster Tour-Schritt „WELCOME TO THE HIRSCH GAMES!“ (auf Spanisch „¡BIENVENIDOS A THE HIRSCH GAMES!“). Login-Karten mit Logo.
+
+## 11. Erweiterung Nov 2026 (aus efspa0 übernommen)
+- **Server:** `state()` liefert `meta` (Kursmünzen), `perfect`, `streak`/`streakToday`/`streakBest`, `adv`; `result()` liefert `perfectNew`; Kauf-Sperre `adv` (Adventstürchen). shop.json: Avatar `[slot, price, lvl, months|0, adv]`, Haus 6. Element `adv`. Test-Daten: `SEED=1 node mock.js`.
+- **engine.js:** Spielmotor (englisch) für neue Spiele – Aufgaben choice/type/order/error/sort, Merk-Box `memo`, Tipps, Combo/Konfetti, Entscheidungen `pick`, Hard mode `?mode=hard` (id + „-hard“, `noHard: true` zum Abschalten).
+- **fx.js:** Combo + Konfetti für die älteren Spiele (hängt sich an `fb()`/`mistake()`), am Ende „Best combo“.
+- **Seiten:** `final.html?u=N` (Endgegner, id `final-uN`, Unit 2: Big Bad Bison), `advent.html?d=N` (24 Türchen, id `adv-N`, Test auf localhost mit `?today=2026-12-05`), `series.html?ep=N` (Serie „Exchange Year“, id `tele-N`, freischalten über `const RELEASED`), `verbs.html` (Verb Blaster, id `verbs`), `album.html` + `cards.js` (Sammelkarten).
+- **Lobby:** Streak-Flamme, 👑 Flawless, Kursziel „Our Skyline“ (METAS), Ansicht „Road Trip USA“ (ZONES), Boss-Karte am Ende des Unit-Regals, Album-Link, `const START` = aktuelles Spiel, `NOSTAR` für Spiele ohne Sterne-Anzeige.
+- **Boss-Kämpfe:** Hard mode `boss.html?id=…&mode=hard` (alles eintippen, 15 s pro Wort).

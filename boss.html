@@ -52,11 +52,13 @@
   @media(max-width:560px){.list{columns:1}}
   .small{font-size:14px;color:var(--muted)}
   .stat{display:inline-block;background:#2a2150;border-radius:10px;padding:6px 12px;margin:4px}
+.tmr{height:8px;border-radius:5px;background:rgba(255,255,255,.15);overflow:hidden;margin:10px 0}.tmr i{display:block;height:100%;background:linear-gradient(90deg,#ff5a2a,#ffd23a);transform-origin:left}
+.hardtag{display:inline-block;background:#ff3a2a;color:#fff;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:800;letter-spacing:.08em}
 </style>
 </head>
 <body>
 <main id="app"></main>
-<script src="game.js?v=10"></script>
+<script src="game.js?v=12"></script>
 <script src="bosses.js?v=5"></script>
 <script src="vocab-u2.js?v=5"></script>
 <script>
@@ -66,7 +68,10 @@ const GAME = P.get("id") || "daily";
 const DAILY = GAME === "daily";
 const REVIEW = GAME === "review";
 const TODAY = (d => d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate())(new Date());
-const KEY = "bossfight-" + GAME + (DAILY ? "-" + TODAY : "");
+const HARD = /[?&]mode=hard/.test(location.search) && !DAILY && !REVIEW;
+const RID = HARD ? GAME + "-hard" : GAME;
+const KEY = "bossfight-" + RID + (DAILY ? "-" + TODAY : "");
+let TMR = null;
 
 /* ---------- Abschnitt bzw. Tages-Challenge ---------- */
 const SECTIONS = Object.values(window.VOCAB).flatMap(u => u.sections.map(s => Object.assign({ unit: u.unit }, s)));
@@ -123,7 +128,7 @@ function me() { const s = E8.getSession(); return s ? s.nr : null; }
 function save() { try { sessionStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
 function load() { try { const x = JSON.parse(sessionStorage.getItem(KEY)); if (x && x.queue && (!REVIEW || (x.total === SEC.words.length && x.sig === SEC.words.map(w => w[0]).join("|")))) S = x; } catch (e) { } }
 function newGame() {
-  const q = shuffle(SEC.words.map((w, i) => ({ w: i, t: (r => r < .42 ? "de2en" : r < .66 ? "en2de" : "type")(Math.random()) })));
+  const q = shuffle(SEC.words.map((w, i) => ({ w: i, t: HARD ? "type" : (r => r < .42 ? "de2en" : r < .66 ? "en2de" : "type")(Math.random()) })));
   S = { nr: me(), queue: q, hp: SEC.words.length, total: SEC.words.length, mistakes: 0, wrong: [], start: Date.now(), end: 0, done: false, sig: SEC.words.map(w => w[0]).join("|") };
   save();
 }
@@ -148,7 +153,7 @@ function intro() {
   $("app").innerHTML = `
   <div class="top"><a class="back" href="./">← All exercises</a><span class="small">${DAILY ? "Daily Challenge" : SEC.unit + " · " + SEC.part}</span></div>
   <div class="panel center">
-    <div class="small">${DAILY ? "A new boss every day!" : "Vocabulary boss fight"}</div>
+    <div class="small">${DAILY ? "A new boss every day!" : "Vocabulary boss fight"}</div>${HARD ? `<span class="hardtag">🔥 HARD MODE · type everything · 15 s per word</span>` : ""}
     <h1>${SEC.bossName}</h1>
     <div style="max-width:240px;margin:0 auto">${BOSSART[SEC.boss]}</div>
     <p><b>${SEC.title}</b> · ${SEC.words.length} words<br><span class="small">${DAILY ? SEC.pages : "Vocabulary " + SEC.pages}</span></p>
@@ -184,7 +189,7 @@ function render() {
     const opts = shuffle([w].concat(distractors(w, 3)));
     qHTML = `<div class="qsub">What does it mean in German?</div><div class="q">${w[0]}</div><div class="opts">${opts.map(o => `<button class="btn" data-ok="${o === w ? 1 : 0}">${o[1]}</button>`).join("")}</div>`;
   } else {
-    qHTML = `<div class="qsub">Type the English word:</div><div class="q">${w[1]}</div><div class="hint">${hintOf(w[0])}</div>
+    qHTML = `<div class="qsub">Type the English word:</div><div class="q">${w[1]}</div>${HARD ? `<div class="tmr"><i id="tmr"></i></div>` : `<div class="hint">${hintOf(w[0])}</div>`}
       <div class="row" style="margin-top:12px"><input class="ty" id="ty" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"><button class="btn primary" id="chk">Attack!</button></div>`;
   }
   const left = S.hp;
@@ -198,7 +203,8 @@ function render() {
   </div>`;
   let locked = false;
   const answer = (ok, given) => {
-    if (locked) return; locked = true;
+    if (locked) return; locked = true; clearInterval(TMR);
+    if (window.FX) ok ? FX.hit() : FX.miss();
     if (ok) {
       S.hp--; S.queue.shift();
       attack();
@@ -218,6 +224,8 @@ function render() {
     if (!ok) document.querySelectorAll('.opts .btn[data-ok="1"]').forEach(x => x.classList.add("right"));
     answer(ok, "");
   });
+  clearInterval(TMR);
+  if (HARD) { const t0 = Date.now(), lim = 15000; TMR = setInterval(() => { const f = 1 - (Date.now() - t0) / lim; if ($("tmr")) $("tmr").style.transform = `scaleX(${Math.max(0, f)})`; if (f <= 0) { clearInterval(TMR); answer(false, ""); } }, 100); }
   if ($("ty")) {
     $("ty").focus();
     const go = () => { const v = $("ty").value; if (!v.trim()) return; answer(variants(w[0]).indexOf(norm(v)) >= 0, v); };
@@ -249,11 +257,13 @@ function finish() {
     <p><span class="stat">Mistakes: <b>${S.mistakes}</b></span><span class="stat">Time: <b>${Math.floor(sec / 60)} min ${sec % 60} s</b></span><span class="stat">Words: <b>${S.total}</b></span></p>
     <div id="coinbox" style="margin:12px auto;padding:12px;background:#2a2150;border-radius:12px;max-width:460px"></div>
     ${wrongList.length ? `<div style="text-align:left"><b>Practise these words:</b> <span class="small">– Diese Wörter solltest du nochmal üben:</span><ul class="list">${wrongList.map(w => `<li><b>${w[0]}</b> – ${w[1]}</li>`).join("")}</ul></div>` : `<p>🌟 No mistakes – perfect!</p>`}
+    ${HARD || DAILY || REVIEW ? "" : `<div style="margin:12px auto;max-width:520px;background:#2a2150;border-radius:12px;padding:10px"><b>🔥 Dare you? – HARD MODE</b><br>Type every word, no first letters, 15 seconds per word. Your own crown! <div class="small">Alles eintippen, keine Anfangsbuchstaben, 15 Sekunden pro Wort.</div><button class="btn" id="hard" style="margin-top:8px">🔥 Fight in hard mode</button></div>`}
     <div class="row"><button class="btn primary" id="again">Fight again / new player</button><button class="btn" onclick="location.href='./'">← All exercises</button></div>
   </div>`;
   S.wrongWords = S.wrong.map(i => SEC.words[i][0]);
   S.fixedWords = SEC.words.filter((w, i) => S.wrong.indexOf(i) < 0).map(w => w[0]);
-  E8.reportInto("coinbox", GAME, S, save);
+  E8.reportInto("coinbox", RID, S, save);
+  if ($("hard")) $("hard").onclick = () => { location.href = "boss.html?id=" + GAME + "&mode=hard"; };
   $("again").onclick = () => { S = null; try { sessionStorage.removeItem(KEY); } catch (e) { } intro(); };
 }
 
@@ -264,5 +274,6 @@ if (S && !S.done && S.queue.length < S.total + 5 && (S.total - S.hp) > 0) resume
 else if (S && S.done) finish();
 else intro();
 </script>
+<script src="fx.js?v=2"></script>
 </body>
 </html>

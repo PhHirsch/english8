@@ -1237,5 +1237,93 @@
 "price": 50,
 "kind": "equality",
 "unit": 5
+},
+{
+"id": "top-varsity",
+"slot": "top",
+"name": "Varsity jacket",
+"price": 250,
+"kind": "varsity",
+"color": "#1d3a6e",
+"unit": 2
+},
+{
+"id": "hat-amish",
+"slot": "hat",
+"name": "Amish straw hat",
+"price": 150,
+"kind": "amishhat",
+"unit": 3
+},
+{
+"id": "face-beard",
+"slot": "face",
+"name": "Amish chin beard",
+"price": 120,
+"kind": "beard",
+"color": "#4a3020",
+"unit": 3
+},
+{
+"id": "top-rainponcho",
+"slot": "top",
+"name": "Niagara rain poncho 💦",
+"price": 200,
+"kind": "rainponcho",
+"color": "#3a8fd8",
+"unit": 3
+},
+{
+"id": "gl-hollywood",
+"slot": "glasses",
+"name": "Hollywood shades ⭐",
+"price": 200,
+"kind": "hollywood",
+"unit": 4
+},
+{
+"id": "hat-racing",
+"slot": "hat",
+"name": "Racing helmet 🏁",
+"price": 350,
+"kind": "racinghelmet",
+"color": "#d23b3b",
+"unit": 5
+},
+{
+"id": "top-grad",
+"slot": "top",
+"name": "Graduation gown 2029",
+"price": 350,
+"kind": "toga",
+"color": "#20243a",
+"lvl": 4
+},
+{
+"id": "hat-grad",
+"slot": "hat",
+"name": "Graduation cap 2029",
+"price": 250,
+"kind": "birrete",
+"color": "#20243a",
+"lvl": 4
+},
+{
+"id": "hat-elf",
+"slot": "hat",
+"name": "Elf hat & ears 🧝",
+"price": 50,
+"kind": "elf",
+"color": "#2f8a3a",
+"adv": 10
+},
+{
+"id": "top-nutcracker",
+"slot": "top",
+"name": "Nutcracker uniform 🎖️",
+"price": 80,
+"kind": "nutcracker",
+"color": "#c8283a",
+"adv": 20
 }
 ]
